@@ -12,7 +12,6 @@ header {
   color: white;
   text-align: center;
   padding: 2em 0;
-  position: relative;
 }
 
 .header-content {
@@ -64,18 +63,49 @@ nav a:hover {
   padding-bottom: 0.5em;
 }
 
-.project-list {
+.profile {
   display: flex;
   flex-wrap: wrap;
+  gap: 2em;
+}
+
+.profile-container {
+  display: flex;
+  align-items: center;
   gap: 1em;
 }
 
-.project-item {
-  flex: 1;
-  min-width: 200px;
-  padding: 1em;
-  background-color: #ecf0f1;
-  border-radius: 5px;
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-info p {
+  margin: 0.5em 0;
+}
+
+.profile-info a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.profile-info a:hover {
+  text-decoration: underline;
+}
+
+.about-content p {
+  margin: 1em 0;
+}
+
+.about-content a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.about-content a:hover {
+  text-decoration: underline;
 }
 
 footer {
