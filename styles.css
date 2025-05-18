@@ -68,8 +68,11 @@ nav a:hover {
 .profile-pic {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  border-radius: 50% !important;
   object-fit: cover;
+  overflow: hidden;
+  display: block;
+  outline: 1px solid red; /* Debugging aid to check boundaries */
 }
 
 .profile-info p {
