@@ -113,12 +113,13 @@ nav a:hover {
 }
 
 .contact a {
-  color: #3498db;
+  color: inherit; /* Inherits the default text color (#333) */
   text-decoration: none;
 }
 
 .contact a:hover {
-  text-decoration: underline;
+  color: inherit; /* No color change on hover */
+  text-decoration: underline; /* Underline on hover */
 }
 
 footer {
