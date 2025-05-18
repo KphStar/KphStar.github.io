@@ -30,8 +30,8 @@ nav a {
 }
 
 nav a:hover {
-  color: white; /* Keep the color white on hover */
-  text-decoration: underline; /* Only underline on hover */
+  color: white;
+  text-decoration: underline;
 }
 
 .section {
@@ -112,13 +112,13 @@ nav a:hover {
 }
 
 .contact a {
-  color: inherit;
+  color: #000000; /* Black text for email and GitHub links */
   text-decoration: none;
 }
 
 .contact a:hover {
-  color: inherit;
-  text-decoration: underline;
+  color: #000000; /* No color change on hover */
+  text-decoration: underline; /* Underline on hover */
 }
 
 footer {
