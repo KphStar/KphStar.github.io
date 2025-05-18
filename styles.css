@@ -27,11 +27,11 @@ nav a {
   text-decoration: none;
   margin: 0 1.5em;
   font-weight: bold;
-  transition: color 0.3s;
 }
 
 nav a:hover {
-  color: #3498db;
+  color: white; /* Keep the color white on hover */
+  text-decoration: underline; /* Only underline on hover */
 }
 
 .section {
@@ -72,7 +72,6 @@ nav a:hover {
   object-fit: cover;
   overflow: hidden;
   display: block;
-  outline: 1px solid red; /* Debugging aid to check boundaries */
 }
 
 .profile-info p {
@@ -113,13 +112,13 @@ nav a:hover {
 }
 
 .contact a {
-  color: inherit; /* Inherits the default text color (#333) */
+  color: inherit;
   text-decoration: none;
 }
 
 .contact a:hover {
-  color: inherit; /* No color change on hover */
-  text-decoration: underline; /* Underline on hover */
+  color: inherit;
+  text-decoration: underline;
 }
 
 footer {
