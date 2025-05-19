@@ -64,12 +64,9 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-     })
-    .catch(err => {
-      console.error("Failed to load Firebase config:", err);
-    });
 
-    const blogList = document.getElementById('blog-list');
+
+       const blogList = document.getElementById('blog-list');
     const blogDetail = document.getElementById('blog-detail');
     const detailTitle = document.getElementById('detail-title');
     const detailDate = document.getElementById('detail-date');
@@ -159,4 +156,10 @@
     // Navigation placeholders
     document.getElementById('prev-post').addEventListener('click', () => console.log('Previous post'));
     document.getElementById('next-post').addEventListener('click', () => console.log('Next post'));
+
+
+     })
+    .catch(err => {
+      console.error("Failed to load Firebase config:", err);
+    });
   </script>
