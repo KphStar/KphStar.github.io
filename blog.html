@@ -50,124 +50,118 @@
     <p>© 2025 Duc Le. All rights reserved.</p>
   </footer>
 
-  
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-  import {
-    getFirestore,
-    collection,
-    getDocs,
-    doc,
-    getDoc,
-    orderBy,
-    query,
-    limit
-  } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 
-  let firebaseConfig;
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
-  // Load config from external JSON
-  fetch('firebase-config.json')
-    .then(res => res.json())
-    .then(config => {
-      firebaseConfig = config;
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCpgmRi0ZxLhB5DcvZtwMQnzyeq--_yt-8",
+      authDomain: "dlblog-12d5e.firebaseapp.com",
+      databaseURL: "https://dlblog-12d5e-default-rtdb.firebaseio.com",
+      projectId: "dlblog-12d5e",
+      storageBucket: "dlblog-12d5e.firebasestorage.app",
+      messagingSenderId: "982675731972",
+      appId: "1:982675731972:web:a83674bdce84ed7ed62751",
+      measurementId: "G-NX04FHD1WG"
+    };
 
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-      const blogList = document.getElementById('blog-list');
-      const blogDetail = document.getElementById('blog-detail');
-      const detailTitle = document.getElementById('detail-title');
-      const detailDate = document.getElementById('detail-date');
-      const detailContent = document.getElementById('detail-content');
-      const relatedPosts = document.getElementById('related-posts');
+    const blogList = document.getElementById('blog-list');
+    const blogDetail = document.getElementById('blog-detail');
+    const detailTitle = document.getElementById('detail-title');
+    const detailDate = document.getElementById('detail-date');
+    const detailContent = document.getElementById('detail-content');
+    const relatedPosts = document.getElementById('related-posts');
 
-      // Load and display blog posts
-      async function loadBlogPosts() {
-        blogList.innerHTML = '';
-        try {
-          const q = query(collection(db, 'blogs'), orderBy('publishedDate', 'desc'));
-          const querySnapshot = await getDocs(q);
-          if (querySnapshot.empty) {
-            blogList.innerHTML = '<p>No blog posts found.</p>';
-            return;
-          }
-          querySnapshot.forEach((doc) => {
+    // Load and display blog posts
+    async function loadBlogPosts() {
+      blogList.innerHTML = '';
+      try {
+        const q = query(collection(db, 'blogs'), orderBy('publishedDate', 'desc'));
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) {
+          blogList.innerHTML = '<p>No blog posts found.</p>';
+          return;
+        }
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          const postDiv = document.createElement('div');
+          postDiv.className = 'blog-post';
+          postDiv.innerHTML = `
+            <h3>${data.title}</h3>
+            <p>${data.readTime}</p>
+            <p><i class="fas fa-calendar"></i> Published: ${data.publishedDate ? data.publishedDate.toDate().toLocaleDateString() : 'N/A'}</p>
+            <p>${data.preview}</p>
+          `;
+          postDiv.addEventListener('click', () => showDetail(doc.id));
+          blogList.appendChild(postDiv);
+        });
+      } catch (error) {
+        console.error('Error loading blog posts:', error);
+        blogList.innerHTML = '<p>Error loading blog posts. Check the console for details.</p>';
+      }
+    }
+
+    // Show blog post detail
+    async function showDetail(postId) {
+      try {
+        const docRef = doc(db, 'blogs', postId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          detailTitle.textContent = data.title;
+          detailDate.textContent = `Published: ${data.publishedDate ? data.publishedDate.toDate().toLocaleDateString() : 'N/A'}`;
+          detailContent.innerHTML = data.content;
+          blogList.classList.add('hidden');
+          blogDetail.classList.remove('hidden');
+          loadRelatedPosts(postId);
+        } else {
+          console.error('Blog post not found:', postId);
+          blogDetail.innerHTML = '<p>Blog post not found.</p>';
+        }
+      } catch (error) {
+        console.error('Error loading blog post details:', error);
+        blogDetail.innerHTML = '<p>Error loading blog post details. Check the console for details.</p>';
+      }
+    }
+
+    // Load related posts
+    async function loadRelatedPosts(currentId) {
+      relatedPosts.innerHTML = '';
+      try {
+        const q = query(collection(db, 'blogs'), limit(4));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          if (doc.id !== currentId) {
             const data = doc.data();
             const postDiv = document.createElement('div');
-            postDiv.className = 'blog-post';
+            postDiv.className = 'related-post';
             postDiv.innerHTML = `
-              <h3>${data.title}</h3>
-              <p>${data.readTime}</p>
-              <p><i class="fas fa-calendar"></i> Published: ${data.publishedDate ? data.publishedDate.toDate().toLocaleDateString() : 'N/A'}</p>
-              <p>${data.preview}</p>
+              <p>${data.title} <small>(${data.publishedDate ? data.publishedDate.toDate().toLocaleDateString() : 'N/A'})</small></p>
             `;
-            postDiv.addEventListener('click', () => showDetail(doc.id));
-            blogList.appendChild(postDiv);
-          });
-        } catch (error) {
-          console.error('Error loading blog posts:', error);
-          blogList.innerHTML = '<p>Error loading blog posts. Check the console for details.</p>';
-        }
-      }
-
-      // Show blog post detail
-      async function showDetail(postId) {
-        try {
-          const docRef = doc(db, 'blogs', postId);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            detailTitle.textContent = data.title;
-            detailDate.textContent = `Published: ${data.publishedDate ? data.publishedDate.toDate().toLocaleDateString() : 'N/A'}`;
-            detailContent.innerHTML = data.content;
-            blogList.classList.add('hidden');
-            blogDetail.classList.remove('hidden');
-            loadRelatedPosts(postId);
-          } else {
-            console.error('Blog post not found:', postId);
-            blogDetail.innerHTML = '<p>Blog post not found.</p>';
+            relatedPosts.appendChild(postDiv);
           }
-        } catch (error) {
-          console.error('Error loading blog post details:', error);
-          blogDetail.innerHTML = '<p>Error loading blog post details. Check the console for details.</p>';
-        }
+        });
+      } catch (error) {
+        console.error('Error loading related posts:', error);
+        relatedPosts.innerHTML = '<p>Error loading related posts.</p>';
       }
+    }
 
-      // Load related posts
-      async function loadRelatedPosts(currentId) {
-        relatedPosts.innerHTML = '';
-        try {
-          const q = query(collection(db, 'blogs'), limit(4));
-          const querySnapshot = await getDocs(q);
-          querySnapshot.forEach((doc) => {
-            if (doc.id !== currentId) {
-              const data = doc.data();
-              const postDiv = document.createElement('div');
-              postDiv.className = 'related-post';
-              postDiv.innerHTML = `
-                <p>${data.title} <small>(${data.publishedDate ? data.publishedDate.toDate().toLocaleDateString() : 'N/A'})</small></p>
-              `;
-              relatedPosts.appendChild(postDiv);
-            }
-          });
-        } catch (error) {
-          console.error('Error loading related posts:', error);
-          relatedPosts.innerHTML = '<p>Error loading related posts.</p>';
-        }
-      }
-
-      // Initial load
-      document.addEventListener('DOMContentLoaded', () => {
-        loadBlogPosts();
-      });
-
-      // Navigation placeholders
-      document.getElementById('prev-post').addEventListener('click', () => console.log('Previous post'));
-      document.getElementById('next-post').addEventListener('click', () => console.log('Next post'));
-    })
-    .catch(err => {
-      console.error("Failed to load Firebase config:", err);
+    // Initial load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBlogPosts();
     });
-</script>
+
+    // Navigation placeholders
+    document.getElementById('prev-post').addEventListener('click', () => console.log('Previous post'));
+    document.getElementById('next-post').addEventListener('click', () => console.log('Next post'));
+  </script>
