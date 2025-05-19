@@ -97,7 +97,6 @@
           postDiv.className = 'blog-post';
           postDiv.innerHTML = `
             <h3>${data.title}</h3>
-            <p>${data.readTime}</p>
             <p><i class="fas fa-calendar"></i> Published: ${data.publishedDate ? data.publishedDate.toDate().toLocaleDateString() : 'N/A'}</p>
             <p>${data.preview}</p>
           `;
