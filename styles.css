@@ -50,6 +50,20 @@ nav a:hover {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-right: 20px;
 }
+.sidebar p {
+  margin: 0.5em 0;
+  font-size: 0.95em;
+  color: #2c3e50;
+}
+
+.sidebar a {
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  text-decoration: underline;
+}
 
 .profile {
   text-align: center;
@@ -114,4 +128,20 @@ footer {
 
 .hidden {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    padding: 1em;
+  }
+
+  .sidebar {
+    width: 100%;
+    margin-bottom: 1em;
+  }
+
+  .main-content {
+    padding: 1em;
+  }
 }
