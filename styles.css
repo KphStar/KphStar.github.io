@@ -66,13 +66,14 @@ nav a:hover {
 }
 
 .profile-pic {
-  width: 180px;
-  height: 180px;
+  width: 280px;
+  height: 280px;
   border-radius: 30% !important;
   object-fit: cover;
   overflow: hidden;
   display: block;
 }
+
 
 .profile-info p {
   margin: 0.5em 0;
