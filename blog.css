@@ -5,6 +5,9 @@ body {
   background-color: #f0f2f5;
   color: #333;
   line-height: 1.6;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -130,14 +133,20 @@ nav a:hover {
   border-radius: 4px;
 }
 
+.container {
+  display: flex;
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 footer {
   text-align: center;
   padding: 1em;
   background-color: #1a252f;
   color: white;
   margin-top: 2em;
-  position: fixed;
-  bottom: 0
 }
 
 .hidden {
