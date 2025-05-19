@@ -136,6 +136,8 @@ footer {
   background-color: #1a252f;
   color: white;
   margin-top: 2em;
+  position: fixed;
+  bottom: 0
 }
 
 .hidden {
