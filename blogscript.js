@@ -1,11 +1,13 @@
 // Firebase configuration (updated with your actual config from Firebase Console)
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "dlblog.firebaseapp.com",
-  projectId: "dlblog",
-  storageBucket: "dlblog.appspot.com",
-  messagingSenderId: "your-messaging-sender-id",
-  appId: "your-app-id"
+  apiKey: "AIzaSyCpgmRi0ZxLhB5DcvZtwMQnzyeq--_yt-8",
+  authDomain: "dlblog-12d5e.firebaseapp.com",
+  databaseURL: "https://dlblog-12d5e-default-rtdb.firebaseio.com",
+  projectId: "dlblog-12d5e",
+  storageBucket: "dlblog-12d5e.firebasestorage.app",
+  messagingSenderId: "982675731972",
+  appId: "1:982675731972:web:a83674bdce84ed7ed62751",
+  measurementId: "G-NX04FHD1WG"
 };
 
 // Initialize Firebase
