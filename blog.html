@@ -396,20 +396,6 @@ async function showDetail(postId) {
 
 document.addEventListener('DOMContentLoaded', () => {
   loadBlogPosts();
-
-  document.getElementById('go-back-btn').addEventListener('click', () => {
-    blogDetail.classList.add('hidden');
-    blogList.classList.remove('hidden');
-    paginationDiv.style.display = 'flex';
-
-    // Re-insert empty related-posts container (optional)
-    if (!document.getElementById('related-posts')) {
-      const newRelated = document.createElement('div');
-      newRelated.id = 'related-posts';
-      newRelated.className = 'related-posts';
-      document.querySelector('.main-content').appendChild(newRelated);
-    }
-  });
 });
 </script>
 
