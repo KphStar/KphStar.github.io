@@ -1,164 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Duc Le Blog</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
-    body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f2f5;
-  color: #333;
-  line-height: 1.6;
-  height: 100%;
-}
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.6;
+    }
 
-header {
-  background-color: #1a252f;
-  color: white;
-  text-align: center;
-  padding: 1em 0;
-}
+    header {
+      background-color: #1a252f;
+      color: white;
+      text-align: center;
+      padding: 1em 0;
+    }
 
-nav {
-  background-color: #2c3e50;
-  padding: 1em;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+    nav {
+      background-color: #2c3e50;
+      padding: 1em;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 1.5em;
-  font-weight: bold;
-}
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1.5em;
+      font-weight: bold;
+    }
 
-nav a:hover {
-  color: white;
-  text-decoration: underline;
-}
+    nav a:hover {
+      text-decoration: underline;
+    }
 
-.container {
-  display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
+    .container {
+      display: flex;
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
-.sidebar {
-  width: 200px;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-right: 20px;
-}
-.sidebar a {
-  color: #2c3e50;
-  text-decoration: none;
-}
+    .sidebar {
+      width: 250px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-right: 20px;
+    }
 
-.sidebar a:hover {
-  text-decoration: underline;
-}
+    .sidebar a {
+      color: #2c3e50;
+      text-decoration: none;
+    }
 
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
 
-.profile {
-  text-align: center;
-}
+    .profile {
+      text-align: center;
+    }
 
-.profile-pic {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
-}
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
 
-.profile p {
-  margin: 5px 0;
-  color: #2c3e50;
-}
+    .profile p {
+      margin: 5px 0;
+      color: #2c3e50;
+    }
 
-.profile i {
-  margin-right: 5px;
-}
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-.main-content {
-  flex-grow: 1;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+    .blog-post {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-.blog-post {
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-}
+    .blog-post h3 {
+      margin: 0;
+      color: #2c3e50;
+    }
 
-.blog-post h3 {
-  margin: 0;
-  color: #2c3e50;
-}
+    .blog-post p {
+      margin: 5px 0;
+      color: #666;
+    }
 
-.blog-post p {
-  margin: 5px 0;
-  color: #666;
-}
+    #blog-detail h1 {
+      color: #2c3e50;
+    }
 
-#blog-detail h1 {
-  color: #2c3e50;
-}
+    #blog-detail p {
+      color: #666;
+    }
 
-#blog-detail p {
-  color: #666;
-}
+    .navigation {
+      margin-top: 20px;
+    }
 
-.navigation {
-  margin-top: 20px;
-}
+    .navigation button {
+      padding: 5px 10px;
+      margin: 0 5px;
+      background-color: #ddd;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-.navigation button {
-  padding: 5px 10px;
-  margin: 0 5px;
-  background-color: #ddd;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+    .navigation button:hover {
+      background-color: #ccc;
+    }
 
-.navigation button:hover {
-  background-color: #ccc;
-}
+    #related-posts .related-post {
+      display: inline-block;
+      margin: 10px;
+      padding: 5px;
+      background-color: #f0f2f5;
+      border-radius: 4px;
+    }
 
-#related-posts .related-post {
-  display: inline-block;
-  margin: 10px;
-  padding: 5px;
-  background-color: #f0f2f5;
-  border-radius: 4px;
-}
+    footer {
+      text-align: center;
+      padding: 1em;
+      background-color: #1a252f;
+      color: white;
+      margin-top: 2em;
+    }
 
-footer {
-  text-align: center;
-  padding: 1em;
-  background-color: #1a252f;
-  color: white;
-  margin-top: 2em;
-}
+    .hidden {
+      display: none;
+    }
 
-.hidden {
-  display: none;
-}
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        padding: 1em;
+      }
+
+      .sidebar {
+        width: 100%;
+        margin-bottom: 1em;
+      }
+
+      .main-content {
+        padding: 1em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -173,6 +187,7 @@ footer {
       <a href="internship.html">INTERNSHIP</a>
     </nav>
   </header>
+
   <div class="container">
     <aside class="sidebar">
       <div class="profile">
@@ -181,12 +196,14 @@ footer {
         <p>Tel: +1 (619) 379-9300</p>
         <p><i class="fas fa-map-marker-alt"></i> San Diego, CA, US</p>
         <p><i class="fas fa-envelope"></i> <a href="mailto:lerockandroy@gmail.com">Email</a></p>
-        <p><i class="fab fa-github"></i> <a href="https://github.com/KphStar">Github</a></p>
+        <p><i class="fab fa-github"></i> <a href="https://github.com/KphStar">GitHub</a></p>
         <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/ducleit">LinkedIn</a></p>
       </div>
     </aside>
+
     <main class="main-content">
       <div id="blog-list"></div>
+
       <div id="blog-detail" class="hidden">
         <h1 id="detail-title"></h1>
         <p id="detail-date"></p>
@@ -196,34 +213,39 @@ footer {
           <button id="next-post">Next</button>
         </div>
       </div>
+
       <div id="related-posts"></div>
     </main>
   </div>
+
   <footer>
     <p>© 2025 Duc Le. All rights reserved.</p>
   </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-
   <script type="module">
-    // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, getDoc, orderBy, query, limit } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      doc,
+      getDoc,
+      orderBy,
+      query,
+      limit
+    } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
-    // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCpgmRi0ZxLhB5DcvZtwMQnzyeq--_yt-8",
       authDomain: "dlblog-12d5e.firebaseapp.com",
       databaseURL: "https://dlblog-12d5e-default-rtdb.firebaseio.com",
       projectId: "dlblog-12d5e",
-      storageBucket: "dlblog-12d5e.firebasestorage.app",
+      storageBucket: "dlblog-12d5e.appspot.com",
       messagingSenderId: "982675731972",
       appId: "1:982675731972:web:a83674bdce84ed7ed62751",
       measurementId: "G-NX04FHD1WG"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
@@ -234,7 +256,6 @@ footer {
     const detailContent = document.getElementById('detail-content');
     const relatedPosts = document.getElementById('related-posts');
 
-    // Load and display blog posts
     async function loadBlogPosts() {
       blogList.innerHTML = '';
       try {
@@ -262,7 +283,6 @@ footer {
       }
     }
 
-    // Show blog post detail
     async function showDetail(postId) {
       try {
         const docRef = doc(db, 'blogs', postId);
@@ -276,16 +296,13 @@ footer {
           blogDetail.classList.remove('hidden');
           loadRelatedPosts(postId);
         } else {
-          console.error('Blog post not found:', postId);
           blogDetail.innerHTML = '<p>Blog post not found.</p>';
         }
       } catch (error) {
-        console.error('Error loading blog post details:', error);
         blogDetail.innerHTML = '<p>Error loading blog post details. Check the console for details.</p>';
       }
     }
 
-    // Load related posts
     async function loadRelatedPosts(currentId) {
       relatedPosts.innerHTML = '';
       try {
@@ -303,17 +320,16 @@ footer {
           }
         });
       } catch (error) {
-        console.error('Error loading related posts:', error);
         relatedPosts.innerHTML = '<p>Error loading related posts.</p>';
       }
     }
 
-    // Initial load
     document.addEventListener('DOMContentLoaded', () => {
       loadBlogPosts();
     });
 
-    // Navigation placeholders
     document.getElementById('prev-post').addEventListener('click', () => console.log('Previous post'));
     document.getElementById('next-post').addEventListener('click', () => console.log('Next post'));
   </script>
+</body>
+</html>
