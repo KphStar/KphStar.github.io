@@ -1,162 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Duc Le Portfolio</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <style>
+    /* --- Base layout --- */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #1a252f;
+      color: white;
+      text-align: center;
+      padding: 1em 0;
+    }
+
+    nav {
+      background-color: #2c3e50;
+      padding: 1em;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1.5em;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      color: white;
+      text-decoration: underline;
+    }
+
+    /* --- Page structure --- */
+    .container {
+      display: flex;
+      flex: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .sidebar {
+      width: 400px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-right: 20px;
+    }
+
+    .sidebar p {
+      margin: 0.5em 0;
+      font-size: 0.95em;
+      color: #2c3e50;
+    }
+
+    .sidebar a {
+      color: #2c3e50;
+      text-decoration: none;
+    }
+
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
+
+    .profile {
+      text-align: center;
+    }
+
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .main-content {
+      flex-grow: 1;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- Footer --- */
+    footer {
+      text-align: center;
+      padding: 1em;
+      background-color: #1a252f;
+      color: white;
+      margin-top: 2em;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        padding: 1em;
+      }
+
+      .sidebar {
+        width: 100%;
+        margin-bottom: 1em;
+      }
+
+      .main-content {
+        padding: 1em;
+      }
+    }
+  </style>
 </head>
-<style>
-    body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f2f5;
-  color: #333;
-  line-height: 1.6;
-  height: 100%;
-}
 
-header {
-  background-color: #1a252f;
-  color: white;
-  text-align: center;
-  padding: 1em 0;
-}
-
-nav {
-  background-color: #2c3e50;
-  padding: 1em;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 1.5em;
-  font-weight: bold;
-}
-
-nav a:hover {
-  color: white;
-  text-decoration: underline;
-}
-
-.container {
-  display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-.sidebar {
-  width: 400px;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-right: 20px;
-}
-
-.sidebar p {
-  margin: 0.5em 0;
-  font-size: 0.95em;
-  color: #2c3e50;
-}
-
-.sidebar a {
-  color: #2c3e50;
-  text-decoration: none;
-}
-
-.sidebar a:hover {
-  text-decoration: underline;
-}
-
-.profile {
-  text-align: center;
-}
-
-.profile-pic {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
-}
-
-.profile p {
-  margin: 5px 0;
-  color: #2c3e50;
-}
-
-.profile i {
-  margin-right: 5px;
-}
-
-.main-content {
-  flex-grow: 1;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-.navigation {
-  margin-top: 20px;
-}
-
-.navigation button {
-  padding: 5px 10px;
-  margin: 0 5px;
-  background-color: #ddd;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.navigation button:hover {
-  background-color: #ccc;
-}
-
-#related-posts .related-post {
-  display: inline-block;
-  margin: 10px;
-  padding: 5px;
-  background-color: #f0f2f5;
-  border-radius: 4px;
-}
-
-footer {
-  text-align: center;
-  padding: 1em;
-  background-color: #1a252f;
-  color: white;
-  margin-top: 2em;
-}
-
-.hidden {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    padding: 1em;
-  }
-
-  .sidebar {
-    width: 100%;
-    margin-bottom: 1em;
-  }
-
-  .main-content {
-    padding: 1em;
-  }
-}
-
-</style>
 <body>
   <header>
     <nav>
@@ -170,36 +141,34 @@ footer {
     </nav>
   </header>
 
-
-  
-<div class="container">
-  <aside class="sidebar">
+  <div class="container">
+    <aside class="sidebar">
       <div class="profile">
         <img src="rsz_1profile.jpg" alt="Duc Le" class="profile-pic">
         <h3>Duc Le</h3>
         <p>Computer Science Student</p>
         <p>San Diego State University</p>
-       <p><i class="fas fa-map-marker-alt"></i> San Diego, CA, US</p>
-       <p><i class="fas fa-envelope"></i> <a href="mailto:lerockandroy@gmail.com">Email</a></p>
-       <p><i class="fab fa-github"></i> <a href="https://github.com/KphStar">GitHub</a></p>
-       <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/ducleit">LinkedIn</a></p>
+        <p><i class="fas fa-map-marker-alt"></i> San Diego, CA, US</p>
+        <p><i class="fas fa-envelope"></i> <a href="mailto:lerockandroy@gmail.com">lerockandroy@gmail.com</a></p>
+        <p><i class="fab fa-github"></i> <a href="https://github.com/KphStar">GitHub</a></p>
+        <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/ducleit">LinkedIn</a></p>
       </div>
     </aside>
 
-  <main class="main-content">
-    <section id="about" class="section">
-      <div class="about-content">
-        <p>👋 Hi, It is Duc Le. Sincerely welcome to my personal page, which I hope will give you a full understanding of my experience and abilities.</p>
-        <p>I am currently studying for my B.S. degree in Computer Science, and I’m planning to pursue my M.S. degree at UCSD. As of now, I am interested in web development, software engineering, and data analysis, and I am working on projects to grow my skills in these areas.</p>
-        <p>My ongoing or planned interests include but are not limited to: full-stack development, cloud computing, and machine learning applications. I plan to be well-prepared for my future career by gaining sufficient skills to accomplish these ideas.</p>
-        <p>Please contact me with any questions you have about me personally or professionally. I am always open to new opportunities and collaborations.</p>
-        <p>Thank you for visiting my page!</p>
-        <p>Best regards,</p>
-        <p>Duc Le</p>
-      </div>
-    </section>
-  </main>
-</div>
+    <main class="main-content">
+      <section id="about">
+        <div class="about-content">
+          <p>👋 Hi, Duc Le here. Sincerely welcome to my personal page, which I hope will give you a full understanding of my experience and abilities.</p>
+          <p>I am currently studying for my B.S. degree in Computer Science, and I’m planning to pursue my M.S. degree at UCSD. As of now, I am interested in web development, software engineering, and data analysis, and I am working on projects to grow my skills in these areas.</p>
+          <p>My ongoing or planned interests include but are not limited to: full-stack development, cloud computing, and machine learning applications. I plan to be well-prepared for my future career by gaining sufficient skills to accomplish these ideas.</p>
+          <p>Please contact me with any questions you have about me personally or professionally. I am always open to new opportunities and collaborations.</p>
+          <p>Thank you for visiting my page!</p>
+          <p>Best regards,</p>
+          <p>Duc Le</p>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <footer>
     <p>© 2025 Duc Le. All rights reserved.</p>
