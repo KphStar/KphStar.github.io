@@ -87,17 +87,16 @@
       color: #2c3e50;
     }
 
-  .main-content {
+.main-content {
   width: 900px;
   flex-grow: 1;
-  padding: 20px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  height: 80vh; /* Make it scrollable */
-  overflow-y: auto;
+  height: 80vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* Prevents the sticky footer from being cut off */
 }
 
     .blog-post {
@@ -173,6 +172,7 @@
   z-index: 10;
 }
 
+
 .pagination button {
   padding: 6px 12px;
   margin: 0 4px;
@@ -233,15 +233,16 @@
 <main class="main-content">
   <h1>Blog Posts</h1>
 
-  <div id="blog-list"></div>
-
-  <div id="blog-detail" class="hidden">
-    <h1 id="detail-title"></h1>
-    <p id="detail-date"></p>
-    <div id="detail-content"></div>
-   <a href="blog.html" style="display: inline-block; margin-top: 20px; padding: 10px 15px; background-color: #1a252f; color: white; border-radius: 4px; text-decoration: none;">
-  ← Go Back
-</a>
+  <div style="flex: 1; overflow-y: auto;" id="scrollable-area">
+    <div id="blog-list"></div>
+    <div id="blog-detail" class="hidden">
+      <h1 id="detail-title"></h1>
+      <p id="detail-date"></p>
+      <div id="detail-content"></div>
+      <a href="blog.html" style="display: inline-block; margin-top: 20px; padding: 10px 15px; background-color: #1a252f; color: white; border-radius: 4px; text-decoration: none;">
+        ← Go Back
+      </a>
+    </div>
   </div>
 
   <div id="pagination" class="pagination"></div>
