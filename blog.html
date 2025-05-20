@@ -87,14 +87,18 @@
       color: #2c3e50;
     }
 
-    .main-content {
-      width: 900px;
-      flex-grow: 1;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+  .main-content {
+  width: 900px;
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 80vh; /* Make it scrollable */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
 
     .blog-post {
       margin-bottom: 20px;
@@ -160,10 +164,13 @@
     }
 
 .pagination {
-  margin-top: 20px;
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+  padding: 1em;
   text-align: center;
-  background-color: transparent;
-  padding-top: 1em;
+  border-top: 1px solid #ccc;
+  z-index: 10;
 }
 
 .pagination button {
@@ -223,17 +230,19 @@
         <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/ducleit">LinkedIn</a></p>
       </div>
     </aside>
-    <main class="main-content">
-      <h1>Blog Posts</h1>
-      <div id="blog-list"></div>
-      <div id="pagination" class="pagination"></div>
+   <main class="main-content">
+  <div style="flex: 1;">
+    <h1>Blog Posts</h1>
+    <div id="blog-list"></div>
+    <div id="blog-detail" class="hidden">
+      <h1 id="detail-title"></h1>
+      <p id="detail-date"></p>
+      <div id="detail-content"></div>
+      <div id="related-posts"></div>
+    </div>
+  </div>
 
-      <div id="blog-detail" class="hidden">
-        <h1 id="detail-title"></h1>
-        <p id="detail-date"></p>
-        <div id="detail-content"></div>
-
-  <div id="related-posts"></div>
+  <div id="pagination" class="pagination"></div>
 </main>
   </div>
 
