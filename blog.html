@@ -368,7 +368,7 @@
   async function loadRelatedPosts(currentId) {
     relatedPosts.innerHTML = '';
     try {
-      const q = query(collection(db, 'blogs'), limit(4));
+      const q = query(collection(db, 'blogs'), limit(5)); // Adjust the limit as needed
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         if (doc.id !== currentId) {
