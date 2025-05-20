@@ -234,12 +234,14 @@
   <div style="flex: 1;">
     <h1>Blog Posts</h1>
     <div id="blog-list"></div>
-    <div id="blog-detail" class="hidden">
-      <h1 id="detail-title"></h1>
-      <p id="detail-date"></p>
-      <div id="detail-content"></div>
-      <div id="related-posts"></div>
-    </div>
+   <div id="blog-detail" class="hidden">
+  <h1 id="detail-title"></h1>
+  <p id="detail-date"></p>
+  <div id="detail-content"></div>
+  <button id="go-back-btn" style="margin-top: 20px; padding: 10px 15px; border: none; background-color: #1a252f; color: white; border-radius: 4px; cursor: pointer;">
+    ← Go Back
+  </button>
+</div>
   </div>
 
   <div id="pagination" class="pagination"></div>
@@ -345,25 +347,31 @@
     if (currentPage < totalPages) paginationDiv.appendChild(createButton('>', currentPage + 1));
   }
 
-  async function showDetail(postId) {
-    try {
-      const docRef = doc(db, 'blogs', postId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        detailTitle.textContent = data.title;
-        detailDate.textContent = `Published: ${data.publishedDate ? data.publishedDate.toDate().toLocaleDateString() : 'N/A'}`;
-        detailContent.innerHTML = data.content;
-        blogList.classList.add('hidden');
-        blogDetail.classList.remove('hidden');
-        loadRelatedPosts(postId);
-      } else {
-        blogDetail.innerHTML = '<p>Blog post not found.</p>';
-      }
-    } catch (error) {
-      blogDetail.innerHTML = '<p>Error loading blog post details. Check the console for details.</p>';
+async function showDetail(postId) {
+  const pagination = document.getElementById('pagination');
+  pagination.style.display = 'none';
+
+  blogList.classList.add('hidden');
+  blogDetail.classList.remove('hidden');
+
+  // Remove related posts entirely
+  relatedPosts.remove();
+
+  try {
+    const docRef = doc(db, 'blogs', postId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      detailTitle.textContent = data.title;
+      detailDate.textContent = `Published: ${data.publishedDate ? data.publishedDate.toDate().toLocaleDateString() : 'N/A'}`;
+      detailContent.innerHTML = data.content;
+    } else {
+      blogDetail.innerHTML = '<p>Blog post not found.</p>';
     }
+  } catch (error) {
+    blogDetail.innerHTML = '<p>Error loading blog post details. Check the console for details.</p>';
   }
+}
 
   async function loadRelatedPosts(currentId) {
     relatedPosts.innerHTML = '';
@@ -388,6 +396,11 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     loadBlogPosts();
+  });
+  document.getElementById('go-back-btn').addEventListener('click', () => {
+  blogDetail.classList.add('hidden');
+  blogList.classList.remove('hidden');
+  document.getElementById('pagination').style.display = 'flex';
   });
 </script>
 
