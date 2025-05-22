@@ -184,13 +184,11 @@
   </footer>
 
   <script src="script.js"></script>
-  <script type="module">
-  // Import required Firebase SDKs
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-  import { getDatabase, ref, get, set, runTransaction, onValue, child } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
 
-  // Firebase config
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getDatabase, ref, get, set, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyA_Pw5SX4ZtyaUjj4_b6ptklaAZJW15CZY",
     authDomain: "visitor-b3811.firebaseapp.com",
@@ -202,43 +200,43 @@
     databaseURL: "https://visitor-b3811-default-rtdb.firebaseio.com"
   };
 
-  // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
   const db = getDatabase(app);
 
-  // Get public IP
   async function getIP() {
-    const response = await fetch('https://api.ipify.org?format=json');
-    const data = await response.json();
+    const res = await fetch("https://api.ipify.org?format=json");
+    const data = await res.json();
     return data.ip;
   }
 
-  // Track and count unique visitors
   async function trackVisitor() {
-    const ip = await getIP();
-    const ipRef = ref(db, 'visitors/' + ip);
+    try {
+      const ip = await getIP();
+      const ipRef = ref(db, 'visitors/' + ip);
+      const snapshot = await get(ipRef);
 
-    const snapshot = await get(ipRef);
-    if (!snapshot.exists()) {
-      // Set IP entry
-      await set(ipRef, { timestamp: Date.now() });
+      if (!snapshot.exists()) {
+        await set(ipRef, { timestamp: Date.now() });
 
-      // Increment global count
+        const countRef = ref(db, 'count');
+        await runTransaction(countRef, (current) => (current || 0) + 1);
+      }
+
+      // Listen for live count updates
       const countRef = ref(db, 'count');
-      await runTransaction(countRef, (current) => (current || 0) + 1);
+      onValue(countRef, (snap) => {
+        const count = snap.val() || 0;
+        document.getElementById('visitor-count').textContent = count;
+      });
+    } catch (err) {
+      console.error("Visitor tracking error:", err);
+      document.getElementById('visitor-count').textContent = 'Error';
     }
-
-    // Display count
-    const countRef = ref(db, 'count');
-    onValue(countRef, (snap) => {
-      document.getElementById('visitor-count').textContent = snap.val() || 0;
-    });
   }
 
-  // Run tracker
   trackVisitor();
 </script>
+
 
 </body>
 </html>
