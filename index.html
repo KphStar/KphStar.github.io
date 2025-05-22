@@ -209,7 +209,7 @@
     return data.ip;
   }
 
-  async function trackVisitor() {
+async function trackVisitor() {
   try {
     const ip = await getIP();
 
@@ -222,39 +222,27 @@
     const safeIP = ip.replace(/\./g, "-");
     const ipRef = ref(db, 'visitors/' + safeIP);
     const snapshot = await get(ipRef);
-    console.log("Writing to path: visitors/" + safeIP);
-    
+
     if (!snapshot.exists()) {
       await set(ipRef, { timestamp: Date.now() });
-
-      const countRef = ref(db, 'count');
-      await runTransaction(countRef, (current) => (current || 0) + 1);
     }
 
-    const countRef = ref(db, 'count');
-    onValue(countRef, (snap) => {
-      const count = snap.val() || 0;
-      document.getElementById('visitor-count').textContent = count;
-    });
+    // Always fetch live count from /visitors node
+    const allVisitorsRef = ref(db, 'visitors');
+    const allVisitorsSnap = await get(allVisitorsRef);
+    const count = allVisitorsSnap.exists() ? Object.keys(allVisitorsSnap.val()).length : 0;
+
+    document.getElementById('visitor-count').textContent = count;
 
   } catch (err) {
     console.error("Visitor tracking error:", err);
     document.getElementById('visitor-count').textContent = 'Error';
   }
 }
-function ipToLong(ip) {
-  return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet), 0);
-}
 
-function isBlockedIP(ip) {
-  const ipNum = ipToLong(ip);
-  const tmoStart = ipToLong("172.32.0.0");
-  const tmoEnd = ipToLong("172.63.255.255");
+ trackVisitor()
 
-  return ipNum >= tmoStart && ipNum <= tmoEnd;
-}
 
-  trackVisitor();
 </script>
 
 
