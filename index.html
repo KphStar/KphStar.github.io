@@ -203,6 +203,17 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
+  function ipToLong(ip) {
+  return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0);
+}
+
+function isBlockedIP(ip) {
+  const ipNum = ipToLong(ip);
+  const tmoStart = ipToLong("172.32.0.0");
+  const tmoEnd = ipToLong("172.63.255.255");
+  return ipNum >= tmoStart && ipNum <= tmoEnd;
+}
+
   async function getIP() {
     const res = await fetch("https://api.ipify.org?format=json");
     const data = await res.json();
