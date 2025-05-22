@@ -215,7 +215,8 @@
     const safeIP = ip.replace(/\./g, "-");  // Sanitize for Firebase path
     const ipRef = ref(db, 'visitors/' + safeIP);
     const snapshot = await get(ipRef);
-
+    console.log("Writing to path: visitors/" + safeIP);
+    
     if (!snapshot.exists()) {
       await set(ipRef, { timestamp: Date.now() });
 
