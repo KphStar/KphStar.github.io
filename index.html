@@ -210,29 +210,29 @@
   }
 
   async function trackVisitor() {
-    try {
-      const ip = await getIP();
-      const ipRef = ref(db, 'visitors/' + ip);
-      const snapshot = await get(ipRef);
+  try {
+    const ip = await getIP();
+    const safeIP = ip.replace(/\./g, "-");  // Sanitize for Firebase path
+    const ipRef = ref(db, 'visitors/' + safeIP);
+    const snapshot = await get(ipRef);
 
-      if (!snapshot.exists()) {
-        await set(ipRef, { timestamp: Date.now() });
+    if (!snapshot.exists()) {
+      await set(ipRef, { timestamp: Date.now() });
 
-        const countRef = ref(db, 'count');
-        await runTransaction(countRef, (current) => (current || 0) + 1);
-      }
-
-      // Listen for live count updates
       const countRef = ref(db, 'count');
-      onValue(countRef, (snap) => {
-        const count = snap.val() || 0;
-        document.getElementById('visitor-count').textContent = count;
-      });
-    } catch (err) {
-      console.error("Visitor tracking error:", err);
-      document.getElementById('visitor-count').textContent = 'Error';
+      await runTransaction(countRef, (current) => (current || 0) + 1);
     }
+
+    const countRef = ref(db, 'count');
+    onValue(countRef, (snap) => {
+      const count = snap.val() || 0;
+      document.getElementById('visitor-count').textContent = count;
+    });
+  } catch (err) {
+    console.error("Visitor tracking error:", err);
+    document.getElementById('visitor-count').textContent = 'Error';
   }
+}
 
   trackVisitor();
 </script>
