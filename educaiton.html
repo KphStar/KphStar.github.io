@@ -68,7 +68,72 @@
       padding: 1em;
       background-color: #1a252f;
       color: white;
-       margin-top: auto;
+      margin-top: auto;
+    }
+
+    /* Timeline styling */
+    .timeline {
+      position: relative;
+      height: 400px;
+      margin: 3em auto;
+      width: 200px;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background-color: #1a252f;
+    }
+
+    .timeline-event {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .circle {
+      width: 20px;
+      height: 20px;
+      background-color: #2c3e50;
+      border-radius: 50%;
+      margin: 0 auto;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .timeline-event:hover .circle {
+      transform: scale(1.5);
+      background-color: #34495e;
+    }
+
+    .info {
+      display: none;
+      background: #fff;
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      margin-top: 0.5em;
+      border-radius: 5px;
+      width: 160px;
+      text-align: left;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .timeline-event:hover .info {
+      display: block;
+    }
+
+    .slider {
+      margin-top: 3em;
+      text-align: center;
+    }
+
+    .slider input[type="range"] {
+      width: 80%;
     }
   </style>
 </head>
@@ -88,33 +153,41 @@
   <main class="main-content">
     <h1>EDUCATION</h1>
 
-    <h3><a href="https://www.sdsu.edu">San Diego State University</a></h3>
-    <p><strong>Bachelor of Science (B.S.)</strong> in Computer Science</p>
-    <ul>
-      <li><strong>Duration:</strong> In Progress</li>
-      <li><strong>GPA:</strong> In Progress</li>
-    </ul>
+    <div class="timeline">
+      <div class="timeline-line"></div>
 
-    <h3><a href="https://www.gvltec.edu">Greenville Technical College</a></h3>
-    <p><strong>Associate of Science (A.S.)</strong> in Computer Engineering</p>
-    <ul>
-      <li><strong>Duration:</strong> 08/2021 – 05/2023</li>
-      <li><strong>GPA:</strong> 2.6/4.0</li>
-    </ul>
+      <div class="timeline-event" style="top: 10%;">
+        <div class="circle"></div>
+        <div class="info">
+          <h4>San Diego City College</h4>
+          <p>GPA: 3.0/4.0</p>
+          <p>Graduated: 05/2022</p>
+        </div>
+      </div>
 
-    <h3><a href="https://sdcity.edu">San Diego City College</a></h3>
-    <p><strong>General Education (G.E.)</strong> in Computer Engineering</p>
-    <ul>
-      <li><strong>Graduation:</strong> 05/2022</li>
-      <li><strong>GPA:</strong> 3.0/4.0</li>
-    </ul>
+      <div class="timeline-event" style="top: 40%;">
+        <div class="circle"></div>
+        <div class="info">
+          <h4>Greenville Technical College</h4>
+          <p>GPA: 2.6/4.0</p>
+          <p>Graduated: 05/2023</p>
+        </div>
+      </div>
 
-    <h3><a href="https://hooverhs.gusd.net">Hoover High School</a></h3>
-    <p><strong>High School Diploma (H.D.)</strong></p>
-    <ul>
-      <li><strong>Graduation:</strong> 05/2014</li>
-      <li><strong>GPA:</strong> 3.5/4.0</li>
-    </ul>
+      <div class="timeline-event" style="top: 70%;">
+        <div class="circle"></div>
+        <div class="info">
+          <h4>Hoover High School</h4>
+          <p>GPA: 3.5/4.0</p>
+          <p>Graduated: 05/2014</p>
+        </div>
+      </div>
+    </div>
+
+   <div class="slider">
+  <label for="education-slider">Timeline Year Range</label><br>
+  <input id="education-slider" type="range" min="1" max="100" value="50" />
+</div>
   </main>
 
   <footer>
@@ -122,4 +195,3 @@
   </footer>
 </body>
 </html>
-<!--         <p>San Diego, CA</p> -->
