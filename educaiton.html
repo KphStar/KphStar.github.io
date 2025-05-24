@@ -71,12 +71,26 @@
       margin-top: auto;
     }
 
+    .content-wrapper {
+      display: flex;
+      gap: 4em;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .education-details {
+      flex: 1;
+      min-width: 300px;
+    }
+
     /* Timeline styles */
     .timeline {
       position: relative;
       height: 600px;
-      margin: 4em auto;
-      width: 100px;
+      width: 120px;
+      flex-shrink: 0;
+      margin-top: 2em;
     }
 
     .timeline-line {
@@ -157,61 +171,65 @@
   <main class="main-content">
     <h1>EDUCATION</h1>
 
-    <h3><a href="https://www.sdsu.edu">San Diego State University</a></h3>
-    <p><strong>Bachelor of Science (B.S.)</strong> in Computer Science</p>
-    <ul>
-      <li><strong>Duration:</strong> In Progress</li>
-      <li><strong>GPA:</strong> In Progress</li>
-    </ul>
+    <div class="content-wrapper">
+      <div class="education-details">
+        <h3><a href="https://www.sdsu.edu">San Diego State University</a></h3>
+        <p><strong>Bachelor of Science (B.S.)</strong> in Computer Science</p>
+        <ul>
+          <li><strong>Duration:</strong> In Progress</li>
+          <li><strong>GPA:</strong> In Progress</li>
+        </ul>
 
-    <h3><a href="https://www.gvltec.edu">Greenville Technical College</a></h3>
-    <p><strong>Associate of Science (A.S.)</strong> in Computer Engineering</p>
-    <ul>
-      <li><strong>Duration:</strong> 08/2021 – 05/2023</li>
-      <li><strong>GPA:</strong> 2.6/4.0</li>
-    </ul>
+        <h3><a href="https://www.gvltec.edu">Greenville Technical College</a></h3>
+        <p><strong>Associate of Science (A.S.)</strong> in Computer Engineering</p>
+        <ul>
+          <li><strong>Duration:</strong> 08/2021 – 05/2023</li>
+          <li><strong>GPA:</strong> 2.6/4.0</li>
+        </ul>
 
-    <h3><a href="https://sdcity.edu">San Diego City College</a></h3>
-    <p><strong>General Education (G.E.)</strong> in Computer Engineering</p>
-    <ul>
-      <li><strong>Graduation:</strong> 05/2022</li>
-      <li><strong>GPA:</strong> 3.0/4.0</li>
-    </ul>
+        <h3><a href="https://sdcity.edu">San Diego City College</a></h3>
+        <p><strong>General Education (G.E.)</strong> in Computer Engineering</p>
+        <ul>
+          <li><strong>Graduation:</strong> 05/2022</li>
+          <li><strong>GPA:</strong> 3.0/4.0</li>
+        </ul>
 
-    <h3><a href="https://hooverhs.gusd.net">Hoover High School</a></h3>
-    <p><strong>High School Diploma (H.D.)</strong></p>
-    <ul>
-      <li><strong>Graduation:</strong> 05/2014</li>
-      <li><strong>GPA:</strong> 3.5/4.0</li>
-    </ul>
-
-    <div class="timeline">
-      <div class="timeline-line"></div>
-
-      <div class="timeline-event left" style="top: 10%;">
-        <div class="circle"></div>
-        <div class="info">
-          <h4>San Diego City College</h4>
-          <p>GPA: 3.0/4.0</p>
-          <p>Graduated: 05/2022</p>
-        </div>
+        <h3><a href="https://hooverhs.gusd.net">Hoover High School</a></h3>
+        <p><strong>High School Diploma (H.D.)</strong></p>
+        <ul>
+          <li><strong>Graduation:</strong> 05/2014</li>
+          <li><strong>GPA:</strong> 3.5/4.0</li>
+        </ul>
       </div>
 
-      <div class="timeline-event right" style="top: 45%;">
-        <div class="circle"></div>
-        <div class="info">
-          <h4>Greenville Technical College</h4>
-          <p>GPA: 2.6/4.0</p>
-          <p>Graduated: 05/2023</p>
-        </div>
-      </div>
+      <div class="timeline">
+        <div class="timeline-line"></div>
 
-      <div class="timeline-event left" style="top: 80%;">
-        <div class="circle"></div>
-        <div class="info">
-          <h4>Hoover High School</h4>
-          <p>GPA: 3.5/4.0</p>
-          <p>Graduated: 05/2014</p>
+        <div class="timeline-event left" style="top: 10%;">
+          <div class="circle"></div>
+          <div class="info">
+            <h4>San Diego City College</h4>
+            <p>GPA: 3.0/4.0</p>
+            <p>Graduated: 05/2022</p>
+          </div>
+        </div>
+
+        <div class="timeline-event right" style="top: 45%;">
+          <div class="circle"></div>
+          <div class="info">
+            <h4>Greenville Technical College</h4>
+            <p>GPA: 2.6/4.0</p>
+            <p>Graduated: 05/2023</p>
+          </div>
+        </div>
+
+        <div class="timeline-event left" style="top: 80%;">
+          <div class="circle"></div>
+          <div class="info">
+            <h4>Hoover High School</h4>
+            <p>GPA: 3.5/4.0</p>
+            <p>Graduated: 05/2014</p>
+          </div>
         </div>
       </div>
     </div>
