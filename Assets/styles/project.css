@@ -208,7 +208,7 @@
 
 /* Project BlackJack CSS */
 
-.project-boxBlackJack {
+.project-boxBlackjack {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -218,18 +218,18 @@
   font-weight: bold;
 }
 
-.project-boxBlackJack h3 {
+.project-boxBlackjack h3 {
   margin-top: 0;
   margin-bottom: 0.5em;
   color: #1a252f;
 }
 
-.project-boxBlackJack ul {
+.project-boxBlackjack ul {
   padding-left: 1.2em;
   margin: 0;
 }
 
-.project-boxBlackJack li {
+.project-boxBlackjack li {
   margin-bottom: 0.5em;
   text-align: left;
   font-size: 0.95em;
