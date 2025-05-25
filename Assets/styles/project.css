@@ -79,6 +79,16 @@
   font-size: 0.95em;
 }
 
+.project-imageHWT {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin: 1em 0;
+  display: block;
+}
+
 /* Project GP CSS */
 
 .project-boxGP {
@@ -194,3 +204,5 @@
   text-align: left;
   font-size: 0.95em;
 }
+
+
