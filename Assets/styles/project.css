@@ -1,0 +1,196 @@
+   html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #1a252f;
+      color: white;
+      text-align: center;
+      padding: 1em 0;
+    }
+
+    nav {
+      background-color: #2c3e50;
+      padding: 1em;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1.5em;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1em;
+      background-color: #1a252f;
+      color: white;
+     margin-top: auto;
+    }
+
+  .project-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Exactly 4 columns */
+  gap: 20px;
+}
+
+/* Project HWT CSS */
+
+.project-boxHWT {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+}
+
+.project-boxHWT h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: #1a252f;
+}
+
+.project-boxHWT ul {
+  padding-left: 1.2em;
+  margin: 0;
+}
+
+.project-boxHWT li {
+  margin-bottom: 0.5em;
+  text-align: left;
+  font-size: 0.95em;
+}
+
+/* Project GP CSS */
+
+.project-boxGP {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+}
+
+.project-boxGP h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: #1a252f;
+}
+
+.project-boxGP ul {
+  padding-left: 1.2em;
+  margin: 0;
+}
+
+.project-boxGP li {
+  margin-bottom: 0.5em;
+  text-align: left;
+  font-size: 0.95em;
+}
+
+/* Project WUSHU CSS */
+
+.project-boxWU {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+}
+
+.project-boxWU h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: #1a252f;
+}
+
+.project-boxWU ul {
+  padding-left: 1.2em;
+  margin: 0;
+}
+
+.project-boxWU li {
+  margin-bottom: 0.5em;
+  text-align: left;
+  font-size: 0.95em;
+}
+
+/* Project NN CSS */
+
+.project-boxNN {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+}
+
+.project-boxNN h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: #1a252f;
+}
+
+.project-boxNN ul {
+  padding-left: 1.2em;
+  margin: 0;
+}
+
+.project-boxNN li {
+  margin-bottom: 0.5em;
+  text-align: left;
+  font-size: 0.95em;
+}
+
+/* Project CK CSS */
+
+.project-boxCK {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+}
+
+.project-boxCK h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: #1a252f;
+}
+
+.project-boxCK ul {
+  padding-left: 1.2em;
+  margin: 0;
+}
+
+.project-boxCK li {
+  margin-bottom: 0.5em;
+  text-align: left;
+  font-size: 0.95em;
+}
