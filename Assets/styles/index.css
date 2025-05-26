@@ -120,6 +120,16 @@ body, .sidebar, .main-content, nav, header, footer {
   opacity: 0.8;
 }
 
+/* Style for the sun icon (light mode) */
+.sun-color {
+  color: #fdd835; /* bright yellow */
+}
+
+/* Optional: color for moon icon */
+#theme-icon.fa-moon {
+  color: #555; /* soft gray moon */
+}
+
     /* --- Footer --- */
     footer {
       text-align: center;
