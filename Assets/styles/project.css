@@ -61,18 +61,13 @@
   font-weight: bold;
 }
 
-.project-boxHWT h3 {
-  margin-top: 0;
-  margin-bottom: 0.5em;
-  color: #1a252f;
-}
-
 /* Flip Card Styling */
 .flip-card {
   background-color: transparent;
   width: 100%;
   max-width: 600px;
   height: 450px;
+  min-height: 450px;
   perspective: 1000px;
   margin: 1em auto;
 }
@@ -89,10 +84,12 @@
   transform: rotateY(180deg);
 }
 
-.flip-card-front, .flip-card-back {
+.flip-card-front,
+.flip-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
+  max-height: 100%;
   backface-visibility: hidden;
   border-radius: 10px;
   overflow: hidden;
@@ -102,7 +99,9 @@
 .flip-card-front img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  max-height: 100%;
+  object-fit: cover; /* Can also use "contain" if you want full visibility without crop */
+  border-radius: 10px;
 }
 
 .flip-card-back {
