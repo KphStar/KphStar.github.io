@@ -52,6 +52,7 @@
 
 /* Project HWT CSS */
 
+/* Hardware Test Project Box */
 .project-boxHWT {
   background-color: white;
   border: 1px solid #ccc;
@@ -68,18 +69,8 @@
   color: #1a252f;
 }
 
-.project-imageHWT {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  margin: 1em 0;
-  display: block;
-}
-
-/* Flip card container */
-.flip-cardHWT {
+/* Flip Card Styling */
+.flip-card {
   background-color: transparent;
   width: 100%;
   max-width: 600px;
@@ -88,7 +79,6 @@
   margin: 1em auto;
 }
 
-/* Flip inner */
 .flip-card-inner {
   position: relative;
   width: 100%;
@@ -97,12 +87,10 @@
   transform-style: preserve-3d;
 }
 
-/* On hover, flip the card */
 .flip-card:hover .flip-card-inner {
   transform: rotateY(180deg);
 }
 
-/* Front and back panels */
 .flip-card-front, .flip-card-back {
   position: absolute;
   width: 100%;
@@ -117,7 +105,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px;
 }
 
 .flip-card-back {
