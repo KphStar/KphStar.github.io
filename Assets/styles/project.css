@@ -454,9 +454,8 @@
 
 .flip-card-frontConnect4 {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   background-color: #fff;
   padding: 1em;
 }
