@@ -116,82 +116,86 @@
   font-size: 0.95em;
   overflow-y: auto;
 }
-/* Container for the code not used in the project box 
 
-/* Container for the Hardware Test Project
+/* Container for the Hardware Test Project*/
 .project-boxHWT {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 1.5em;
+  padding: 2.5em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-weight: bold;
 }
 
-/* Container for the Activation Wonderland 
+/* Container for the Activation Wonderland */
 .project-boxACT {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 1.5em;
+  padding: 2.5em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-weight: bold;
 }
 
-/* Project WUSHU CSS 
+/* Project WUSHU CSS */
 .project-boxWU {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 1.5em;
+  padding: 2.5em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-weight: bold;
 }
 
+/* Project Nail News CSS */
 .project-boxNN {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 1.5em;
+  padding: 2.5em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-weight: bold;
 }
 
+/* Project Custom Kernel CSS */
 
 .project-boxCK {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 1.5em;
+  padding: 2.5em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-weight: bold;
 }
+
+/* Project Black Jack Game CSS */
 
 .project-boxBlackjack{
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 1.5em;
+  padding: 2.5em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-weight: bold;
 }
 
+/* Project Connect4 CSS */
+
 .project-boxConnect4{
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 1.5em;
+  padding: 2.5em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-weight: bold;
 } 
-   */
  
 
 
