@@ -70,7 +70,7 @@
 /* Flip Card Styling */
 .flip-card {
   background-color: transparent;
-  width: 100%;
+  width: 500px;
   max-width: 900px;
   height: 350px;
   perspective: 1000px;
