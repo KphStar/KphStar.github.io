@@ -92,6 +92,34 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
+    /* Dark Mode Styles */
+body.dark-mode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+body.dark-mode header,
+body.dark-mode footer,
+body.dark-mode nav,
+body.dark-mode .sidebar,
+body.dark-mode .main-content {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+body.dark-mode a {
+  color: #90caf9;
+}
+/* Smooth transition for theme change */
+body, .sidebar, .main-content, nav, header, footer {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Optional: Add hover effect on the toggle button */
+#toggle-theme-btn:hover {
+  opacity: 0.8;
+}
+
     /* --- Footer --- */
     footer {
       text-align: center;
