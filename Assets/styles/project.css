@@ -171,16 +171,25 @@
 }
 
 
-/* Project NN CSS */
+/* Front Side - Modified */
+.flip-card-frontNN {
+  display: flex;
+  flex-wrap: wrap; /* Allow images to wrap if needed */
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 1em;
+  gap: 1em; /* spacing between images */
+}
 
-.project-boxNN {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
+/* Project images inside flip-card */
+.project-imageNN {
+  width: 45%; /* Two images per row if container is full width */
+  max-width: 250px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* Project CK CSS */
