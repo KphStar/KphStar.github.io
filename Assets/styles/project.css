@@ -90,7 +90,7 @@
 }
 
 /* Flip card container */
-.flip-card {
+.flip-cardHWT {
   background-color: transparent;
   width: 100%;
   max-width: 600px;
@@ -100,7 +100,7 @@
 }
 
 /* Flip inner */
-.flip-card-inner {
+.flip-card-innerHWT {
   position: relative;
   width: 100%;
   height: 100%;
@@ -109,12 +109,12 @@
 }
 
 /* On hover, flip the card */
-.flip-card:hover .flip-card-inner {
+.flip-card:hover .flip-card-innerHWT {
   transform: rotateY(180deg);
 }
 
 /* Front and back panels */
-.flip-card-front, .flip-card-back {
+.flip-card-frontHWT, .flip-card-back {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -124,7 +124,7 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-.flip-card-front img {
+.flip-card-frontHWT img {
   width: 100%;
   height: 100%;
   object-fit: cover;
