@@ -116,8 +116,9 @@
   font-size: 0.95em;
   overflow-y: auto;
 }
+/* Container for the code not used in the project box 
 
-/* Container for the Hardware Test Project */
+/* Container for the Hardware Test Project
 .project-boxHWT {
   background-color: white;
   border: 1px solid #ccc;
@@ -128,7 +129,7 @@
   font-weight: bold;
 }
 
-/* Container for the Activation Wonderland */
+/* Container for the Activation Wonderland 
 .project-boxACT {
   background-color: white;
   border: 1px solid #ccc;
@@ -139,8 +140,7 @@
   font-weight: bold;
 }
 
-/* Project WUSHU CSS */
-
+/* Project WUSHU CSS 
 .project-boxWU {
   background-color: white;
   border: 1px solid #ccc;
@@ -151,9 +151,51 @@
   font-weight: bold;
 }
 
+.project-boxNN {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+}
+
+
+.project-boxCK {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+}
+
+.project-boxBlackjack{
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+}
+
+.project-boxConnect4{
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+} 
+   */
+ 
+
 
 /* Project GP CSS */
-
 .project-boxGP {
   background-color: white;
   border: 1px solid #ccc;
@@ -182,16 +224,6 @@
 }
 
 
-/* Container Box */
-.project-boxNN {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
 
 /* Flip Card Container */
 .flip-cardNN {
@@ -260,17 +292,6 @@
   overflow-y: auto;
 }
 
-/* Project CK CSS */
-
-.project-boxCK {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
 
 /* Flip Card Container */
 .flip-cardCK {
@@ -342,16 +363,6 @@
 
 /* Project BlackJack CSS */
 
-.project-boxBlackjack{
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
-
 /* Flip Card Container */
 .flip-cardBlackjack {
   width: 100%;
@@ -421,15 +432,6 @@
 
 /* Project Connect4WH CSS */
 
-.project-boxConnect4{
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
 
 /* Flip Card Container for Connect 4 */
 .flip-cardConnect4 {
