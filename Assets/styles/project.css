@@ -50,16 +50,7 @@
   gap: 20px;
 }
 
-/* Container for the Hardware Test Project */
-.project-boxHWT {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
+/* Universal Flipping Card CSS */
 
 /* Flip Card Container */
 .flip-card {
@@ -124,6 +115,17 @@
   text-align: left;
   font-size: 0.95em;
   overflow-y: auto;
+}
+
+/* Container for the Hardware Test Project */
+.project-boxHWT {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
 }
 
 /* Project WUSHU CSS */
