@@ -61,6 +61,16 @@
   font-weight: bold;
 }
 
+.project-imageHWT {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin: 1em 0;
+  display: block;
+}
+
 /* Flip Card Container */
 .flip-card {
   width: 600px;
@@ -105,8 +115,7 @@
 
 .flip-card-front img {
   width: 100%;
-  max-width: 600px;
-  height: auto;
+  height: 100%;
   object-fit: cover;
   border-radius: 10px;
   display: block;
