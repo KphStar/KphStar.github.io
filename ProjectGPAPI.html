@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Walking Farmer Animation</title>
+  <title>Walking Farmer Animation - Debug</title>
   <style>
     * {
       box-sizing: border-box;
@@ -15,58 +15,87 @@
     }
     canvas {
       display: block;
+      border: 2px dashed black;
+    }
+    #log {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 8px;
+      background: rgba(255,255,255,0.9);
+      font-family: monospace;
+      font-size: 12px;
+      color: #000;
+      z-index: 10;
     }
   </style>
 </head>
 <body>
+  <div id="log">Log:</div>
   <canvas id="canvas" width="800" height="400"></canvas>
 
   <script>
+    const log = (msg) => {
+      console.log(msg);
+      document.getElementById("log").innerText += "\n" + msg;
+    };
+
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
     const farmer = new Image();
-    farmer.src = "./Assets/images/FarmerWalking.png"; // 👈 Rename this to match your actual image file name
+    farmer.src = './Assets/images/FarmerWalking.png'; // Make sure path is correct
+    farmer.onload = () => {
+      log("Farmer image loaded successfully.");
+      requestAnimationFrame(animate);
+    };
+    farmer.onerror = () => {
+      log("❌ ERROR: Failed to load farmer image from: " + farmer.src);
+    };
 
     // Sprite settings
-    const frameWidth = 64; // Width of a single frame
+    const frameWidth = 64;
     const frameHeight = 64;
     const totalFrames = 4;
     let currentFrame = 0;
     let frameTimer = 0;
     const frameInterval = 10;
 
-    // Position and movement
+    // Movement
     let x = -frameWidth;
     const y = canvas.height / 2 - frameHeight / 2;
     let speed = 2;
     let state = 'entering';
     let pauseCounter = 0;
 
-    farmer.onload = () => {
-      requestAnimationFrame(animate);
-    };
-
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Advance animation frame
+      // Red box to show where sprite should appear
+      ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+      ctx.fillRect(x, y, frameWidth, frameHeight);
+
+      // Animate sprite frame
       frameTimer++;
       if (frameTimer >= frameInterval) {
         currentFrame = (currentFrame + 1) % totalFrames;
         frameTimer = 0;
       }
 
-      // Draw current sprite frame
-      ctx.drawImage(
-        farmer,
-        currentFrame * frameWidth, 0, // Source frame x, y
-        frameWidth, frameHeight,      // Source size
-        x, y,                         // Canvas position
-        frameWidth, frameHeight       // Display size
-      );
+      // Draw sprite frame
+      try {
+        ctx.drawImage(
+          farmer,
+          currentFrame * frameWidth, 0,
+          frameWidth, frameHeight,
+          x, y,
+          frameWidth, frameHeight
+        );
+      } catch (e) {
+        log("❌ drawImage error: " + e.message);
+      }
 
-      // Update movement
+      // Movement
       if (state === 'entering') {
         x += speed;
         if (x >= canvas.width / 2 - frameWidth / 2) {
@@ -80,7 +109,6 @@
       } else if (state === 'exiting') {
         x += speed;
         if (x > canvas.width + frameWidth) {
-          // Restart
           x = -frameWidth;
           state = 'entering';
           pauseCounter = 0;
