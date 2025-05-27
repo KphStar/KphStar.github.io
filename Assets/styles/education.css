@@ -82,6 +82,7 @@ footer {
   justify-content: center;
   min-width: 300px;
   flex: 0 0 auto;
+  background-color: aquamarine;
 }
 
 canvas#farmerCanvas {
