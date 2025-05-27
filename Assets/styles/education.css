@@ -39,6 +39,7 @@ nav a:hover {
 main.main-content {
   padding: 2em;
   flex: 1;
+  position: relative; /* 👈 Add this so the canvas can anchor inside */
 }
 
 h1 {
@@ -76,108 +77,11 @@ footer {
   min-width: 300px;
 }
 
-/* Timeline styles */
-.timeline {
-  position: relative;
-  height: 600px;
-  width: 1000px;
-  flex-shrink: 0;
-  margin-top: 2em;
-}
-
-.timeline-line {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  bottom: 0;
-  width: 6px;
-  background-color: #1a252f;
-}
-
-.timeline-event {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  width: 90px;
-}
-
-.circle {
-  position: relative;
-  width: 30px;
-  height: 30px;
-  background-color: #2c3e50;
-  margin: 0 auto;
-  cursor: pointer;
-  transition: all 0.4s ease-in-out;
-  clip-path: circle(50% at 50% 50%);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Branch (line growing out) */
-.circle::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  width: 0;
-  height: 4px;
-  background-color: #1a252f;
-  transform: translateY(-50%);
-  transition: width 0.4s ease-in-out 0.1s;
-  border-radius: 2px;
-}
-
-/* Leaf shape */
-.circle::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  width: 0;
-  height: 0;
-  background-color: #4caf50;
-  clip-path: ellipse(60% 40% at 50% 50%);
-  transform: translate(10px, -50%) scale(0);
-  transition: transform 0.3s ease-in-out 0.5s, width 0.3s ease-in-out 0.5s, height 0.3s ease-in-out 0.5s;
-  z-index: 5;
-}
-
-/* On hover: grow branch and show leaf */
-.circle:hover::after {
-  width: 50px;
-}
-
-.circle:hover::before {
-  width: 20px;
-  height: 12px;
-  transform: translate(60px, -50%) scale(1);
-}
-
-.info {
-  display: none;
-  background: #fff;
-  padding: 0.75em;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  position: absolute;
-  top: 40px;
-  width: 260px;
-  z-index: 10;
-}
-
-.timeline-event.left .info {
-  left: -280px;
-  text-align: right;
-}
-
-.timeline-event.right .info {
-  right: -280px;
-  text-align: left;
-}
-
-.timeline-event:hover .info {
-  display: block;
-}
+    canvas#farmerCanvas {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 128px;
+      height: 128px;
+      z-index: 10;
+    }
