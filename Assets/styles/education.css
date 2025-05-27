@@ -37,7 +37,7 @@ nav a:hover {
 }
 
 main.main-content {
-  padding: 2em;
+ padding: 2em 2em 1em 2em; /* less bottom padding */
   flex: 1;
 }
 
@@ -69,11 +69,13 @@ footer {
   align-items: stretch; /* ensures both columns match height */
   flex-wrap: wrap;
   gap: 4em;
+  margin-bottom: 0; /* add this */
 }
 
 .education-details {
   flex: 1;
   min-width: 300px;
+   margin-bottom: 0; /* add this */
 }
 
 .farmer-canvas-wrapper {
