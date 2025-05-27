@@ -77,11 +77,14 @@ footer {
   min-width: 300px;
 }
 
-    canvas#farmerCanvas {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 128px;
-      height: 128px;
-      z-index: 10;
-    }
+ .farmer-container {
+  display: flex;
+  justify-content: flex-end; /* aligns the canvas to the right */
+  margin-top: 2em;
+}
+
+canvas#farmerCanvas {
+  width: 300px;
+  height: 300px;
+  border: none;
+}
