@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walking Farmer Animation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background-color: #88c070;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const farmer = new Image();
+    farmer.src = 'Assets/images/FarmerWalking.png'; // 👈 Rename this to match your actual image file name
+
+    // Sprite settings
+    const frameWidth = 64; // Width of a single frame
+    const frameHeight = 64;
+    const totalFrames = 4;
+    let currentFrame = 0;
+    let frameTimer = 0;
+    const frameInterval = 10;
+
+    // Position and movement
+    let x = -frameWidth;
+    const y = canvas.height / 2 - frameHeight / 2;
+    let speed = 2;
+    let state = 'entering';
+    let pauseCounter = 0;
+
+    farmer.onload = () => {
+      requestAnimationFrame(animate);
+    };
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Advance animation frame
+      frameTimer++;
+      if (frameTimer >= frameInterval) {
+        currentFrame = (currentFrame + 1) % totalFrames;
+        frameTimer = 0;
+      }
+
+      // Draw current sprite frame
+      ctx.drawImage(
+        farmer,
+        currentFrame * frameWidth, 0, // Source frame x, y
+        frameWidth, frameHeight,      // Source size
+        x, y,                         // Canvas position
+        frameWidth, frameHeight       // Display size
+      );
+
+      // Update movement
+      if (state === 'entering') {
+        x += speed;
+        if (x >= canvas.width / 2 - frameWidth / 2) {
+          state = 'pause';
+        }
+      } else if (state === 'pause') {
+        pauseCounter++;
+        if (pauseCounter > 60) {
+          state = 'exiting';
+        }
+      } else if (state === 'exiting') {
+        x += speed;
+        if (x > canvas.width + frameWidth) {
+          // Restart
+          x = -frameWidth;
+          state = 'entering';
+          pauseCounter = 0;
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+  </script>
+</body>
+</html>
