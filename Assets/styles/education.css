@@ -39,7 +39,6 @@ nav a:hover {
 main.main-content {
   padding: 2em;
   flex: 1;
-  position: relative; /* 👈 Add this so the canvas can anchor inside */
 }
 
 h1 {
@@ -66,10 +65,10 @@ footer {
 
 .content-wrapper {
   display: flex;
-  gap: 4em;
-  align-items: flex-start;
   justify-content: space-between;
+  align-items: stretch; /* ensures both columns match height */
   flex-wrap: wrap;
+  gap: 4em;
 }
 
 .education-details {
@@ -77,14 +76,18 @@ footer {
   min-width: 300px;
 }
 
- .farmer-container {
+.farmer-canvas-wrapper {
   display: flex;
-  justify-content: flex-end; /* aligns the canvas to the right */
-  margin-top: 2em;
+  align-items: center;
+  justify-content: center;
+  min-width: 300px;
+  flex: 0 0 auto;
 }
 
 canvas#farmerCanvas {
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
+  max-width: 300px;
+  max-height: 100%;
   border: none;
 }
