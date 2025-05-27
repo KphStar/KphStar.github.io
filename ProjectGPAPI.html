@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Walking Farmer Animation - Debug</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Walking Farmer Animation - Frame by Frame</title>
   <style>
     * {
       box-sizing: border-box;
@@ -43,27 +43,40 @@
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
 
-    const farmer = new Image();
-    farmer.src = './Assets/images/FarmerWalking.png'; // Make sure path is correct
-    farmer.onload = () => {
-      log("Farmer image loaded successfully.");
-      requestAnimationFrame(animate);
-    };
-    farmer.onerror = () => {
-      log("❌ ERROR: Failed to load farmer image from: " + farmer.src);
-    };
+    // Load each frame image individually
+    const totalFrames = 4;
+    const frameImages = [];
+    let imagesLoaded = 0;
 
-    // Sprite settings
+    for (let i = 1; i <= totalFrames; i++) {
+      const img = new Image();
+      img.src = `./Assets/images/farmer${i}.png`; // e.g., farmer1.png, farmer2.png, etc.
+      img.onload = () => {
+        imagesLoaded++;
+        if (imagesLoaded === totalFrames) {
+          log("All frames loaded. Starting animation.");
+          requestAnimationFrame(animate);
+        }
+      };
+      img.onerror = () => {
+        log(`❌ ERROR: Failed to load farmer${i}.png`);
+      };
+      frameImages.push(img);
+    }
+
+    // Animation settings
     const frameWidth = 64;
     const frameHeight = 64;
-    const totalFrames = 4;
+    const displayWidth = 64;
+    const displayHeight = 64;
+    const y = canvas.height / 2 - displayHeight / 2;
+
     let currentFrame = 0;
     let frameTimer = 0;
     const frameInterval = 10;
 
     // Movement
-    let x = -frameWidth;
-    const y = canvas.height / 2 - frameHeight / 2;
+    let x = -displayWidth;
     let speed = 2;
     let state = 'entering';
     let pauseCounter = 0;
@@ -71,34 +84,24 @@
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Red box to show where sprite should appear
-      ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
-      ctx.fillRect(x, y, frameWidth, frameHeight);
-
-      // Animate sprite frame
+      // Advance frame
       frameTimer++;
       if (frameTimer >= frameInterval) {
         currentFrame = (currentFrame + 1) % totalFrames;
         frameTimer = 0;
       }
 
-      // Draw sprite frame
+      // Draw current frame image
       try {
-        ctx.drawImage(
-          farmer,
-          currentFrame * frameWidth, 0,
-          frameWidth, frameHeight,
-          x, y,
-          frameWidth, frameHeight
-        );
+        ctx.drawImage(frameImages[currentFrame], x, y, displayWidth, displayHeight);
       } catch (e) {
         log("❌ drawImage error: " + e.message);
       }
 
-      // Movement
+      // Move character
       if (state === 'entering') {
         x += speed;
-        if (x >= canvas.width / 2 - frameWidth / 2) {
+        if (x >= canvas.width / 2 - displayWidth / 2) {
           state = 'pause';
         }
       } else if (state === 'pause') {
@@ -108,8 +111,8 @@
         }
       } else if (state === 'exiting') {
         x += speed;
-        if (x > canvas.width + frameWidth) {
-          x = -frameWidth;
+        if (x > canvas.width + displayWidth) {
+          x = -displayWidth;
           state = 'entering';
           pauseCounter = 0;
         }
