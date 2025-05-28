@@ -18,10 +18,11 @@
   </style>
 </head>
 <body>
-  <script src="https://unpkg.com/three@0.174.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.174.0/examples/js/loaders/FontLoader.js"></script>
-  <script src="https://unpkg.com/three@0.174.0/examples/js/geometries/TextGeometry.js"></script>
-  <script>
+  <script type="module">
+    import * as THREE from 'https://cdn.skypack.dev/three';
+    import { FontLoader } from 'https://cdn.skypack.dev/three/examples/jsm/loaders/FontLoader.js';
+    import { TextGeometry } from 'https://cdn.skypack.dev/three/examples/jsm/geometries/TextGeometry.js';
+
     let scene, camera, renderer;
     let stars, hearts = [], texts = [];
     let mouseX = 0, mouseY = 0;
@@ -93,11 +94,11 @@
     }
 
     function addTexts() {
-      const loader = new THREE.FontLoader();
+      const loader = new FontLoader();
       loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
         for (let i = 0; i < 10; i++) {
           const message = messages[Math.floor(Math.random() * messages.length)];
-          const geo = new THREE.TextGeometry(message, {
+          const geo = new TextGeometry(message, {
             font: font,
             size: 2,
             height: 0.5
