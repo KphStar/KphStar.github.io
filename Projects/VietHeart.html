@@ -24,12 +24,12 @@
 
   <script>
     const messages = [
-         "Cảm ơn vì em đã đến",
+      "Cảm ơn vì em đã đến",
       "Anh sẽ luôn bên cạnh em",
       "Anh yêu em nhiều lắm ♡",
       "Làm người yêu anh nhé ♡",
-    "Em là ánh sáng trong cuộc đời anh",
-    "Anh sẽ mãi yêu em",
+      "Em là ánh sáng trong cuộc đời anh",
+      "Anh sẽ mãi yêu em",
       "Mỗi ngày bên em là một ngày hạnh phúc",
       "Em là lý do anh mỉm cười",
       "Anh sẽ luôn bảo vệ em",
@@ -58,16 +58,18 @@
     const hearts = [];
 
     function createFloatingText() {
-      const text = messages[Math.floor(Math.random() * messages.length)];
-      floatingTexts.push({
-        text,
-        x: Math.random() * width,
-        y: height + 50,
-        speed: 0.5 + Math.random(),
-        size: 20 + Math.random() * 20,
-        opacity: 0.5 + Math.random() * 0.5,
-        glow: Math.random() * 40 + 10
-      });
+      if (floatingTexts.length < 20 && Math.random() < 0.5) {
+        const text = messages[Math.floor(Math.random() * messages.length)];
+        floatingTexts.push({
+          text,
+          x: Math.random() * width,
+          y: height + 50,
+          speed: 1 + Math.random() * 1.5,
+          size: 20 + Math.random() * 20,
+          opacity: 0.5 + Math.random() * 0.5,
+          glow: Math.random() * 40 + 10
+        });
+      }
     }
 
     function createHeart() {
@@ -75,7 +77,7 @@
         x: Math.random() * width,
         y: height + 10,
         size: 10 + Math.random() * 20,
-        speed: 1 + Math.random(),
+        speed: 1.5 + Math.random() * 1.5,
         opacity: 0.5 + Math.random() * 0.5
       });
     }
@@ -122,8 +124,8 @@
       requestAnimationFrame(draw);
     }
 
-    setInterval(createFloatingText, 500);
-    setInterval(createHeart, 300);
+    setInterval(createFloatingText, 300);
+    setInterval(createHeart, 200);
     draw();
   </script>
 </body>
