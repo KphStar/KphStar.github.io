@@ -24,7 +24,7 @@
 
   <script>
     const messages = [
-    "Cảm ơn vì em đã đến",
+         "Cảm ơn vì em đã đến",
       "Anh sẽ luôn bên cạnh em",
       "Anh yêu em nhiều lắm ♡",
       "Làm người yêu anh nhé ♡",
@@ -65,7 +65,8 @@
         y: height + 50,
         speed: 0.5 + Math.random(),
         size: 20 + Math.random() * 20,
-        opacity: 0.5 + Math.random() * 0.5
+        opacity: 0.5 + Math.random() * 0.5,
+        glow: Math.random() * 40 + 10
       });
     }
 
@@ -105,7 +106,7 @@
         ctx.font = `${item.size}px Segoe UI`;
         ctx.fillStyle = `rgba(255, 153, 255, ${item.opacity})`;
         ctx.shadowColor = '#ff99cc';
-        ctx.shadowBlur = 20;
+        ctx.shadowBlur = item.glow + Math.sin(Date.now() / 200 + index) * 10;
         ctx.fillText(item.text, item.x, item.y);
         item.y -= item.speed;
         if (item.y < -50) floatingTexts.splice(index, 1);
