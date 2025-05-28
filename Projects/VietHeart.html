@@ -25,6 +25,8 @@
   let scene, camera, renderer;
   let hearts = [], texts = [];
 
+  let mouseX = 0, mouseY = 0;
+
   const messages = [
     "Cảm ơn vì em đã đến",
     "Anh yêu em nhiều lắm ♡",
@@ -52,6 +54,7 @@
     add2DText();
 
     window.addEventListener('resize', onWindowResize);
+    window.addEventListener('mousemove', onMouseMove);
   }
 
   function addLights() {
@@ -88,7 +91,6 @@
   function add2DText() {
     for (let i = 0; i < 40; i++) {
       const message = messages[Math.floor(Math.random() * messages.length)];
-
       const sprite = new SpriteText(message);
       sprite.color = "#ff99cc";
       sprite.textHeight = 2;
@@ -110,14 +112,22 @@
     requestAnimationFrame(animate);
     const time = Date.now() * 0.001;
 
+    // Floating upward
     hearts.forEach(h => {
       h.rotation.y += 0.005;
-      h.position.y += Math.sin(time + h.position.x) * 0.01;
+      h.position.y += 0.05;
+      if (h.position.y > 60) h.position.y = -60;
     });
 
     texts.forEach(t => {
-      t.position.y += Math.sin(time + t.userData.offset) * 0.01;
+      t.position.y += 0.05;
+      if (t.position.y > 60) t.position.y = -60;
     });
+
+    // Smooth camera movement
+    camera.position.x += (mouseX * 100 - camera.position.x) * 0.02;
+    camera.position.y += (mouseY * 100 - camera.position.y) * 0.02;
+    camera.lookAt(0, 0, 0);
 
     renderer.render(scene, camera);
   }
@@ -126,6 +136,11 @@
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  function onMouseMove(event) {
+    mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = -(event.clientY / window.innerHeight - 0.5) * 2;
   }
 </script>
 </body>
