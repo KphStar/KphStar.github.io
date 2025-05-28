@@ -24,12 +24,14 @@
 
   let scene, camera, renderer;
   let hearts = [], texts = [];
+  let heartGeometry, heartMaterial;
 
   let mouseX = 0, mouseY = 0;
-  const messageCount = 50;
-  const heartCount = 50;
+
   const floatSpeed = 0.2;
   const forwardSpeed = 0.1;
+  const maxY = 80;
+  const minY = -80;
 
   const messages = [
     "Cảm ơn vì em đã đến",
@@ -54,8 +56,11 @@
     document.body.appendChild(renderer.domElement);
 
     addLights();
-    add3DHearts();
-    add2DText();
+    prepareHeartGeometry();
+    for (let i = 0; i < 50; i++) {
+      spawnHeart();
+      spawnText();
+    }
 
     window.addEventListener('resize', onWindowResize);
     window.addEventListener('mousemove', onMouseMove);
@@ -66,7 +71,7 @@
     scene.add(light);
   }
 
-  function add3DHearts() {
+  function prepareHeartGeometry() {
     const shape = new THREE.Shape();
     shape.moveTo(0, 0);
     shape.bezierCurveTo(0, 3, -5, 3, -5, 0);
@@ -75,64 +80,69 @@
     shape.bezierCurveTo(5, 3, 0, 3, 0, 0);
 
     const extrudeSettings = { depth: 1, bevelEnabled: false };
-    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    const material = new THREE.MeshPhongMaterial({ color: 0xff3366, shininess: 100 });
-
-    for (let i = 0; i < heartCount; i++) {
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.scale.setScalar(0.1 + Math.random() * 0.3);
-      mesh.position.set(
-        (Math.random() - 0.5) * 100,
-        Math.random() * -100,
-        (Math.random() - 0.5) * 100
-      );
-      mesh.rotation.set(Math.random(), Math.random(), Math.random());
-      scene.add(mesh);
-      hearts.push(mesh);
-    }
+    heartGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    heartMaterial = new THREE.MeshPhongMaterial({ color: 0xff3366, shininess: 100 });
   }
 
-  function add2DText() {
-    for (let i = 0; i < messageCount; i++) {
-      const message = messages[Math.floor(Math.random() * messages.length)];
-      const sprite = new SpriteText(message);
-      sprite.color = "#ff99cc";
-      sprite.textHeight = 2;
-      sprite.fontFace = "Arial";
-      sprite.userData.offset = Math.random() * 100;
-      sprite.position.set(
-        (Math.random() - 0.5) * 100,
-        Math.random() * -100,
-        (Math.random() - 0.5) * 100
-      );
-      scene.add(sprite);
-      texts.push(sprite);
-    }
+  function spawnHeart() {
+    const mesh = new THREE.Mesh(heartGeometry, heartMaterial.clone());
+    const scale = 0.1 + Math.random() * 0.3;
+    mesh.scale.setScalar(scale);
+    mesh.position.set(
+      (Math.random() - 0.5) * 100,
+      minY,
+      (Math.random() - 0.5) * 100
+    );
+    mesh.rotation.set(Math.random(), Math.random(), Math.random());
+    hearts.push(mesh);
+    scene.add(mesh);
+  }
+
+  function spawnText() {
+    const message = messages[Math.floor(Math.random() * messages.length)];
+    const sprite = new SpriteText(message);
+    sprite.color = "#ff99cc";
+    sprite.textHeight = 2;
+    sprite.fontFace = "Arial";
+    sprite.position.set(
+      (Math.random() - 0.5) * 100,
+      minY,
+      (Math.random() - 0.5) * 100
+    );
+    texts.push(sprite);
+    scene.add(sprite);
   }
 
   function animate() {
     requestAnimationFrame(animate);
-    const time = Date.now() * 0.001;
 
-    // Move camera forward slowly
+    // Camera movement
     camera.position.z -= forwardSpeed;
-
-    // Slight parallax based on mouse
     camera.position.x += (mouseX * 50 - camera.position.x) * 0.02;
     camera.position.y += (mouseY * 50 - camera.position.y) * 0.02;
     camera.lookAt(0, 0, camera.position.z - 20);
 
-    // Move hearts upward
-    hearts.forEach(h => {
+    // Move hearts
+    for (let i = hearts.length - 1; i >= 0; i--) {
+      const h = hearts[i];
       h.position.y += floatSpeed;
-      if (h.position.y > 50) h.position.y = -50;
-    });
+      if (h.position.y > maxY) {
+        scene.remove(h);
+        hearts.splice(i, 1);
+        spawnHeart();
+      }
+    }
 
-    // Move texts upward
-    texts.forEach(t => {
+    // Move texts
+    for (let i = texts.length - 1; i >= 0; i--) {
+      const t = texts[i];
       t.position.y += floatSpeed;
-      if (t.position.y > 50) t.position.y = -50;
-    });
+      if (t.position.y > maxY) {
+        scene.remove(t);
+        texts.splice(i, 1);
+        spawnText();
+      }
+    }
 
     renderer.render(scene, camera);
   }
