@@ -30,7 +30,9 @@ let heartGeometry, heartMaterial;
 
 let isDragging = false;
 let prevMouse = { x: 0, y: 0 };
-let rotation = { x: 0, y: 0 };
+let rotation = { x: 0, y: -0.5 }; // 🔼 Start looking up
+let targetRotation = { x: 0, y: 0 };
+let autoSnapTimer = null;
 
 let lastSpawnTime = 0;
 const fallSpeed = 0.25;
@@ -69,8 +71,14 @@ function init() {
     isDragging = true;
     prevMouse.x = e.clientX;
     prevMouse.y = e.clientY;
+    if (autoSnapTimer) clearTimeout(autoSnapTimer);
   });
-  window.addEventListener('mouseup', () => isDragging = false);
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    autoSnapTimer = setTimeout(() => {
+      targetRotation = { x: 0, y: 0 }; // snap to center
+    }, 10000); // ⏱️ 10 seconds idle
+  });
   window.addEventListener('mousemove', onMouseMove);
 }
 
@@ -132,6 +140,12 @@ function spawnText() {
 function animate(time) {
   requestAnimationFrame(animate);
 
+  // Smoothly rotate toward targetRotation when idle
+  if (!isDragging) {
+    rotation.x += (targetRotation.x - rotation.x) * 0.02;
+    rotation.y += (targetRotation.y - rotation.y) * 0.02;
+  }
+
   // Spawning
   if (!lastSpawnTime || time - lastSpawnTime > 300) {
     if (Math.random() < 0.6 + zoomOutBonus) spawnText();
@@ -159,7 +173,6 @@ function animate(time) {
     }
   });
 
-  // Camera look direction (based on drag rotation)
   camera.rotation.x = rotation.y;
   camera.rotation.y = rotation.x;
 
@@ -181,13 +194,12 @@ function onMouseMove(event) {
   const deltaX = event.clientX - prevMouse.x;
   const deltaY = event.clientY - prevMouse.y;
 
-  rotation.x += deltaX * 0.005; // Left/right
-  rotation.y += deltaY * 0.005; // Up/down
+  rotation.x += deltaX * 0.005;
+  rotation.y += deltaY * 0.005;
 
   prevMouse.x = event.clientX;
   prevMouse.y = event.clientY;
 }
-
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -196,3 +208,5 @@ function onWindowResize() {
 </script>
 </body>
 </html>
+<!-- This is a simple HTML template for a personal portfolio page. -->
+<!-- It includes a header with navigation links, a sidebar with profile information, -->
