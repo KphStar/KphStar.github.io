@@ -3,15 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Love Rain</title>
+  <title>Love Space 3D</title>
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100%;
-      background: black;
-    }
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+  background: black;
+  -webkit-user-select: none; /* ✅ Add this for Safari */
+  user-select: none;
+}
     canvas {
       display: block;
     }
@@ -19,187 +21,191 @@
 </head>
 <body>
 <script type="module">
-  import * as THREE from 'https://esm.sh/three';
-  import SpriteText from 'https://esm.sh/three-spritetext';
+import * as THREE from 'https://esm.sh/three';
+import SpriteText from 'https://esm.sh/three-spritetext';
 
-  let scene, camera, renderer;
-  let hearts = [], texts = [];
-  let heartGeometry, heartMaterial;
+let scene, camera, renderer;
+let hearts = [], texts = [], particles;
+let heartGeometry, heartMaterial;
 
-  let mouse = { x: 0, y: 0 }, isDragging = false, prevMouse = { x: 0, y: 0 };
-  let rotation = { x: 0, y: 0 };
+let isHolding = false;
+let prevMouse = { x: 0, y: 0 };
+let rotation = { x: 0, y: 0 };
 
-  const floatSpeed = 0.25;
-  const maxY = 80;
-  const minY = -80;
-  const spawnInterval = 300;
-  let lastSpawnTime = 0;
-  let zoomOutBonus = 0;
-  let lastZoom = 50;
+let lastSpawnTime = 0;
+const floatSpeed = 0.25;
+const maxY = 80;
+const minY = -80;
+let lastZoom = 50;
+let zoomOutBonus = 0;
 
-  const messages = [
-    "Cảm ơn vì em đã đến",
-    "Anh yêu em nhiều lắm ♡",
-    "Làm người yêu anh nhé ♡",
-    "Em là ánh sáng trong cuộc đời anh",
-    "Anh sẽ mãi yêu em",
-    "Chúng ta sẽ cùng nhau đi hết cuộc đời này"
-  ];
+const messages = [
+  "Cảm ơn vì em đã đến",
+  "Anh yêu em nhiều lắm ♡",
+  "Làm người yêu anh nhé ♡",
+  "Em là ánh sáng trong cuộc đời anh",
+  "Anh sẽ mãi yêu em",
+  "Chúng ta sẽ cùng nhau đi hết cuộc đời này"
+];
 
-  init();
-  animate();
+init();
+animate();
 
-  function init() {
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
-    camera.position.z = lastZoom;
+function init() {
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
+  camera.position.z = lastZoom;
 
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
 
-    addLights();
-    prepareHeartGeometry();
+  addLights();
+  addParticles();
+  prepareHeartGeometry();
 
-    window.addEventListener('resize', onWindowResize);
-    window.addEventListener('wheel', onScrollZoom);
-    window.addEventListener('mousedown', () => isDragging = true);
-    window.addEventListener('mouseup', () => isDragging = false);
-    window.addEventListener('mousemove', onMouseDrag);
+  window.addEventListener('resize', onWindowResize);
+  window.addEventListener('wheel', onScrollZoom);
+  window.addEventListener('mousedown', () => isHolding = true);
+  window.addEventListener('mouseup', () => isHolding = false);
+  window.addEventListener('mousemove', onMouseMove);
+}
+
+function addLights() {
+  scene.add(new THREE.AmbientLight(0xffffff, 1));
+
+  const sparkle = new THREE.PointLight(0xff99cc, 1.5, 300);
+  sparkle.position.set(0, 20, 20);
+  scene.add(sparkle);
+}
+
+function addParticles() {
+  const count = 1000;
+  const geometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(count * 3);
+  for (let i = 0; i < count * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 600;
   }
 
-  function addLights() {
-    const ambient = new THREE.AmbientLight(0xffffff, 1);
-    scene.add(ambient);
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-    const sparkle = new THREE.PointLight(0xff99cc, 1, 200);
-    sparkle.position.set(0, 20, 20);
-    scene.add(sparkle);
+  const material = new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: 1.2,
+    transparent: true,
+    opacity: 0.4,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+
+  particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+}
+
+function prepareHeartGeometry() {
+  const shape = new THREE.Shape();
+  shape.moveTo(0, 0);
+  shape.bezierCurveTo(0, 3, -5, 3, -5, 0);
+  shape.bezierCurveTo(-5, -3, 0, -5, 0, -7);
+  shape.bezierCurveTo(0, -5, 5, -3, 5, 0);
+  shape.bezierCurveTo(5, 3, 0, 3, 0, 0);
+
+  const extrudeSettings = { depth: 1, bevelEnabled: false };
+  heartGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  heartMaterial = new THREE.MeshPhongMaterial({
+    color: 0xff3366,
+    shininess: 300,
+    specular: 0xffccff
+  });
+}
+
+function spawnHeart() {
+  const mesh = new THREE.Mesh(heartGeometry, heartMaterial.clone());
+  const scale = 0.1 + Math.random() * 0.3;
+  mesh.scale.setScalar(scale);
+  mesh.position.set((Math.random() - 0.5) * 100, minY, (Math.random() - 0.5) * 100);
+  mesh.rotation.set(Math.random(), Math.random(), Math.random());
+  hearts.push(mesh);
+  scene.add(mesh);
+}
+
+function spawnText() {
+  const message = messages[Math.floor(Math.random() * messages.length)];
+  const sprite = new SpriteText(message);
+  sprite.color = "#ff99cc";
+  sprite.textHeight = 2.5 + Math.random();
+  sprite.fontFace = "Arial";
+  sprite.material.opacity = 0.9 + Math.random() * 0.1;
+  sprite.position.set((Math.random() - 0.5) * 100, minY, (Math.random() - 0.5) * 100);
+  texts.push(sprite);
+  scene.add(sprite);
+}
+
+function animate(time) {
+  requestAnimationFrame(animate);
+
+  if (!lastSpawnTime || time - lastSpawnTime > 300) {
+    if (Math.random() < 0.6 + zoomOutBonus) spawnText();
+    if (Math.random() < 0.3 + zoomOutBonus / 2) spawnHeart();
+    lastSpawnTime = time;
+    zoomOutBonus = 0;
   }
 
-  function prepareHeartGeometry() {
-    const shape = new THREE.Shape();
-    shape.moveTo(0, 0);
-    shape.bezierCurveTo(0, 3, -5, 3, -5, 0);
-    shape.bezierCurveTo(-5, -3, 0, -5, 0, -7);
-    shape.bezierCurveTo(0, -5, 5, -3, 5, 0);
-    shape.bezierCurveTo(5, 3, 0, 3, 0, 0);
-
-    const extrudeSettings = { depth: 1, bevelEnabled: false };
-    heartGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    heartMaterial = new THREE.MeshPhongMaterial({
-      color: 0xff3366,
-      shininess: 300,
-      specular: 0xffccff
-    });
-  }
-
-  function spawnHeart() {
-    const mesh = new THREE.Mesh(heartGeometry, heartMaterial.clone());
-    const scale = 0.1 + Math.random() * 0.3;
-    mesh.scale.setScalar(scale);
-    mesh.position.set(
-      (Math.random() - 0.5) * 100,
-      minY,
-      (Math.random() - 0.5) * 100
-    );
-    mesh.rotation.set(Math.random(), Math.random(), Math.random());
-    hearts.push(mesh);
-    scene.add(mesh);
-  }
-
-  function spawnText() {
-    const message = messages[Math.floor(Math.random() * messages.length)];
-    const sprite = new SpriteText(message);
-    sprite.color = "#ff99cc";
-    sprite.textHeight = 2.5 + Math.random();
-    sprite.fontFace = "Arial";
-    sprite.material.opacity = 0.9 + Math.random() * 0.1;
-    sprite.position.set(
-      (Math.random() - 0.5) * 100,
-      minY,
-      (Math.random() - 0.5) * 100
-    );
-    texts.push(sprite);
-    scene.add(sprite);
-  }
-
-  function animate(time) {
-    requestAnimationFrame(animate);
-
-    // Random interval-based spawn
-    if (!lastSpawnTime || time - lastSpawnTime > spawnInterval) {
-      if (Math.random() < 0.6 + zoomOutBonus) spawnText();
-      if (Math.random() < 0.3 + zoomOutBonus / 2) spawnHeart();
-      lastSpawnTime = time;
-      zoomOutBonus = 0; // reset after one wave
-    }
-
-    // Float objects
-    for (let i = hearts.length - 1; i >= 0; i--) {
-      const h = hearts[i];
-      h.position.y += floatSpeed;
-      h.rotation.y += 0.01;
-      if (h.position.y > maxY) {
-        scene.remove(h);
-        hearts.splice(i, 1);
-      }
-    }
-
-    for (let i = texts.length - 1; i >= 0; i--) {
-      const t = texts[i];
-      t.position.y += floatSpeed;
-      t.material.opacity = 0.8 + Math.sin(time * 0.005 + t.position.x) * 0.2; // glitter
-      if (t.position.y > maxY) {
-        scene.remove(t);
-        texts.splice(i, 1);
-      }
-    }
-
-    // Apply camera rotation from dragging
-    camera.rotation.x = rotation.y;
-    camera.rotation.y = rotation.x;
-
-    renderer.render(scene, camera);
-  }
-
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-
-  function onScrollZoom(event) {
-    lastZoom += event.deltaY * 0.05;
-    if (lastZoom < 10) lastZoom = 10;
-    if (lastZoom > 200) lastZoom = 200;
-    camera.position.z = lastZoom;
-
-    // If zooming out, trigger a burst of hearts/messages
-    if (event.deltaY > 0) {
-      zoomOutBonus = 0.8; // temporary boost in spawn rate
-    }
-  }
-
-  function onMouseDrag(event) {
-    if (!isDragging) return;
-    const deltaX = event.clientX - prevMouse.x;
-    const deltaY = event.clientY - prevMouse.y;
-
-    rotation.x += deltaX * 0.005;
-    rotation.y += deltaY * 0.005;
-
-    prevMouse.x = event.clientX;
-    prevMouse.y = event.clientY;
-  }
-
-  // Keep track of last mouse position
-  window.addEventListener('mousemove', (e) => {
-    if (isDragging) {
-      prevMouse.x = e.clientX;
-      prevMouse.y = e.clientY;
+  hearts.forEach((h, i) => {
+    h.position.y += floatSpeed;
+    h.rotation.y += 0.01;
+    if (h.position.y > maxY) {
+      scene.remove(h);
+      hearts.splice(i, 1);
     }
   });
+
+  texts.forEach((t, i) => {
+    t.position.y += floatSpeed;
+    t.material.opacity = 0.8 + Math.sin(time * 0.005 + t.position.x) * 0.2;
+    if (t.position.y > maxY) {
+      scene.remove(t);
+      texts.splice(i, 1);
+    }
+  });
+
+  // Glitter background movement
+  particles.rotation.y += 0.0005;
+
+  // Apply view rotation from hold-drag
+  camera.rotation.x = rotation.y;
+  camera.rotation.y = rotation.x;
+
+  renderer.render(scene, camera);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onScrollZoom(event) {
+  lastZoom += event.deltaY * 0.05;
+  if (lastZoom < 10) lastZoom = 10;
+  if (lastZoom > 200) lastZoom = 200;
+  camera.position.z = lastZoom;
+
+  if (event.deltaY > 0) zoomOutBonus = 0.8;
+}
+
+function onMouseMove(event) {
+  if (!isHolding) return;
+
+  const deltaX = event.clientX - prevMouse.x;
+  const deltaY = event.clientY - prevMouse.y;
+
+  rotation.x += deltaX * 0.005;
+  rotation.y += deltaY * 0.005;
+
+  prevMouse.x = event.clientX;
+  prevMouse.y = event.clientY;
+}
 </script>
 </body>
 </html>
