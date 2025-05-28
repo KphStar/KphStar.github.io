@@ -78,21 +78,20 @@ footer {
    margin-bottom: 0; /* add this */
 }
 
-.farmer-canvas-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  min-width: 300px;
-  max-width: 100%;
-  height: auto;
+.farmer-canvas-fullwidth {
+  width: 100vw; /* full width of viewport */
   background-color: aquamarine;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 canvas#farmerCanvas {
   width: 100%;
+  max-width: 300px; /* limit canvas size */
   height: auto;
-  max-width: 100%;
-  max-height: 300px; /* optional max height */
   border: none;
 }
