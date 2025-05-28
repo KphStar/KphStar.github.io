@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Love Rain 3D</title>
+  <title>Love Rain 360°</title>
   <style>
     html, body {
       margin: 0;
@@ -28,7 +28,7 @@ let heartGeometry, heartMaterial;
 
 let isDragging = false;
 let prevMouse = { x: 0, y: 0 };
-let rotation = { x: 0, y: -0.3 };
+let rotation = { x: 0, y: 0 };
 let zoom = 50;
 let zoomTarget = 50;
 
@@ -46,7 +46,6 @@ animate();
 
 function init() {
   scene = new THREE.Scene();
-
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
   camera.position.z = zoom;
 
@@ -70,9 +69,9 @@ function init() {
 
 function addLights() {
   scene.add(new THREE.AmbientLight(0xffffff, 1));
-  const pink = new THREE.PointLight(0xff99cc, 1.5, 200);
-  pink.position.set(0, 30, 50);
-  scene.add(pink);
+  const light = new THREE.PointLight(0xff99cc, 1.5, 200);
+  light.position.set(0, 30, 50);
+  scene.add(light);
 }
 
 function prepareHeartGeometry() {
@@ -96,12 +95,16 @@ function spawnHeart() {
   const scale = 0.2 + Math.random() * 0.3;
   mesh.scale.setScalar(scale);
   mesh.position.set(
-    (Math.random() - 0.5) * 100,
-    80,
-    (Math.random() - 0.5) * 100
+    (Math.random() - 0.5) * 150,
+    (Math.random() - 0.5) * 150 + 60,
+    (Math.random() - 0.5) * 150
   );
   mesh.rotation.set(Math.random(), Math.random(), Math.random());
-  mesh.userData.vy = 0.1 + Math.random() * 0.2;
+  mesh.userData.velocity = new THREE.Vector3(
+    0,
+    -0.2 - Math.random() * 0.2,
+    0
+  );
   hearts.push(mesh);
   scene.add(mesh);
 }
@@ -112,11 +115,15 @@ function spawnText() {
   sprite.color = "#ff99cc";
   sprite.textHeight = 3 + Math.random() * 1;
   sprite.position.set(
-    (Math.random() - 0.5) * 100,
-    80,
-    (Math.random() - 0.5) * 100
+    (Math.random() - 0.5) * 150,
+    (Math.random() - 0.5) * 150 + 60,
+    (Math.random() - 0.5) * 150
   );
-  sprite.userData.vy = 0.1 + Math.random() * 0.2;
+  sprite.userData.velocity = new THREE.Vector3(
+    0,
+    -0.2 - Math.random() * 0.2,
+    0
+  );
   texts.push(sprite);
   scene.add(sprite);
 }
@@ -124,11 +131,11 @@ function spawnText() {
 function animate(time) {
   requestAnimationFrame(animate);
 
-  if (Math.random() < 0.5) spawnText();
-  if (Math.random() < 0.3) spawnHeart();
+  if (Math.random() < 0.7) spawnText();
+  if (Math.random() < 0.4) spawnHeart();
 
   hearts.forEach((h, i) => {
-    h.position.y -= h.userData.vy;
+    h.position.add(h.userData.velocity);
     h.rotation.y += 0.01;
     if (h.position.y < -80) {
       scene.remove(h);
@@ -137,8 +144,8 @@ function animate(time) {
   });
 
   texts.forEach((t, i) => {
-    t.position.y -= t.userData.vy;
-    t.lookAt(camera.position); // Face camera
+    t.position.add(t.userData.velocity);
+    t.lookAt(camera.position);
     if (t.position.y < -80) {
       scene.remove(t);
       texts.splice(i, 1);
@@ -148,7 +155,7 @@ function animate(time) {
   // Smooth zoom
   camera.position.z += (zoomTarget - camera.position.z) * 0.1;
 
-  // Apply rotation
+  // Apply rotation (orbit-like)
   camera.rotation.order = 'YXZ';
   camera.rotation.y = rotation.x;
   camera.rotation.x = rotation.y;
