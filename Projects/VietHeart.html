@@ -3,98 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tình Yêu</title>
+  <title>Love Space</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      overflow: hidden;
       background: #000;
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .message {
-      font-size: 2rem;
-      color: #ff99cc;
-      animation: fadeIn 4s ease-in-out infinite alternate;
-      max-width: 90%;
-    }
-
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-
-    .hearts {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+      font-family: 'Segoe UI', sans-serif;
       height: 100%;
-      pointer-events: none;
-      overflow: hidden;
     }
 
-   .heart {
-  position: absolute;
-  color: #ff4d6d;
-  font-size: 1.5rem;
-  animation: fall linear infinite;
-  -webkit-user-select: none;
-  user-select: none;
-}
-    @keyframes fall {
-      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    canvas {
+      display: block;
     }
 
-    @media (max-width: 768px) {
-      .message {
-        font-size: 1.5rem;
-      }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="message" id="message"></div>
-  <div class="hearts" id="hearts"></div>
+  <canvas id="loveCanvas"></canvas>
 
   <script>
     const messages = [
-      "Cảm ơn em bên anh",
-      "Anh yêu em",
-      "Anh nhớ em",
-      "Anh rất hạnh phúc khi được bên em"
+      "Cảm ơn vì em đã đến",
+      "Anh sẽ luôn bên cạnh em",
+      "Anh yêu em nhiều lắm ♡",
+      "Làm người yêu anh nhé ♡"
     ];
 
-    let index = 0;
-    const messageDiv = document.getElementById("message");
-    function showMessage() {
-      messageDiv.textContent = messages[index];
-      index = (index + 1) % messages.length;
-    }
-    showMessage();
-    setInterval(showMessage, 4000);
+    const canvas = document.getElementById('loveCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
 
-    const heartContainer = document.getElementById("hearts");
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const floatingTexts = [];
+    const hearts = [];
+
+    function createFloatingText() {
+      const text = messages[Math.floor(Math.random() * messages.length)];
+      floatingTexts.push({
+        text,
+        x: Math.random() * width,
+        y: height + 50,
+        speed: 0.5 + Math.random(),
+        size: 20 + Math.random() * 20,
+        opacity: 0.5 + Math.random() * 0.5
+      });
+    }
+
     function createHeart() {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.textContent = "❤️";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = 3 + Math.random() * 2 + "s";
-      heart.style.fontSize = 1 + Math.random() * 2 + "rem";
-      heartContainer.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 5000);
+      hearts.push({
+        x: Math.random() * width,
+        y: height + 10,
+        size: 10 + Math.random() * 20,
+        speed: 1 + Math.random(),
+        opacity: 0.5 + Math.random() * 0.5
+      });
     }
-    setInterval(createHeart, 200);
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw floating texts
+      ctx.textAlign = 'center';
+      floatingTexts.forEach((item, index) => {
+        ctx.font = `${item.size}px Segoe UI`;
+        ctx.fillStyle = `rgba(255, 153, 255, ${item.opacity})`;
+        ctx.shadowColor = '#ff99cc';
+        ctx.shadowBlur = 20;
+        ctx.fillText(item.text, item.x, item.y);
+        item.y -= item.speed;
+        if (item.y < -50) floatingTexts.splice(index, 1);
+      });
+
+      // Draw hearts
+      hearts.forEach((heart, index) => {
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255, 0, 0, ${heart.opacity})`;
+        ctx.shadowColor = 'red';
+        ctx.shadowBlur = 10;
+        ctx.moveTo(heart.x, heart.y);
+        ctx.arc(heart.x - heart.size/4, heart.y, heart.size/4, 0, Math.PI * 2);
+        ctx.arc(heart.x + heart.size/4, heart.y, heart.size/4, 0, Math.PI * 2);
+        ctx.lineTo(heart.x, heart.y + heart.size);
+        ctx.closePath();
+        ctx.fill();
+        heart.y -= heart.speed;
+        if (heart.y < -20) hearts.splice(index, 1);
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    setInterval(createFloatingText, 500);
+    setInterval(createHeart, 300);
+    draw();
   </script>
 </body>
 </html>
