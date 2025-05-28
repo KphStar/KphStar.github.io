@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tình Yêu</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .message {
+      font-size: 2rem;
+      color: #ff99cc;
+      animation: fadeIn 4s ease-in-out infinite alternate;
+      max-width: 90%;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .hearts {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+   .heart {
+  position: absolute;
+  color: #ff4d6d;
+  font-size: 1.5rem;
+  animation: fall linear infinite;
+  -webkit-user-select: none;
+  user-select: none;
+}
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    @media (max-width: 768px) {
+      .message {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="message" id="message"></div>
+  <div class="hearts" id="hearts"></div>
+
+  <script>
+    const messages = [
+      "Cảm ơn em bên anh",
+      "Anh yêu em",
+      "Anh nhớ em",
+      "Anh rất hạnh phúc khi được bên em"
+    ];
+
+    let index = 0;
+    const messageDiv = document.getElementById("message");
+    function showMessage() {
+      messageDiv.textContent = messages[index];
+      index = (index + 1) % messages.length;
+    }
+    showMessage();
+    setInterval(showMessage, 4000);
+
+    const heartContainer = document.getElementById("hearts");
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = 3 + Math.random() * 2 + "s";
+      heart.style.fontSize = 1 + Math.random() * 2 + "rem";
+      heartContainer.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 5000);
+    }
+    setInterval(createHeart, 200);
+  </script>
+</body>
+</html>
