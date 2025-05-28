@@ -10,7 +10,7 @@
       padding: 0;
       overflow: hidden;
       height: 100%;
-      background: #000;
+      background: black;
     }
     canvas {
       display: block;
@@ -20,83 +20,46 @@
 <body>
 <script type="module">
   import * as THREE from 'https://esm.sh/three';
-  import { FontLoader } from 'https://esm.sh/three/examples/jsm/loaders/FontLoader.js';
-  import { TextGeometry } from 'https://esm.sh/three/examples/jsm/geometries/TextGeometry.js';
-  import { EffectComposer } from 'https://esm.sh/three/examples/jsm/postprocessing/EffectComposer.js';
-  import { RenderPass } from 'https://esm.sh/three/examples/jsm/postprocessing/RenderPass.js';
-  import { UnrealBloomPass } from 'https://esm.sh/three/examples/jsm/postprocessing/UnrealBloomPass.js';
+  import { TextSprite } from 'https://cdn.skypack.dev/three.textsprite';
 
-  let scene, camera, renderer, composer;
-  let texts = [], hearts = [];
-  const mouse = { x: 0, y: 0 };
+  let scene, camera, renderer;
+  let hearts = [], texts = [];
 
   const messages = [
-    "Cảm ơn vì em đã đến", "Anh yêu em nhiều lắm ♡",
-    "Làm người yêu anh nhé ♡", "Anh sẽ luôn bên cạnh em",
-    "Em là ánh sáng trong cuộc đời anh", "Chúng ta sẽ cùng nhau đi hết cuộc đời này"
+    "Cảm ơn vì em đã đến",
+    "Anh yêu em nhiều lắm ♡",
+    "Làm người yêu anh nhé ♡",
+    "Em là ánh sáng trong cuộc đời anh",
+    "Anh sẽ mãi yêu em",
+    "Chúng ta sẽ cùng nhau đi hết cuộc đời này"
   ];
 
   init();
+  animate();
 
   function init() {
     scene = new THREE.Scene();
 
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.z = 50;
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    const renderScene = new RenderPass(scene, camera);
-    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-    bloomPass.threshold = 0;
-    bloomPass.strength = 2;
-    bloomPass.radius = 0.8;
-
-    composer = new EffectComposer(renderer);
-    composer.addPass(renderScene);
-    composer.addPass(bloomPass);
-
-    addText();
-    addHearts();
-
-    animate();
+    addLights();
+    add3DHearts();
+    add2DText();
 
     window.addEventListener('resize', onWindowResize);
   }
 
-  function addText() {
-    const loader = new FontLoader();
-    loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', font => {
-      for (let i = 0; i < 50; i++) {
-        const msg = messages[Math.floor(Math.random() * messages.length)];
-        const geo = new TextGeometry(msg, {
-          font: font,
-          size: 2,
-          height: 0,
-          curveSegments: 8
-        });
-        geo.center();
-
-        const mat = new THREE.MeshBasicMaterial({ color: 0xff66cc });
-        const mesh = new THREE.Mesh(geo, mat);
-
-        mesh.position.set(
-          (Math.random() - 0.5) * 100,
-          (Math.random() - 0.5) * 100,
-          (Math.random() - 0.5) * 100
-        );
-
-        mesh.rotation.y = Math.random() * Math.PI;
-        mesh.userData.offset = Math.random() * 100;
-        texts.push(mesh);
-        scene.add(mesh);
-      }
-    });
+  function addLights() {
+    const light = new THREE.AmbientLight(0xffffff, 1);
+    scene.add(light);
   }
 
-  function addHearts() {
+  function add3DHearts() {
     const shape = new THREE.Shape();
     shape.moveTo(0, 0);
     shape.bezierCurveTo(0, 3, -5, 3, -5, 0);
@@ -104,42 +67,75 @@
     shape.bezierCurveTo(0, -5, 5, -3, 5, 0);
     shape.bezierCurveTo(5, 3, 0, 3, 0, 0);
 
-    const geometry = new THREE.ShapeGeometry(shape);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const extrudeSettings = { depth: 1, bevelEnabled: false };
+    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+    const material = new THREE.MeshPhongMaterial({ color: 0xff3366, shininess: 100 });
 
     for (let i = 0; i < 30; i++) {
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.scale.setScalar(0.2 + Math.random() * 0.5);
+      mesh.scale.setScalar(0.1 + Math.random() * 0.5);
       mesh.position.set(
         (Math.random() - 0.5) * 100,
         (Math.random() - 0.5) * 100,
         (Math.random() - 0.5) * 100
       );
-      mesh.rotation.z = Math.random() * Math.PI;
+      mesh.rotation.set(Math.random(), Math.random(), Math.random());
       hearts.push(mesh);
       scene.add(mesh);
     }
   }
 
+  function add2DText() {
+    for (let i = 0; i < 40; i++) {
+      const message = messages[Math.floor(Math.random() * messages.length)];
+
+      const sprite = new TextSprite({
+        material: {
+          color: '#ff99cc'
+        },
+        redrawInterval: 250,
+        textSize: 2,
+        texture: {
+          text: message,
+          fontFamily: 'Arial, sans-serif',
+          fontWeight: 'bold'
+        }
+      });
+
+      sprite.position.set(
+        (Math.random() - 0.5) * 100,
+        (Math.random() - 0.5) * 100,
+        (Math.random() - 0.5) * 100
+      );
+
+      sprite.userData.offset = Math.random() * 100;
+      texts.push(sprite);
+      scene.add(sprite);
+    }
+  }
+
   function animate() {
     requestAnimationFrame(animate);
-
     const time = Date.now() * 0.001;
 
-    texts.forEach(text => {
-      text.position.y += Math.sin(time + text.userData.offset) * 0.01;
-      text.rotation.y += 0.001;
+    hearts.forEach(h => {
+      h.rotation.y += 0.005;
+      h.position.y += Math.sin(time + h.position.x) * 0.01;
     });
 
-    composer.render();
+    texts.forEach(t => {
+      t.position.y += Math.sin(time + t.userData.offset) * 0.01;
+    });
+
+    renderer.render(scene, camera);
   }
 
   function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    composer.setSize(window.innerWidth, window.innerHeight);
   }
 </script>
 </body>
 </html>
+<!-- This is a simple HTML file for the VietHeart project, which creates a 3D heart animation with messages. -->
