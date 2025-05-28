@@ -6,14 +6,14 @@
   <title>Love Space 3D</title>
   <style>
     html, body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  height: 100%;
-  background: black;
-  -webkit-user-select: none; /* ✅ Add this for Safari */
-  user-select: none;
-}
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background: black;
+      -webkit-user-select: none; /* Safari support */
+      user-select: none;
+    }
     canvas {
       display: block;
     }
@@ -28,7 +28,7 @@ let scene, camera, renderer;
 let hearts = [], texts = [], particles;
 let heartGeometry, heartMaterial;
 
-let isHolding = false;
+let isDragging = false;
 let prevMouse = { x: 0, y: 0 };
 let rotation = { x: 0, y: 0 };
 
@@ -64,10 +64,15 @@ function init() {
   addParticles();
   prepareHeartGeometry();
 
+  // Events
   window.addEventListener('resize', onWindowResize);
   window.addEventListener('wheel', onScrollZoom);
-  window.addEventListener('mousedown', () => isHolding = true);
-  window.addEventListener('mouseup', () => isHolding = false);
+  window.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    prevMouse.x = e.clientX;
+    prevMouse.y = e.clientY;
+  });
+  window.addEventListener('mouseup', () => isDragging = false);
   window.addEventListener('mousemove', onMouseMove);
 }
 
@@ -144,6 +149,7 @@ function spawnText() {
 function animate(time) {
   requestAnimationFrame(animate);
 
+  // spawn new
   if (!lastSpawnTime || time - lastSpawnTime > 300) {
     if (Math.random() < 0.6 + zoomOutBonus) spawnText();
     if (Math.random() < 0.3 + zoomOutBonus / 2) spawnHeart();
@@ -151,6 +157,7 @@ function animate(time) {
     zoomOutBonus = 0;
   }
 
+  // float objects
   hearts.forEach((h, i) => {
     h.position.y += floatSpeed;
     h.rotation.y += 0.01;
@@ -169,20 +176,14 @@ function animate(time) {
     }
   });
 
-  // Glitter background movement
+  // background sparkle
   particles.rotation.y += 0.0005;
 
-  // Apply view rotation from hold-drag
+  // rotate POV when dragging
   camera.rotation.x = rotation.y;
   camera.rotation.y = rotation.x;
 
   renderer.render(scene, camera);
-}
-
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function onScrollZoom(event) {
@@ -195,7 +196,7 @@ function onScrollZoom(event) {
 }
 
 function onMouseMove(event) {
-  if (!isHolding) return;
+  if (!isDragging) return;
 
   const deltaX = event.clientX - prevMouse.x;
   const deltaY = event.clientY - prevMouse.y;
@@ -205,6 +206,12 @@ function onMouseMove(event) {
 
   prevMouse.x = event.clientX;
   prevMouse.y = event.clientY;
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
 </script>
 </body>
