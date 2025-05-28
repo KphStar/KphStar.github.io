@@ -108,10 +108,17 @@
           geo.computeBoundingBox();
           geo.center();
 
-          const mat = new THREE.MeshStandardMaterial({ color: 0xff99cc, side: THREE.DoubleSide });
+          const mat = new THREE.MeshStandardMaterial({
+            color: 0xff99cc,
+            emissive: 0xff66aa,
+            emissiveIntensity: 0.8,
+            side: THREE.DoubleSide
+          });
+
           const mesh = new THREE.Mesh(geo, mat);
           mesh.position.set((Math.random() - 0.5) * 40, Math.random() * 40 - 20, Math.random() * -40);
           mesh.rotation.y = Math.random() * Math.PI * 2;
+          mesh.userData.offset = Math.random() * 100;
           texts.push(mesh);
           scene.add(mesh);
         }
@@ -132,9 +139,16 @@
     function animate() {
       requestAnimationFrame(animate);
 
+      const time = Date.now() * 0.002;
+
       hearts.forEach(heart => {
         heart.position.y += 0.1;
         if (heart.position.y > 50) heart.position.y = -50;
+      });
+
+      texts.forEach(text => {
+        text.position.y += Math.sin(time + text.userData.offset) * 0.01;
+        text.rotation.y += 0.002;
       });
 
       camera.position.x += (mouseX * 20 - camera.position.x) * 0.05;
