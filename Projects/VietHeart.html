@@ -26,9 +26,11 @@
   let hearts = [], texts = [];
   let heartGeometry, heartMaterial;
 
-  const floatSpeed = 0.3;
+  const floatSpeed = 0.25;
   const maxY = 80;
   const minY = -80;
+  const spawnInterval = 300; // ms
+  let lastSpawnTime = 0;
 
   const messages = [
     "Cảm ơn vì em đã đến",
@@ -44,7 +46,6 @@
 
   function init() {
     scene = new THREE.Scene();
-
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.z = 50;
 
@@ -54,10 +55,6 @@
 
     addLights();
     prepareHeartGeometry();
-    for (let i = 0; i < 50; i++) {
-      spawnHeart();
-      spawnText();
-    }
 
     window.addEventListener('resize', onWindowResize);
     window.addEventListener('wheel', onScrollZoom);
@@ -99,7 +96,7 @@
     const message = messages[Math.floor(Math.random() * messages.length)];
     const sprite = new SpriteText(message);
     sprite.color = "#ff99cc";
-    sprite.textHeight = 2;
+    sprite.textHeight = 2.5 + Math.random(); // Slight random size
     sprite.fontFace = "Arial";
     sprite.position.set(
       (Math.random() - 0.5) * 100,
@@ -110,27 +107,33 @@
     scene.add(sprite);
   }
 
-  function animate() {
+  function animate(time) {
     requestAnimationFrame(animate);
 
-    // Float upward
+    // Random spawn logic
+    if (!lastSpawnTime || time - lastSpawnTime > spawnInterval) {
+      if (Math.random() < 0.6) spawnText();
+      if (Math.random() < 0.3) spawnHeart();
+      lastSpawnTime = time;
+    }
+
+    // Move hearts upward
     for (let i = hearts.length - 1; i >= 0; i--) {
       const h = hearts[i];
       h.position.y += floatSpeed;
       if (h.position.y > maxY) {
         scene.remove(h);
         hearts.splice(i, 1);
-        spawnHeart();
       }
     }
 
+    // Move texts upward
     for (let i = texts.length - 1; i >= 0; i--) {
       const t = texts[i];
       t.position.y += floatSpeed;
       if (t.position.y > maxY) {
         scene.remove(t);
         texts.splice(i, 1);
-        spawnText();
       }
     }
 
@@ -151,4 +154,3 @@
 </script>
 </body>
 </html>
-<!-- This is a simple HTML page for a personal portfolio project called "VietHeart" -->
