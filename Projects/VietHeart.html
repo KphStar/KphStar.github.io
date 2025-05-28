@@ -17,10 +17,6 @@
     canvas {
       display: block;
     }
-
-    .hidden {
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -28,7 +24,7 @@
 
   <script>
     const messages = [
-      "Cảm ơn vì em đã đến",
+    "Cảm ơn vì em đã đến",
       "Anh sẽ luôn bên cạnh em",
       "Anh yêu em nhiều lắm ♡",
       "Làm người yêu anh nhé ♡",
@@ -83,6 +79,23 @@
       });
     }
 
+    function drawHeart(x, y, size, opacity) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(size / 20, size / 20);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(0, -3, -5, -3, -5, 0);
+      ctx.bezierCurveTo(-5, 3, 0, 5, 0, 7);
+      ctx.bezierCurveTo(0, 5, 5, 3, 5, 0);
+      ctx.bezierCurveTo(5, -3, 0, -3, 0, 0);
+      ctx.fillStyle = `rgba(255, 0, 0, ${opacity})`;
+      ctx.shadowColor = 'red';
+      ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.restore();
+    }
+
     function draw() {
       ctx.clearRect(0, 0, width, height);
 
@@ -100,16 +113,7 @@
 
       // Draw hearts
       hearts.forEach((heart, index) => {
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(255, 0, 0, ${heart.opacity})`;
-        ctx.shadowColor = 'red';
-        ctx.shadowBlur = 10;
-        ctx.moveTo(heart.x, heart.y);
-        ctx.arc(heart.x - heart.size/4, heart.y, heart.size/4, 0, Math.PI * 2);
-        ctx.arc(heart.x + heart.size/4, heart.y, heart.size/4, 0, Math.PI * 2);
-        ctx.lineTo(heart.x, heart.y + heart.size);
-        ctx.closePath();
-        ctx.fill();
+        drawHeart(heart.x, heart.y, heart.size, heart.opacity);
         heart.y -= heart.speed;
         if (heart.y < -20) hearts.splice(index, 1);
       });
