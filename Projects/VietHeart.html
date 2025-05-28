@@ -22,6 +22,7 @@
     import * as THREE from 'https://esm.sh/three';
     import { FontLoader } from 'https://esm.sh/three/examples/jsm/loaders/FontLoader.js';
     import { TextGeometry } from 'https://esm.sh/three/examples/jsm/geometries/TextGeometry.js';
+    import WebGL from 'https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/capabilities/WebGL.js';
 
     let scene, camera, renderer;
     let stars, hearts = [], texts = [];
@@ -152,7 +153,12 @@
       animate();
     }
 
-    init();
+    if (WebGL.isWebGL2Available()) {
+      init();
+    } else {
+      const warning = WebGL.getWebGL2ErrorMessage();
+      document.body.appendChild(warning);
+    }
   </script>
 </body>
 </html>
