@@ -5,22 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Love Space</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background: #000;
-      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: 'Pacifico', cursive;
       height: 100%;
     }
 
     canvas {
       display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .message-container {
+      position: absolute;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      font-size: 2rem;
+      text-align: center;
+      padding: 20px;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
   <canvas id="loveCanvas"></canvas>
+  <div class="message-container">Chào em yêu ♡</div>
 
   <script>
     const messages = [
@@ -58,15 +81,15 @@
     const hearts = [];
 
     function createFloatingText() {
-      if (floatingTexts.length < 20 && Math.random() < 0.5) {
+      if (floatingTexts.length < 15 && Math.random() < 0.4) {
         const text = messages[Math.floor(Math.random() * messages.length)];
         floatingTexts.push({
           text,
           x: Math.random() * width,
           y: height + 50,
-          speed: 1 + Math.random() * 1.5,
-          size: 20 + Math.random() * 20,
-          opacity: 0.5 + Math.random() * 0.5,
+          speed: 1.2 + Math.random() * 1.8,
+          size: 24 + Math.random() * 20,
+          opacity: 0.4 + Math.random() * 0.6,
           glow: Math.random() * 40 + 10
         });
       }
@@ -76,8 +99,8 @@
       hearts.push({
         x: Math.random() * width,
         y: height + 10,
-        size: 10 + Math.random() * 20,
-        speed: 1.5 + Math.random() * 1.5,
+        size: 10 + Math.random() * 25,
+        speed: 1.5 + Math.random() * 2,
         opacity: 0.5 + Math.random() * 0.5
       });
     }
@@ -94,7 +117,7 @@
       ctx.bezierCurveTo(5, -3, 0, -3, 0, 0);
       ctx.fillStyle = `rgba(255, 0, 0, ${opacity})`;
       ctx.shadowColor = 'red';
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 15;
       ctx.fill();
       ctx.restore();
     }
@@ -102,19 +125,17 @@
     function draw() {
       ctx.clearRect(0, 0, width, height);
 
-      // Draw floating texts
       ctx.textAlign = 'center';
       floatingTexts.forEach((item, index) => {
-        ctx.font = `${item.size}px Segoe UI`;
-        ctx.fillStyle = `rgba(255, 153, 255, ${item.opacity})`;
-        ctx.shadowColor = '#ff99cc';
+        ctx.font = `${item.size}px Pacifico, cursive`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${item.opacity})`;
+        ctx.shadowColor = '#ffffff';
         ctx.shadowBlur = item.glow + Math.sin(Date.now() / 200 + index) * 10;
         ctx.fillText(item.text, item.x, item.y);
         item.y -= item.speed;
         if (item.y < -50) floatingTexts.splice(index, 1);
       });
 
-      // Draw hearts
       hearts.forEach((heart, index) => {
         drawHeart(heart.x, heart.y, heart.size, heart.opacity);
         heart.y -= heart.speed;
@@ -124,8 +145,8 @@
       requestAnimationFrame(draw);
     }
 
-    setInterval(createFloatingText, 300);
-    setInterval(createHeart, 200);
+    setInterval(createFloatingText, 400);
+    setInterval(createHeart, 300);
     draw();
   </script>
 </body>
