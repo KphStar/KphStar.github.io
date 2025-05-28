@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Love Space 3D</title>
+  <title>Love Rain</title>
   <style>
     html, body {
       margin: 0;
@@ -11,7 +11,7 @@
       overflow: hidden;
       height: 100%;
       background: black;
-      -webkit-user-select: none; /* Safari support */
+      -webkit-user-select: none;
       user-select: none;
     }
     canvas {
@@ -25,7 +25,7 @@ import * as THREE from 'https://esm.sh/three';
 import SpriteText from 'https://esm.sh/three-spritetext';
 
 let scene, camera, renderer;
-let hearts = [], texts = [], particles;
+let hearts = [], texts = [];
 let heartGeometry, heartMaterial;
 
 let isDragging = false;
@@ -33,9 +33,9 @@ let prevMouse = { x: 0, y: 0 };
 let rotation = { x: 0, y: 0 };
 
 let lastSpawnTime = 0;
-const floatSpeed = 0.25;
-const maxY = 80;
+const fallSpeed = 0.25;
 const minY = -80;
+const maxY = 80;
 let lastZoom = 50;
 let zoomOutBonus = 0;
 
@@ -61,10 +61,8 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   addLights();
-  addParticles();
   prepareHeartGeometry();
 
-  // Events
   window.addEventListener('resize', onWindowResize);
   window.addEventListener('wheel', onScrollZoom);
   window.addEventListener('mousedown', (e) => {
@@ -79,32 +77,9 @@ function init() {
 function addLights() {
   scene.add(new THREE.AmbientLight(0xffffff, 1));
 
-  const sparkle = new THREE.PointLight(0xff99cc, 1.5, 300);
-  sparkle.position.set(0, 20, 20);
-  scene.add(sparkle);
-}
-
-function addParticles() {
-  const count = 1000;
-  const geometry = new THREE.BufferGeometry();
-  const positions = new Float32Array(count * 3);
-  for (let i = 0; i < count * 3; i++) {
-    positions[i] = (Math.random() - 0.5) * 600;
-  }
-
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-  const material = new THREE.PointsMaterial({
-    color: 0xffffff,
-    size: 1.2,
-    transparent: true,
-    opacity: 0.4,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false
-  });
-
-  particles = new THREE.Points(geometry, material);
-  scene.add(particles);
+  const softPink = new THREE.PointLight(0xff99cc, 1.2, 150);
+  softPink.position.set(0, 30, 50);
+  scene.add(softPink);
 }
 
 function prepareHeartGeometry() {
@@ -128,7 +103,7 @@ function spawnHeart() {
   const mesh = new THREE.Mesh(heartGeometry, heartMaterial.clone());
   const scale = 0.1 + Math.random() * 0.3;
   mesh.scale.setScalar(scale);
-  mesh.position.set((Math.random() - 0.5) * 100, minY, (Math.random() - 0.5) * 100);
+  mesh.position.set((Math.random() - 0.5) * 100, maxY, (Math.random() - 0.5) * 100);
   mesh.rotation.set(Math.random(), Math.random(), Math.random());
   hearts.push(mesh);
   scene.add(mesh);
@@ -141,7 +116,7 @@ function spawnText() {
   sprite.textHeight = 2.5 + Math.random();
   sprite.fontFace = "Arial";
   sprite.material.opacity = 0.9 + Math.random() * 0.1;
-  sprite.position.set((Math.random() - 0.5) * 100, minY, (Math.random() - 0.5) * 100);
+  sprite.position.set((Math.random() - 0.5) * 100, maxY, (Math.random() - 0.5) * 100);
   texts.push(sprite);
   scene.add(sprite);
 }
@@ -149,37 +124,37 @@ function spawnText() {
 function animate(time) {
   requestAnimationFrame(animate);
 
-  // spawn new
+  // Random spawns
   if (!lastSpawnTime || time - lastSpawnTime > 300) {
     if (Math.random() < 0.6 + zoomOutBonus) spawnText();
-    if (Math.random() < 0.3 + zoomOutBonus / 2) spawnHeart();
+    if (Math.random() < 0.4 + zoomOutBonus / 2) spawnHeart();
     lastSpawnTime = time;
     zoomOutBonus = 0;
   }
 
-  // float objects
-  hearts.forEach((h, i) => {
-    h.position.y += floatSpeed;
+  // Falling hearts
+  for (let i = hearts.length - 1; i >= 0; i--) {
+    const h = hearts[i];
+    h.position.y -= fallSpeed;
     h.rotation.y += 0.01;
-    if (h.position.y > maxY) {
+    if (h.position.y < minY) {
       scene.remove(h);
       hearts.splice(i, 1);
     }
-  });
+  }
 
-  texts.forEach((t, i) => {
-    t.position.y += floatSpeed;
+  // Falling text
+  for (let i = texts.length - 1; i >= 0; i--) {
+    const t = texts[i];
+    t.position.y -= fallSpeed;
     t.material.opacity = 0.8 + Math.sin(time * 0.005 + t.position.x) * 0.2;
-    if (t.position.y > maxY) {
+    if (t.position.y < minY) {
       scene.remove(t);
       texts.splice(i, 1);
     }
-  });
+  }
 
-  // background sparkle
-  particles.rotation.y += 0.0005;
-
-  // rotate POV when dragging
+  // Apply camera rotation
   camera.rotation.x = rotation.y;
   camera.rotation.y = rotation.x;
 
@@ -188,8 +163,8 @@ function animate(time) {
 
 function onScrollZoom(event) {
   lastZoom += event.deltaY * 0.05;
-  if (lastZoom < 10) lastZoom = 10;
-  if (lastZoom > 200) lastZoom = 200;
+  if (lastZoom < 20) lastZoom = 20; // close enough to text
+  if (lastZoom > 100) lastZoom = 100; // not too far
   camera.position.z = lastZoom;
 
   if (event.deltaY > 0) zoomOutBonus = 0.8;
