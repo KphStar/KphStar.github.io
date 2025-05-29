@@ -21,7 +21,7 @@ for (let i = 1; i <= totalFrames; i++) {
 const displayWidth = 64;
 const displayHeight = 64;
 let x = -displayWidth;
-let speed = 1;
+let speed = 2;
 let currentFrame = 0;
 let state = 'entering';
 let pauseCounter = 0;
