@@ -1,0 +1,11 @@
+  html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+      height: 100%;
+    }
+    canvas {
+      display: block;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Mali&display=swap');
