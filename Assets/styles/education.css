@@ -80,7 +80,6 @@ footer {
 
 .farmer-canvas-fullwidth {
   width: 100vw; /* full width of viewport */
-  background-color: aquamarine;
   display: flex;
   justify-content: center;
   align-items: center;
