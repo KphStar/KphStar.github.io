@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Walking Farmer Animation - Frame by Frame</title>
+  <title>Project Vietnamese Gold Price</title>
   <style>
     * {
       box-sizing: border-box;
@@ -31,95 +31,7 @@
   </style>
 </head>
 <body>
-  <div id="log">Log:</div>
-  <canvas id="canvas" width="800" height="400"></canvas>
 
-  <script>
-    const log = (msg) => {
-      console.log(msg);
-      document.getElementById("log").innerText += "\n" + msg;
-    };
 
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-
-    // Load each frame image individually
-    const totalFrames = 4;
-    const frameImages = [];
-    let imagesLoaded = 0;
-
-    for (let i = 1; i <= totalFrames; i++) {
-      const img = new Image();
-      img.src = `./Assets/images/farmer${i}.png`; // e.g., farmer1.png, farmer2.png, etc.
-      img.onload = () => {
-        imagesLoaded++;
-        if (imagesLoaded === totalFrames) {
-          log("All frames loaded. Starting animation.");
-          requestAnimationFrame(animate);
-        }
-      };
-      img.onerror = () => {
-        log(`❌ ERROR: Failed to load farmer${i}.png`);
-      };
-      frameImages.push(img);
-    }
-
-    // Animation settings
-    const frameWidth = 64;
-    const frameHeight = 64;
-    const displayWidth = 64;
-    const displayHeight = 64;
-    const y = canvas.height / 2 - displayHeight / 2;
-
-    let currentFrame = 0;
-    let frameTimer = 0;
-    const frameInterval = 20;
-
-    // Movement
-    let x = -displayWidth;
-    let speed = 1.5;
-    let state = 'entering';
-    let pauseCounter = 0;
-
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Advance frame
-      frameTimer++;
-      if (frameTimer >= frameInterval) {
-        currentFrame = (currentFrame + 1) % totalFrames;
-        frameTimer = 0;
-      }
-
-      // Draw current frame image
-      try {
-        ctx.drawImage(frameImages[currentFrame], x, y, displayWidth, displayHeight);
-      } catch (e) {
-        log("❌ drawImage error: " + e.message);
-      }
-
-      // Move character
-      if (state === 'entering') {
-        x += speed;
-        if (x >= canvas.width / 2 - displayWidth / 2) {
-          state = 'pause';
-        }
-      } else if (state === 'pause') {
-        pauseCounter++;
-        if (pauseCounter > 60) {
-          state = 'exiting';
-        }
-      } else if (state === 'exiting') {
-        x += speed;
-        if (x > canvas.width + displayWidth) {
-          x = -displayWidth;
-          state = 'entering';
-          pauseCounter = 0;
-        }
-      }
-
-      requestAnimationFrame(animate);
-    }
-  </script>
 </body>
 </html>
