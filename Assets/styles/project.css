@@ -277,6 +277,34 @@
 }
 
 
+/* Project GH CSS */
+.project-boxGH {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+}
+
+.project-boxGH h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: #1a252f;
+}
+
+.project-boxGH ul {
+  padding-left: 1.2em;
+  margin: 0;
+}
+
+.project-boxGH li {
+  margin-bottom: 0.5em;
+  text-align: left;
+  font-size: 0.95em;
+}
+
 
 /* Flip Card Container */
 .flip-cardNN {
