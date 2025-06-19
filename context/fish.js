@@ -109,6 +109,8 @@ var mat = new THREE.ShaderMaterial({
 var lantern = new THREE.Mesh(instGeom, mat);
 scene.add(lantern);
 
+// Load Whale & Dolphin using OBJLoader
+let objLoader = new THREE.OBJLoader();
 
 // 🐋 Blue Whale
 objLoader.load('Assets/models/BlueWhale.obj', function (obj) {
