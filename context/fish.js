@@ -140,6 +140,7 @@ whaleloader.load("/Assets/model/3dwhale.stl", objGeom => {
   objGeom.rotateX(-Math.PI * 0.5);
   let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"))
                     .getSize(new THREE.Vector3());
+                    console.log('🐋 Whale size:', objSize);
   let objUniforms = {
     uSpatialTexture: { value: tex },
     uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
@@ -209,6 +210,7 @@ loader.load("https://cywarr.github.io/small-shop/fish.stl", objGeom => {
   objGeom.scale(0.5, 0.5, 0.5);
   let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"))
                     .getSize(new THREE.Vector3());
+                    console.log('🐟 Koi size:', objSize);
   let objUniforms = {
     uSpatialTexture: { value: tex },
     uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
