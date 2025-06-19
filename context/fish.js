@@ -122,21 +122,6 @@ for (let i = 0; i < cSegments; i++) {
       .setZ(Math.cos(i * 0.7) * 20 + THREE.MathUtils.randFloat(-5, 5))
   );
 }
-const curve = new THREE.CatmullRomCurve3(cPts);
-curve.closed = false;
-const numPoints = 511;
-const cPoints = curve.getSpacedPoints(numPoints);
-const cObjects = curve.computeFrenetFrames(numPoints, true);
-const data = [];
-cPoints.forEach(v => data.push(v.x, v.y, v.z));
-cObjects.binormals.forEach(v => data.push(v.x, v.y, v.z));
-cObjects.normals.forEach(v => data.push(v.x, v.y, v.z));
-cObjects.tangents.forEach(v => data.push(v.x, v.y, v.z));
-const dataArray = new Float32Array(data);
-const tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
-tex.magFilter = THREE.NearestFilter;
-
-let oUs = [];
 
 let whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
