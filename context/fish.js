@@ -139,7 +139,7 @@ tex.magFilter = THREE.NearestFilter;
 let oUs = [];
 
 let whaleloader = new THREE.STLLoader();
-whaleloader.load("/Assets/model/3dwhale.stl", objGeom => {
+whaleloader.load("/Assets/model/Whale3d.stl", objGeom => {
   objGeom.center();
   objGeom.rotateX(-Math.PI * 0.5);
   let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position")).getSize(new THREE.Vector3());
