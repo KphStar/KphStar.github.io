@@ -222,6 +222,85 @@ shader.vertexShader = shader.vertexShader.replace(
 // Add animals
 //loadPathFollowerOBJ("/Assets/model/BlueWhale.obj", 0x3366cc);
 
+//loadd STL Whale
+let whaleloader=new THREE.STLLoader()
+whaleloader.load("/Assets/model/3dwhale.stl", objGeom=>  {
+  objGeom.center();
+  objGeom.rotateX(-Math.PI * 0.5);
+  objGeom.scale(0.5, 0.5, 0.5);
+  let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"))
+                    .getSize(new THREE.Vector3());
+  let objUniforms = {
+    uSpatialTexture: { value: tex },
+    uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
+    uTime: { value: 0 },
+    uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
+    uObjSize: { value: objSize }
+  };
+  oUs.push(objUniforms);
+  let objMat = new THREE.MeshBasicMaterial({ color: 0xff6600, wireframe: true });
+  objMat.onBeforeCompile = shader => {
+    shader.uniforms.uSpatialTexture = objUniforms.uSpatialTexture;
+    shader.uniforms.uTextureSize = objUniforms.uTextureSize;
+    shader.uniforms.uTime = objUniforms.uTime;
+    shader.uniforms.uLengthRatio = objUniforms.uLengthRatio;
+    shader.uniforms.uObjSize = objUniforms.uObjSize;
+    shader.vertexShader = `
+    uniform sampler2D uSpatialTexture;
+    uniform vec2 uTextureSize;
+    uniform float uTime;
+    uniform float uLengthRatio;
+    uniform vec3 uObjSize;
+
+    struct splineData {
+      vec3 point;
+      vec3 binormal;
+      vec3 normal;
+    };
+
+    splineData getSplineData(float t){
+      float step = 1. / uTextureSize.y;
+      float halfStep = step * 0.5;
+      splineData sd;
+      sd.point    = texture2D(uSpatialTexture, vec2(t, step * 0. + halfStep)).rgb;
+      sd.binormal = texture2D(uSpatialTexture, vec2(t, step * 1. + halfStep)).rgb;
+      sd.normal   = texture2D(uSpatialTexture, vec2(t, step * 2. + halfStep)).rgb;
+      return sd;
+    }
+` + shader.vertexShader; // insert path vertex logic
+shader.vertexShader = shader.vertexShader.replace(
+  `#include <begin_vertex>`,
+  `#include <begin_vertex>
+
+  vec3 pos = position;
+
+  float wStep = 1. / uTextureSize.x;
+  float hWStep = wStep * 0.5;
+
+  float d = pos.z / uObjSize.z;
+  float t = fract((uTime * 0.1) + (d * uLengthRatio));
+  float numPrev = floor(t / wStep);
+  float numNext = numPrev + 1.;
+  //numNext = numNext > (uTextureSize.x - 1.) ? 0. : numNext;
+  float tPrev = numPrev * wStep + hWStep;
+  float tNext = numNext * wStep + hWStep;
+  //float tDiff = tNext - tPrev;
+  splineData splinePrev = getSplineData(tPrev);
+  splineData splineNext = getSplineData(tNext);
+
+  float f = (t - tPrev) / wStep;
+  vec3 P = mix(splinePrev.point, splineNext.point, f);
+  vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
+  vec3 N = mix(splinePrev.normal, splineNext.normal, f);
+
+  transformed = P + (N * pos.x) + (B * pos.y);
+`
+); // path animation
+  };
+  scene.add(new THREE.Mesh(objGeom, objMat));
+});
+
+
 // Load STL koi
 let loader = new THREE.STLLoader();
 loader.load("https://cywarr.github.io/small-shop/fish.stl", objGeom => {
@@ -272,7 +351,7 @@ shader.vertexShader = shader.vertexShader.replace(
   `#include <begin_vertex>`,
   `#include <begin_vertex>
 
-  vec3 pos = position ;
+  vec3 pos = position;
 
   float wStep = 1. / uTextureSize.x;
   float hWStep = wStep * 0.5;
