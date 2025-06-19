@@ -220,7 +220,7 @@ shader.vertexShader = shader.vertexShader.replace(
 
 
 // Add animals
-loadPathFollowerOBJ("/Assets/model/BlueWhale.obj", 0x3366cc);
+//loadPathFollowerOBJ("/Assets/model/BlueWhale.obj", 0x3366cc);
 
 // Load STL koi
 let loader = new THREE.STLLoader();
