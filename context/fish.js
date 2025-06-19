@@ -149,7 +149,7 @@ function loadPathFollowerOBJ(url, color) {
           uTime: { value: 0 },
           uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
           uObjSize: { value: objSize },
-          uScale: { value: 0.15 } // << add this
+          uScale: { value: 0.65 } // << add this
         };
         oUs.push(uniforms);
         let material = new THREE.MeshBasicMaterial({ color: color, wireframe: true });
