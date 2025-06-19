@@ -109,6 +109,7 @@ var mat = new THREE.ShaderMaterial({
 var lantern = new THREE.Mesh(instGeom, mat);
 scene.add(lantern);
 
+let oUs = [];
 let whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
   objGeom.center();
@@ -116,7 +117,6 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
   objGeom.scale(0.5, 0.5, 0.5);
   let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"))
                     .getSize(new THREE.Vector3());
-                    //console.log('🐟 Koi size:', objSize);
   let objUniforms = {
     uSpatialTexture: { value: tex },
     uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
