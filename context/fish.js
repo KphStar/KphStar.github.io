@@ -129,6 +129,7 @@ cObjects.tangents.forEach(v => data.push(v.x, v.y, v.z));
 const dataArray = new Float32Array(data);
 const tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
 tex.magFilter = THREE.NearestFilter;
+const whaleScale = 0.15; // tweak this as needed
 
 // Path-following loader
 let oUs = [];
@@ -139,7 +140,7 @@ function loadPathFollowerOBJ(url, color) {
       if (child instanceof THREE.Mesh) {
         child.geometry.center();
         child.geometry.rotateX(-Math.PI * 0.5);
-        child.geometry.scale(0.5, 0.5, 0.5);
+        child.geometry.scale(whaleScale, whaleScale, whaleScale);
         let objSize = new THREE.Box3().setFromBufferAttribute(child.geometry.getAttribute("position"))
                           .getSize(new THREE.Vector3());
         let uniforms = {
@@ -220,7 +221,6 @@ shader.vertexShader = shader.vertexShader.replace(
 
 // Add animals
 loadPathFollowerOBJ("/Assets/model/BlueWhale.obj", 0x3366cc);
-//oadPathFollowerOBJ("Assets/model/Dophin.obj", 0x88ccff);
 
 // Load STL koi
 let loader = new THREE.STLLoader();
