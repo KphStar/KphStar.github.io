@@ -129,7 +129,6 @@ cObjects.tangents.forEach(v => data.push(v.x, v.y, v.z));
 const dataArray = new Float32Array(data);
 const tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
 tex.magFilter = THREE.NearestFilter;
-const whaleScale = 0.05; // tweak this as needed
 
 // Path-following loader
 let oUs = [];
@@ -140,7 +139,7 @@ function loadPathFollowerOBJ(url, color) {
       if (child instanceof THREE.Mesh) {
         child.geometry.center();
         child.geometry.rotateX(-Math.PI * 0.5);
-        child.geometry.scale(whaleScale, whaleScale, whaleScale);
+        child.geometry.scale(0.05,0.05,0.05);
         let objSize = new THREE.Box3().setFromBufferAttribute(child.geometry.getAttribute("position"))
                           .getSize(new THREE.Vector3());
         let uniforms = {
@@ -148,8 +147,7 @@ function loadPathFollowerOBJ(url, color) {
           uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
           uTime: { value: 0 },
           uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
-          uObjSize: { value: objSize },
-          uScale: { value: 0.65 } // << add this
+          uObjSize: { value: objSize }
         };
         oUs.push(uniforms);
         let material = new THREE.MeshBasicMaterial({ color: color, wireframe: true });
@@ -166,8 +164,7 @@ function loadPathFollowerOBJ(url, color) {
     uniform vec2 uTextureSize;
     uniform float uTime;
     uniform float uLengthRatio;
-    uniform vec3 uObjSize;
-    uniform float uScale;
+    uniform vec3 uObjSize
 
     struct splineData {
       vec3 point;
