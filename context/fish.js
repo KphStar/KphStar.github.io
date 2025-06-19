@@ -129,7 +129,7 @@ cObjects.tangents.forEach(v => data.push(v.x, v.y, v.z));
 const dataArray = new Float32Array(data);
 const tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
 tex.magFilter = THREE.NearestFilter;
-const whaleScale = 0.5; // tweak this as needed
+const whaleScale = 0.05; // tweak this as needed
 
 // Path-following loader
 let oUs = [];
