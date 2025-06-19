@@ -142,70 +142,76 @@ let whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/Whale3d.stl", objGeom => {
   objGeom.center();
   objGeom.rotateX(-Math.PI * 0.5);
-  let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position")).getSize(new THREE.Vector3());
+  objGeom.scale(0.5, 0.5, 0.5);
+  let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"))
+                    .getSize(new THREE.Vector3());
+                    //console.log('🐟 Koi size:', objSize);
   let objUniforms = {
     uSpatialTexture: { value: tex },
     uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
     uTime: { value: 0 },
     uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
-    uObjSize: { value: objSize },
-    uScale: { value: 0.001 }
+    uObjSize: { value: objSize }
   };
   oUs.push(objUniforms);
-  let objMat = new THREE.MeshBasicMaterial({ color: 0x3399ff, wireframe: true });
+  let objMat = new THREE.MeshBasicMaterial({ color: 0xff6600, wireframe: true });
   objMat.onBeforeCompile = shader => {
     shader.uniforms.uSpatialTexture = objUniforms.uSpatialTexture;
     shader.uniforms.uTextureSize = objUniforms.uTextureSize;
     shader.uniforms.uTime = objUniforms.uTime;
     shader.uniforms.uLengthRatio = objUniforms.uLengthRatio;
     shader.uniforms.uObjSize = objUniforms.uObjSize;
-    shader.uniforms.uScale = objUniforms.uScale;
     shader.vertexShader = `
-      uniform sampler2D uSpatialTexture;
-      uniform vec2 uTextureSize;
-      uniform float uTime;
-      uniform float uLengthRatio;
-      uniform vec3 uObjSize;
-      uniform float uScale;
-      struct splineData {
-        vec3 point;
-        vec3 binormal;
-        vec3 normal;
-      };
-      splineData getSplineData(float t){
-        float step = 1. / uTextureSize.y;
-        float halfStep = step * 0.5;
-        splineData sd;
-        sd.point    = texture2D(uSpatialTexture, vec2(t, step * 0. + halfStep)).rgb;
-        sd.binormal = texture2D(uSpatialTexture, vec2(t, step * 1. + halfStep)).rgb;
-        sd.normal   = texture2D(uSpatialTexture, vec2(t, step * 2. + halfStep)).rgb;
-        return sd;
-      }
-    ` + shader.vertexShader;
-    shader.vertexShader = shader.vertexShader.replace(`#include <begin_vertex>`, `#include <begin_vertex>
-      vec3 pos = position;
-      float tailWave = sin(uTime * 12.0 + pos.z * 50.0) * 0.5;
-      pos.x += tailWave * smoothstep(0.6, 1.0, abs(pos.z / uObjSize.z));
-      pos.z += sin(uTime * 1.0 + pos.x * 2.0) * 0.1;
-      pos.y += sin(uTime * 2.5 + pos.z * 0.4) * 0.7 + cos(uTime * 1.0 + pos.x * 0.5) * 0.3;
-      pos *= uScale;
-      float animationOffset = 0.25;
-      float wStep = 1. / uTextureSize.x;
-      float hWStep = wStep * 0.5;
-      float d = pos.z / uObjSize.z;
-      float t = fract((uTime * 0.1 + animationOffset) + (d * uLengthRatio));
-      float numPrev = floor(t / wStep);
-      float numNext = numPrev + 1.;
-      float tPrev = numPrev * wStep + hWStep;
-      float tNext = numNext * wStep + hWStep;
-      splineData splinePrev = getSplineData(tPrev);
-      splineData splineNext = getSplineData(tNext);
-      float f = (t - tPrev) / wStep;
-      vec3 P = mix(splinePrev.point, splineNext.point, f);
-      vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
-      vec3 N = mix(splinePrev.normal, splineNext.normal, f);
-      transformed = P + (N * pos.x) + (B * pos.y);
-    `);
+    uniform sampler2D uSpatialTexture;
+    uniform vec2 uTextureSize;
+    uniform float uTime;
+    uniform float uLengthRatio;
+    uniform vec3 uObjSize;
+
+    struct splineData {
+      vec3 point;
+      vec3 binormal;
+      vec3 normal;
+    };
+
+    splineData getSplineData(float t){
+      float step = 1. / uTextureSize.y;
+      float halfStep = step * 0.5;
+      splineData sd;
+      sd.point    = texture2D(uSpatialTexture, vec2(t, step * 0. + halfStep)).rgb;
+      sd.binormal = texture2D(uSpatialTexture, vec2(t, step * 1. + halfStep)).rgb;
+      sd.normal   = texture2D(uSpatialTexture, vec2(t, step * 2. + halfStep)).rgb;
+      return sd;
+    }
+` + shader.vertexShader; // insert path vertex logic
+shader.vertexShader = shader.vertexShader.replace(
+  `#include <begin_vertex>`,
+  `#include <begin_vertex>
+
+  vec3 pos = position;
+
+  float wStep = 1. / uTextureSize.x;
+  float hWStep = wStep * 0.5;
+
+  float d = pos.z / uObjSize.z;
+  float t = fract((uTime * 0.1) + (d * uLengthRatio));
+  float numPrev = floor(t / wStep);
+  float numNext = numPrev + 1.;
+  //numNext = numNext > (uTextureSize.x - 1.) ? 0. : numNext;
+  float tPrev = numPrev * wStep + hWStep;
+  float tNext = numNext * wStep + hWStep;
+  //float tDiff = tNext - tPrev;
+  splineData splinePrev = getSplineData(tPrev);
+  splineData splineNext = getSplineData(tNext);
+
+  float f = (t - tPrev) / wStep;
+  vec3 P = mix(splinePrev.point, splineNext.point, f);
+  vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
+  vec3 N = mix(splinePrev.normal, splineNext.normal, f);
+
+  transformed = P + (N * pos.x) + (B * pos.y);
+`
+); // path animation
   };
   scene.add(new THREE.Mesh(objGeom, objMat));
 });
