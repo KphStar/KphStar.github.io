@@ -109,125 +109,13 @@ var mat = new THREE.ShaderMaterial({
 var lantern = new THREE.Mesh(instGeom, mat);
 scene.add(lantern);
 
-// Shared animation curve
-const baseVector = new THREE.Vector3(40, 0, 0);
-const axis = new THREE.Vector3(0, 1, 0);
-const cPts = [], cSegments = 6, cStep = Math.PI * 2 / cSegments;
-for (let i = 0; i < cSegments; i++) {
-  cPts.push(new THREE.Vector3().copy(baseVector).applyAxisAngle(axis, cStep * i).setY(THREE.MathUtils.randFloat(-10, 10)));
-}
-const curve = new THREE.CatmullRomCurve3(cPts);
-curve.closed = true;
-const numPoints = 511;
-const cPoints = curve.getSpacedPoints(numPoints);
-const cObjects = curve.computeFrenetFrames(numPoints, true);
-const data = [];
-cPoints.forEach(v => data.push(v.x, v.y, v.z));
-cObjects.binormals.forEach(v => data.push(v.x, v.y, v.z));
-cObjects.normals.forEach(v => data.push(v.x, v.y, v.z));
-cObjects.tangents.forEach(v => data.push(v.x, v.y, v.z));
-const dataArray = new Float32Array(data);
-const tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
-tex.magFilter = THREE.NearestFilter;
-
-// Path-following loader
-let oUs = [];
-function loadPathFollowerOBJ(url, color) {
-  let loader = new THREE.OBJLoader();
-  loader.load(url, obj => {
-    obj.traverse(child => {
-      if (child instanceof THREE.Mesh) {
-        child.geometry.center();
-        child.geometry.rotateX(-Math.PI * 0.5);
-        child.geometry.scale(0.05,0.05,0.05);
-        let objSize = new THREE.Box3().setFromBufferAttribute(child.geometry.getAttribute("position"))
-                          .getSize(new THREE.Vector3());
-        let uniforms = {
-          uSpatialTexture: { value: tex },
-          uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
-          uTime: { value: 0 },
-          uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
-          uObjSize: { value: objSize }
-        };
-        oUs.push(uniforms);
-        let material = new THREE.MeshBasicMaterial({ color: color, wireframe: true });
-        material.onBeforeCompile = shader => {
-          shader.uniforms.uSpatialTexture = uniforms.uSpatialTexture;
-          shader.uniforms.uTextureSize = uniforms.uTextureSize;
-          shader.uniforms.uTime = uniforms.uTime;
-          shader.uniforms.uLengthRatio = uniforms.uLengthRatio;
-          shader.uniforms.uObjSize = uniforms.uObjSize;
-          shader.uniforms.uScale = uniforms.uScale;
-         
-    shader.vertexShader = `
-    uniform sampler2D uSpatialTexture;
-    uniform vec2 uTextureSize;
-    uniform float uTime;
-    uniform float uLengthRatio;
-    uniform vec3 uObjSize
-
-    struct splineData {
-      vec3 point;
-      vec3 binormal;
-      vec3 normal;
-    };
-
-    splineData getSplineData(float t){
-      float step = 1. / uTextureSize.y;
-      float halfStep = step * 0.5;
-      splineData sd;
-      sd.point    = texture2D(uSpatialTexture, vec2(t, step * 0. + halfStep)).rgb;
-      sd.binormal = texture2D(uSpatialTexture, vec2(t, step * 1. + halfStep)).rgb;
-      sd.normal   = texture2D(uSpatialTexture, vec2(t, step * 2. + halfStep)).rgb;
-      return sd;
-    }
-` + shader.vertexShader; // insert path vertex logic
-shader.vertexShader = shader.vertexShader.replace(
-  `#include <begin_vertex>`,
-  `#include <begin_vertex>
-
-  vec3 pos = position ;
-
-  float wStep = 1. / uTextureSize.x;
-  float hWStep = wStep * 0.5;
-
-  float d = pos.z / uObjSize.z;
-  float t = fract((uTime * 0.1) + (d * uLengthRatio));
-  float numPrev = floor(t / wStep);
-  float numNext = numPrev + 1.;
-  //numNext = numNext > (uTextureSize.x - 1.) ? 0. : numNext;
-  float tPrev = numPrev * wStep + hWStep;
-  float tNext = numNext * wStep + hWStep;
-  //float tDiff = tNext - tPrev;
-  splineData splinePrev = getSplineData(tPrev);
-  splineData splineNext = getSplineData(tNext);
-
-  float f = (t - tPrev) / wStep;
-  vec3 P = mix(splinePrev.point, splineNext.point, f);
-  vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
-  vec3 N = mix(splinePrev.normal, splineNext.normal, f);
-
-  transformed = P + (N * pos.x) + (B * pos.y);
-`
-); // path animation
-        };
-        child.material = material;
-      }
-    });
-    scene.add(obj);
-  });
-}
-
-
-// Add animals
-//loadPathFollowerOBJ("/Assets/model/BlueWhale.obj", 0x3366cc);
 
 //loadd STL Whale
 let whaleloader=new THREE.STLLoader()
 whaleloader.load("/Assets/model/3dwhale.stl", objGeom=>  {
   objGeom.center();
   objGeom.rotateX(-Math.PI * 0.5);
-  objGeom.scale(0.5, 0.5, 0.5);
+  objGeom.scale(0.05, 0.05, 0.05);
   let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"))
                     .getSize(new THREE.Vector3());
   let objUniforms = {
