@@ -146,7 +146,7 @@ whaleloader.load("/Assets/model/3dwhale.stl", objGeom => {
     uTime: { value: 0 },
     uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
     uObjSize: { value: objSize },
-    uScale: { value: 0.00005 } // scale whale down
+    uScale: { value: 0.001} // scale whale down
   };
   oUs.push(objUniforms);
   let objMat = new THREE.MeshBasicMaterial({ color: 0x3399ff, wireframe: true });
