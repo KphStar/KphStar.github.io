@@ -110,15 +110,20 @@ var lantern = new THREE.Mesh(instGeom, mat);
 scene.add(lantern);
 
 
-// Shared curve setup
-const baseVector = new THREE.Vector3(40, 0, 0);
+// Spline path for whale
+const baseVector = new THREE.Vector3(80, 0, 0);
 const axis = new THREE.Vector3(0, 1, 0);
 const cPts = [], cSegments = 6, cStep = Math.PI * 2 / cSegments;
 for (let i = 0; i < cSegments; i++) {
-  cPts.push(new THREE.Vector3().copy(baseVector).applyAxisAngle(axis, cStep * i).setY(THREE.MathUtils.randFloat(-10, 10)));
+  cPts.push(
+    new THREE.Vector3().copy(baseVector)
+      .applyAxisAngle(axis, cStep * i)
+      .setY(Math.sin(i * 0.8) * 20 + THREE.MathUtils.randFloat(-5, 5))
+      .setZ(Math.cos(i * 0.7) * 20 + THREE.MathUtils.randFloat(-5, 5))
+  );
 }
 const curve = new THREE.CatmullRomCurve3(cPts);
-curve.closed = true;
+curve.closed = false;
 const numPoints = 511;
 const cPoints = curve.getSpacedPoints(numPoints);
 const cObjects = curve.computeFrenetFrames(numPoints, true);
@@ -133,21 +138,18 @@ tex.magFilter = THREE.NearestFilter;
 
 let oUs = [];
 
-// Load STL whale and apply scale inside shader
 let whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/3dwhale.stl", objGeom => {
   objGeom.center();
   objGeom.rotateX(-Math.PI * 0.5);
-  let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"))
-                    .getSize(new THREE.Vector3());
-                    //console.log('🐋 Whale size:', objSize);
+  let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position")).getSize(new THREE.Vector3());
   let objUniforms = {
     uSpatialTexture: { value: tex },
     uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
     uTime: { value: 0 },
     uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
     uObjSize: { value: objSize },
-    uScale: { value: 0.001} // scale whale down
+    uScale: { value: 0.001 }
   };
   oUs.push(objUniforms);
   let objMat = new THREE.MeshBasicMaterial({ color: 0x3399ff, wireframe: true });
@@ -181,29 +183,29 @@ whaleloader.load("/Assets/model/3dwhale.stl", objGeom => {
       }
     ` + shader.vertexShader;
     shader.vertexShader = shader.vertexShader.replace(`#include <begin_vertex>`, `#include <begin_vertex>
-    vec3 pos = position;
-    float tailWave = sin(uTime * 12.0 + pos.z * 50.0) * 0.5;
+      vec3 pos = position;
+      float tailWave = sin(uTime * 12.0 + pos.z * 50.0) * 0.5;
       pos.x += tailWave * smoothstep(0.6, 1.0, abs(pos.z / uObjSize.z));
       pos.z += sin(uTime * 1.0 + pos.x * 2.0) * 0.1;
       pos.y += sin(uTime * 2.5 + pos.z * 0.4) * 0.7 + cos(uTime * 1.0 + pos.x * 0.5) * 0.3;
-    pos *= uScale; // simulate side sway
-    float animationOffset = 0.25; // adds phase offset for the whale
-    float wStep = 1. / uTextureSize.x;
-    float hWStep = wStep * 0.5;
-    float d = pos.z / uObjSize.z;
-    float t = fract((uTime * 0.1 + animationOffset) + (d * uLengthRatio));
-    float numPrev = floor(t / wStep);
-    float numNext = numPrev + 1.;
-    float tPrev = numPrev * wStep + hWStep;
-    float tNext = numNext * wStep + hWStep;
-    splineData splinePrev = getSplineData(tPrev);
-    splineData splineNext = getSplineData(tNext);
-    float f = (t - tPrev) / wStep;
-    vec3 P = mix(splinePrev.point, splineNext.point, f);
-    vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
-    vec3 N = mix(splinePrev.normal, splineNext.normal, f);
-    transformed = P + (N * pos.x) + (B * pos.y);
-  `);
+      pos *= uScale;
+      float animationOffset = 0.25;
+      float wStep = 1. / uTextureSize.x;
+      float hWStep = wStep * 0.5;
+      float d = pos.z / uObjSize.z;
+      float t = fract((uTime * 0.1 + animationOffset) + (d * uLengthRatio));
+      float numPrev = floor(t / wStep);
+      float numNext = numPrev + 1.;
+      float tPrev = numPrev * wStep + hWStep;
+      float tNext = numNext * wStep + hWStep;
+      splineData splinePrev = getSplineData(tPrev);
+      splineData splineNext = getSplineData(tNext);
+      float f = (t - tPrev) / wStep;
+      vec3 P = mix(splinePrev.point, splineNext.point, f);
+      vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
+      vec3 N = mix(splinePrev.normal, splineNext.normal, f);
+      transformed = P + (N * pos.x) + (B * pos.y);
+    `);
   };
   scene.add(new THREE.Mesh(objGeom, objMat));
 });
