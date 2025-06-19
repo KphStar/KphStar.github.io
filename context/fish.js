@@ -109,20 +109,6 @@ var mat = new THREE.ShaderMaterial({
 var lantern = new THREE.Mesh(instGeom, mat);
 scene.add(lantern);
 
-
-// Spline path for whale
-const baseVector = new THREE.Vector3(80, 0, 0);
-const axis = new THREE.Vector3(0, 1, 0);
-const cPts = [], cSegments = 6, cStep = Math.PI * 2 / cSegments;
-for (let i = 0; i < cSegments; i++) {
-  cPts.push(
-    new THREE.Vector3().copy(baseVector)
-      .applyAxisAngle(axis, cStep * i)
-      .setY(Math.sin(i * 0.8) * 20 + THREE.MathUtils.randFloat(-5, 5))
-      .setZ(Math.cos(i * 0.7) * 20 + THREE.MathUtils.randFloat(-5, 5))
-  );
-}
-
 let whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
   objGeom.center();
