@@ -186,7 +186,7 @@ shader.vertexShader = shader.vertexShader.replace(
   `#include <begin_vertex>`,
   `#include <begin_vertex>
 
-  vec3 pos = position;
+  vec3 pos = position * 0.2;
 
   float wStep = 1. / uTextureSize.x;
   float hWStep = wStep * 0.5;
