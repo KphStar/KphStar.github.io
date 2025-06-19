@@ -109,168 +109,148 @@ var mat = new THREE.ShaderMaterial({
 var lantern = new THREE.Mesh(instGeom, mat);
 scene.add(lantern);
 
-// Load Whale & Dolphin using OBJLoader
-let objLoader = new THREE.OBJLoader();
+// Shared animation curve
+const baseVector = new THREE.Vector3(40, 0, 0);
+const axis = new THREE.Vector3(0, 1, 0);
+const cPts = [], cSegments = 6, cStep = Math.PI * 2 / cSegments;
+for (let i = 0; i < cSegments; i++) {
+  cPts.push(new THREE.Vector3().copy(baseVector).applyAxisAngle(axis, cStep * i).setY(THREE.MathUtils.randFloat(-10, 10)));
+}
+const curve = new THREE.CatmullRomCurve3(cPts);
+curve.closed = true;
+const numPoints = 511;
+const cPoints = curve.getSpacedPoints(numPoints);
+const cObjects = curve.computeFrenetFrames(numPoints, true);
+const data = [];
+cPoints.forEach(v => data.push(v.x, v.y, v.z));
+cObjects.binormals.forEach(v => data.push(v.x, v.y, v.z));
+cObjects.normals.forEach(v => data.push(v.x, v.y, v.z));
+cObjects.tangents.forEach(v => data.push(v.x, v.y, v.z));
+const dataArray = new Float32Array(data);
+const tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
+tex.magFilter = THREE.NearestFilter;
 
-// 🐋 Blue Whale
-objLoader.load('Assets/models/BlueWhale.obj', function (obj) {
-  obj.traverse(child => {
-    if (child instanceof THREE.Mesh) {
-      child.material = new THREE.MeshBasicMaterial({ color: 0x3366cc });
-    }
-  });
-  obj.scale.set(0.5, 0.5, 0.5);
-  obj.position.set(-30, -10, -50);
-  obj.rotation.x = -Math.PI / 2;
-  scene.add(obj);
-});
-
-// 🐬 Dolphin
-objLoader.load('Assets/models/Dophin.obj', function (obj) {
-  obj.traverse(child => {
-    if (child instanceof THREE.Mesh) {
-      child.material = new THREE.MeshBasicMaterial({ color: 0x88ccff });
-    }
-  });
-  obj.scale.set(0.4, 0.4, 0.4);
-  obj.position.set(30, -8, -40);
-  obj.rotation.x = -Math.PI / 2;
-  scene.add(obj);
-});
-
-
-
-// Koi
-
+// Path-following loader
 let oUs = [];
+function loadPathFollowerOBJ(url, color) {
+  let loader = new THREE.OBJLoader();
+  loader.load(url, obj => {
+    obj.traverse(child => {
+      if (child instanceof THREE.Mesh) {
+        child.geometry.center();
+        child.geometry.rotateX(-Math.PI * 0.5);
+        child.geometry.scale(0.5, 0.5, 0.5);
+        let objSize = new THREE.Box3().setFromBufferAttribute(child.geometry.getAttribute("position"))
+                          .getSize(new THREE.Vector3());
+        let uniforms = {
+          uSpatialTexture: { value: tex },
+          uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
+          uTime: { value: 0 },
+          uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
+          uObjSize: { value: objSize }
+        };
+        oUs.push(uniforms);
+        let material = new THREE.MeshBasicMaterial({ color: color, wireframe: true });
+        material.onBeforeCompile = shader => {
+          shader.uniforms.uSpatialTexture = uniforms.uSpatialTexture;
+          shader.uniforms.uTextureSize = uniforms.uTextureSize;
+          shader.uniforms.uTime = uniforms.uTime;
+          shader.uniforms.uLengthRatio = uniforms.uLengthRatio;
+          shader.uniforms.uObjSize = uniforms.uObjSize;
+         
+    shader.vertexShader = `
+    uniform sampler2D uSpatialTexture;
+    uniform vec2 uTextureSize;
+    uniform float uTime;
+    uniform float uLengthRatio;
+    uniform vec3 uObjSize;
 
+    struct splineData {
+      vec3 point;
+      vec3 binormal;
+      vec3 normal;
+    };
+
+    splineData getSplineData(float t){
+      float step = 1. / uTextureSize.y;
+      float halfStep = step * 0.5;
+      splineData sd;
+      sd.point    = texture2D(uSpatialTexture, vec2(t, step * 0. + halfStep)).rgb;
+      sd.binormal = texture2D(uSpatialTexture, vec2(t, step * 1. + halfStep)).rgb;
+      sd.normal   = texture2D(uSpatialTexture, vec2(t, step * 2. + halfStep)).rgb;
+      return sd;
+    }
+` + shader.vertexShader; // insert path vertex logic
+shader.vertexShader = shader.vertexShader.replace(
+  `#include <begin_vertex>`,
+  `#include <begin_vertex>
+
+  vec3 pos = position;
+
+  float wStep = 1. / uTextureSize.x;
+  float hWStep = wStep * 0.5;
+
+  float d = pos.z / uObjSize.z;
+  float t = fract((uTime * 0.1) + (d * uLengthRatio));
+  float numPrev = floor(t / wStep);
+  float numNext = numPrev + 1.;
+  //numNext = numNext > (uTextureSize.x - 1.) ? 0. : numNext;
+  float tPrev = numPrev * wStep + hWStep;
+  float tNext = numNext * wStep + hWStep;
+  //float tDiff = tNext - tPrev;
+  splineData splinePrev = getSplineData(tPrev);
+  splineData splineNext = getSplineData(tNext);
+
+  float f = (t - tPrev) / wStep;
+  vec3 P = mix(splinePrev.point, splineNext.point, f);
+  vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
+  vec3 N = mix(splinePrev.normal, splineNext.normal, f);
+
+  transformed = P + (N * pos.x) + (B * pos.y);
+`
+); // path animation
+        };
+        child.material = material;
+      }
+    });
+    scene.add(obj);
+  });
+}
+
+
+// Add animals
+loadPathFollowerOBJ("Assets/models/BlueWhale.obj", 0x3366cc);
+loadPathFollowerOBJ("Assets/models/Dophin.obj", 0x88ccff);
+
+// Load STL koi
 let loader = new THREE.STLLoader();
-//https://clara.io/view/b47726c8-02cf-4eb5-b275-d9b2be591bad
 loader.load("https://cywarr.github.io/small-shop/fish.stl", objGeom => {
-  console.log(objGeom);
-  //objGeom.rotateX(-MathPI * 0.5);
-
-  // path
-  let baseVector = new THREE.Vector3(40, 0, 0);
-  let axis = new THREE.Vector3(0, 1, 0);
-  let cPts = [];
-  let cSegments = 6;
-  let cStep = Math.PI * 2 / cSegments;
-  for (let i = 0; i < cSegments; i++){
-    cPts.push(
-      new THREE.Vector3().copy(baseVector)
-      //.setLength(35 + (Math.random() - 0.5) * 5)
-      .applyAxisAngle(axis, cStep * i).setY(THREE.MathUtils.randFloat(-10, 10))
-    );
-  }
-  let curve = new THREE.CatmullRomCurve3(cPts);
-  curve.closed = true;
-
-  console.log(curve);
-
-  let numPoints = 511;
-  let cPoints = curve.getSpacedPoints(numPoints);
-  let cObjects = curve.computeFrenetFrames(numPoints, true);
-  console.log(cObjects);
-  let pGeom = new THREE.BufferGeometry().setFromPoints(cPoints);
-  let pMat = new THREE.LineBasicMaterial({color: "yellow"});
-  let pathLine = new THREE.Line(pGeom, pMat);
-  //scene.add(pathLine);
-
-  // data texture
-  let data = [];
-  cPoints.forEach( v => { data.push(v.x, v.y, v.z);} );
-  cObjects.binormals.forEach( v => { data.push(v.x, v.y, v.z);} );
-  cObjects.normals.forEach( v => { data.push(v.x, v.y, v.z);} );
-  cObjects.tangents.forEach( v => { data.push(v.x, v.y, v.z);} );
-
-  let dataArray = new Float32Array(data);
-
-  let tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
-  tex.magFilter = THREE.NearestFilter;
-  console.log(tex);
-  
   objGeom.center();
   objGeom.rotateX(-Math.PI * 0.5);
   objGeom.scale(0.5, 0.5, 0.5);
-  let objBox = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"));
-  let objSize = new THREE.Vector3();
-  objBox.getSize(objSize);
-  //objGeom.translate(0, 0, objBox.z);
-
-  objUniforms = {
-    uSpatialTexture: {value: tex},
-    uTextureSize: {value: new THREE.Vector2(numPoints + 1, 4)},
-    uTime: {value: 0},
-    uLengthRatio: {value: objSize.z / curve.cacheArcLengths[200]}, // more or less real lenght along the path
-    uObjSize: {value: objSize} // lenght
-  }
+  let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"))
+                    .getSize(new THREE.Vector3());
+  let objUniforms = {
+    uSpatialTexture: { value: tex },
+    uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
+    uTime: { value: 0 },
+    uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
+    uObjSize: { value: objSize }
+  };
   oUs.push(objUniforms);
-
-  let objMat = new THREE.MeshBasicMaterial({color: 0xff6600, wireframe: true});
+  let objMat = new THREE.MeshBasicMaterial({ color: 0xff6600, wireframe: true });
   objMat.onBeforeCompile = shader => {
     shader.uniforms.uSpatialTexture = objUniforms.uSpatialTexture;
     shader.uniforms.uTextureSize = objUniforms.uTextureSize;
     shader.uniforms.uTime = objUniforms.uTime;
     shader.uniforms.uLengthRatio = objUniforms.uLengthRatio;
     shader.uniforms.uObjSize = objUniforms.uObjSize;
-
-    shader.vertexShader = `
-      uniform sampler2D uSpatialTexture;
-      uniform vec2 uTextureSize;
-      uniform float uTime;
-      uniform float uLengthRatio;
-      uniform vec3 uObjSize;
-
-      struct splineData {
-        vec3 point;
-        vec3 binormal;
-        vec3 normal;
-      };
-
-      splineData getSplineData(float t){
-        float step = 1. / uTextureSize.y;
-        float halfStep = step * 0.5;
-        splineData sd;
-        sd.point    = texture2D(uSpatialTexture, vec2(t, step * 0. + halfStep)).rgb;
-        sd.binormal = texture2D(uSpatialTexture, vec2(t, step * 1. + halfStep)).rgb;
-        sd.normal   = texture2D(uSpatialTexture, vec2(t, step * 2. + halfStep)).rgb;
-        return sd;
-      }
-  ` + shader.vertexShader;
-    shader.vertexShader = shader.vertexShader.replace(
-      `#include <begin_vertex>`,
-      `#include <begin_vertex>
-
-      vec3 pos = position;
-
-      float wStep = 1. / uTextureSize.x;
-      float hWStep = wStep * 0.5;
-
-      float d = pos.z / uObjSize.z;
-      float t = fract((uTime * 0.1) + (d * uLengthRatio));
-      float numPrev = floor(t / wStep);
-      float numNext = numPrev + 1.;
-      //numNext = numNext > (uTextureSize.x - 1.) ? 0. : numNext;
-      float tPrev = numPrev * wStep + hWStep;
-      float tNext = numNext * wStep + hWStep;
-      //float tDiff = tNext - tPrev;
-      splineData splinePrev = getSplineData(tPrev);
-      splineData splineNext = getSplineData(tNext);
-
-      float f = (t - tPrev) / wStep;
-      vec3 P = mix(splinePrev.point, splineNext.point, f);
-      vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
-      vec3 N = mix(splinePrev.normal, splineNext.normal, f);
-
-      transformed = P + (N * pos.x) + (B * pos.y);
-  `
-    );
-    //console.log(shader.vertexShader);
-  }
-  let obj = new THREE.Mesh(objGeom, objMat);
-  scene.add(obj);
+    shader.vertexShader = `...` + shader.vertexShader;
+    shader.vertexShader = shader.vertexShader.replace(`#include <begin_vertex>`, `...`); // same logic
+  };
+  scene.add(new THREE.Mesh(objGeom, objMat));
 });
+
 
 
 var clock = new THREE.Clock();
