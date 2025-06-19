@@ -148,7 +148,8 @@ function loadPathFollowerOBJ(url, color) {
           uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
           uTime: { value: 0 },
           uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
-          uObjSize: { value: objSize }
+          uObjSize: { value: objSize },
+          uScale: { value: 0.15 } // << add this
         };
         oUs.push(uniforms);
         let material = new THREE.MeshBasicMaterial({ color: color, wireframe: true });
@@ -158,6 +159,7 @@ function loadPathFollowerOBJ(url, color) {
           shader.uniforms.uTime = uniforms.uTime;
           shader.uniforms.uLengthRatio = uniforms.uLengthRatio;
           shader.uniforms.uObjSize = uniforms.uObjSize;
+          shader.uniforms.uScale = uniforms.uScale;
          
     shader.vertexShader = `
     uniform sampler2D uSpatialTexture;
@@ -165,6 +167,7 @@ function loadPathFollowerOBJ(url, color) {
     uniform float uTime;
     uniform float uLengthRatio;
     uniform vec3 uObjSize;
+    uniform float uScale;
 
     struct splineData {
       vec3 point;
@@ -186,7 +189,7 @@ shader.vertexShader = shader.vertexShader.replace(
   `#include <begin_vertex>`,
   `#include <begin_vertex>
 
-  vec3 pos = position * 0.2;
+  vec3 pos = position * uScale;
 
   float wStep = 1. / uTextureSize.x;
   float hWStep = wStep * 0.5;
