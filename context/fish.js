@@ -181,23 +181,24 @@ whaleloader.load("/Assets/model/3dwhale.stl", objGeom => {
       }
     ` + shader.vertexShader;
     shader.vertexShader = shader.vertexShader.replace(`#include <begin_vertex>`, `#include <begin_vertex>
-      vec3 pos = position * uScale;
-      float wStep = 1. / uTextureSize.x;
-      float hWStep = wStep * 0.5;
-      float d = pos.z / uObjSize.z;
-      float t = fract((uTime * 0.1) + (d * uLengthRatio));
-      float numPrev = floor(t / wStep);
-      float numNext = numPrev + 1.;
-      float tPrev = numPrev * wStep + hWStep;
-      float tNext = numNext * wStep + hWStep;
-      splineData splinePrev = getSplineData(tPrev);
-      splineData splineNext = getSplineData(tNext);
-      float f = (t - tPrev) / wStep;
-      vec3 P = mix(splinePrev.point, splineNext.point, f);
-      vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
-      vec3 N = mix(splinePrev.normal, splineNext.normal, f);
-      transformed = P + (N * pos.x) + (B * pos.y) + vec3(10.0, 0.0, 0.0);
-    `);
+    vec3 pos = position * uScale;
+    float animationOffset = 0.25; // adds phase offset for the whale
+    float wStep = 1. / uTextureSize.x;
+    float hWStep = wStep * 0.5;
+    float d = pos.z / uObjSize.z;
+    float t = fract((uTime * 0.1 + animationOffset) + (d * uLengthRatio));
+    float numPrev = floor(t / wStep);
+    float numNext = numPrev + 1.;
+    float tPrev = numPrev * wStep + hWStep;
+    float tNext = numNext * wStep + hWStep;
+    splineData splinePrev = getSplineData(tPrev);
+    splineData splineNext = getSplineData(tNext);
+    float f = (t - tPrev) / wStep;
+    vec3 P = mix(splinePrev.point, splineNext.point, f);
+    vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
+    vec3 N = mix(splinePrev.normal, splineNext.normal, f);
+    transformed = P + (N * pos.x) + (B * pos.y);
+  `);
   };
   scene.add(new THREE.Mesh(objGeom, objMat));
 });
