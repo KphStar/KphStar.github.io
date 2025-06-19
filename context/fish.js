@@ -246,7 +246,34 @@ loader.load("https://cywarr.github.io/small-shop/fish.stl", objGeom => {
     shader.uniforms.uLengthRatio = objUniforms.uLengthRatio;
     shader.uniforms.uObjSize = objUniforms.uObjSize;
     shader.vertexShader = `...` + shader.vertexShader;
-    shader.vertexShader = shader.vertexShader.replace(`#include <begin_vertex>`, `...`); // same logic
+    shader.vertexShader = shader.vertexShader.replace(
+      `#include <begin_vertex>`,
+      `#include <begin_vertex>
+    
+      vec3 pos = position;
+    
+      float wStep = 1. / uTextureSize.x;
+      float hWStep = wStep * 0.5;
+    
+      float d = pos.z / uObjSize.z;
+      float t = fract((uTime * 0.1) + (d * uLengthRatio));
+      float numPrev = floor(t / wStep);
+      float numNext = numPrev + 1.;
+      //numNext = numNext > (uTextureSize.x - 1.) ? 0. : numNext;
+      float tPrev = numPrev * wStep + hWStep;
+      float tNext = numNext * wStep + hWStep;
+      //float tDiff = tNext - tPrev;
+      splineData splinePrev = getSplineData(tPrev);
+      splineData splineNext = getSplineData(tNext);
+    
+      float f = (t - tPrev) / wStep;
+      vec3 P = mix(splinePrev.point, splineNext.point, f);
+      vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
+      vec3 N = mix(splinePrev.normal, splineNext.normal, f);
+    
+      transformed = P + (N * pos.x) + (B * pos.y);
+    `
+    ); // path animation
   };
   scene.add(new THREE.Mesh(objGeom, objMat));
 });
