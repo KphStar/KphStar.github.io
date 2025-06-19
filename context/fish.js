@@ -182,8 +182,9 @@ whaleloader.load("/Assets/model/3dwhale.stl", objGeom => {
     ` + shader.vertexShader;
     shader.vertexShader = shader.vertexShader.replace(`#include <begin_vertex>`, `#include <begin_vertex>
     vec3 pos = position;
+    float tailWave = sin(uTime * 10.0 + pos.z * 20.0) * 0.2;
+    pos.x += tailWave * smoothstep(0.5, 1.0, abs(pos.z / uObjSize.z));
     pos.y += sin(uTime * 2.0 + pos.z * 0.2) * 0.5;
-    pos.x += sin(uTime * 1.5 + pos.y * 0.2) * 0.2;
     pos *= uScale; // simulate side sway
     float animationOffset = 0.25; // adds phase offset for the whale
     float wStep = 1. / uTextureSize.x;
