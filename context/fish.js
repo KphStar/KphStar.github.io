@@ -115,7 +115,7 @@ let whaleloader=new THREE.STLLoader()
 whaleloader.load("/Assets/model/3dwhale.stl", objGeom=>  {
   objGeom.center();
   objGeom.rotateX(-Math.PI * 0.5);
-  objGeom.scale(1, 1, 1);
+  objGeom.scale(50, 50, 50);
   let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"))
                     .getSize(new THREE.Vector3());
   let objUniforms = {
