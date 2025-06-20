@@ -114,15 +114,46 @@ let oUs = [];
 
 // Whale animation path setup
 
-const whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
+  // Path (same style as koi)
+  let baseVector = new THREE.Vector3(50, 0, 0);
+  let axis = new THREE.Vector3(0, 1, 0);
+  let cPts = [];
+  let cSegments = 6;
+  let cStep = Math.PI * 2 / cSegments;
+  for (let i = 0; i < cSegments; i++) {
+    cPts.push(
+      new THREE.Vector3().copy(baseVector)
+        .applyAxisAngle(axis, cStep * i)
+        .setY(THREE.MathUtils.randFloat(-10, 10))
+    );
+  }
+  let curve = new THREE.CatmullRomCurve3(cPts);
+  curve.closed = true;
+
+  let numPoints = 511;
+  let cPoints = curve.getSpacedPoints(numPoints);
+  let cObjects = curve.computeFrenetFrames(numPoints, true);
+
+  let data = [];
+  cPoints.forEach(v => data.push(v.x, v.y, v.z));
+  cObjects.binormals.forEach(v => data.push(v.x, v.y, v.z));
+  cObjects.normals.forEach(v => data.push(v.x, v.y, v.z));
+  cObjects.tangents.forEach(v => data.push(v.x, v.y, v.z));
+  let dataArray = new Float32Array(data);
+  let tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
+  tex.magFilter = THREE.NearestFilter;
+
+  // Model transform
   objGeom.center();
-  objGeom.rotateX(-Math.PI * 0.5); // Same as koi
-  objGeom.scale(3.5, 3.5, 3.5); // Optional for uniform scaling
+  objGeom.rotateX(-Math.PI * 0.5);
+  objGeom.scale(0.5, 0.5, 0.5);
+  let objBox = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"));
+  let objSize = new THREE.Vector3();
+  objBox.getSize(objSize);
 
-  const objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position")).getSize(new THREE.Vector3());
-
-  const objUniforms = {
+  // Uniforms
+  let objUniforms = {
     uSpatialTexture: { value: tex },
     uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
     uTime: { value: 0 },
@@ -131,7 +162,8 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
   };
   oUs.push(objUniforms);
 
-  const objMat = new THREE.MeshBasicMaterial({ color: 0x3399ff, wireframe: true });
+  // Shader and Material
+  let objMat = new THREE.MeshBasicMaterial({ color: 0x3399ff, wireframe: true });
   objMat.onBeforeCompile = shader => {
     shader.uniforms.uSpatialTexture = objUniforms.uSpatialTexture;
     shader.uniforms.uTextureSize = objUniforms.uTextureSize;
@@ -191,10 +223,9 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
     );
   };
 
-  const whale = new THREE.Mesh(objGeom, objMat);
+  let whale = new THREE.Mesh(objGeom, objMat);
   scene.add(whale);
 });
-
 
 //koi fish 
 let loader = new THREE.STLLoader();
