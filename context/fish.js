@@ -144,7 +144,9 @@ tex.magFilter = THREE.NearestFilter;
 const whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
   objGeom.center();
-  objGeom.rotateX(Math.PI); // upright orientation
+  objGeom.rotateX(-Math.PI * 0.5); // Same as koi
+  objGeom.scale(0.5, 0.5, 0.5); // Optional for uniform scaling
+
   const objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position")).getSize(new THREE.Vector3());
 
   const objUniforms = {
@@ -152,8 +154,7 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
     uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
     uTime: { value: 0 },
     uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
-    uObjSize: { value: objSize },
-    uScale: { value: 3.5 }
+    uObjSize: { value: objSize }
   };
   oUs.push(objUniforms);
 
@@ -164,7 +165,6 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
     shader.uniforms.uTime = objUniforms.uTime;
     shader.uniforms.uLengthRatio = objUniforms.uLengthRatio;
     shader.uniforms.uObjSize = objUniforms.uObjSize;
-    shader.uniforms.uScale = objUniforms.uScale;
 
     shader.vertexShader = `
       uniform sampler2D uSpatialTexture;
@@ -172,12 +172,13 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
       uniform float uTime;
       uniform float uLengthRatio;
       uniform vec3 uObjSize;
-      uniform float uScale;
+
       struct splineData {
         vec3 point;
         vec3 binormal;
         vec3 normal;
       };
+
       splineData getSplineData(float t){
         float step = 1. / uTextureSize.y;
         float halfStep = step * 0.5;
@@ -194,27 +195,24 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
       `#include <begin_vertex>
         vec3 pos = position;
 
-        float tailWave = sin(uTime * 12.0 + pos.z * 50.0) * 0.5;
-        pos.x += tailWave * smoothstep(0.6, 1.0, abs(pos.z / uObjSize.z));
-        pos.z += sin(uTime * 1.0 + pos.x * 2.0) * 0.1;
-        pos.y += sin(uTime * 2.5 + pos.z * 0.4) * 0.7 + cos(uTime * 1.0 + pos.x * 0.5) * 0.3;
-        pos *= uScale;
-
-        float animationOffset = 0.25;
         float wStep = 1. / uTextureSize.x;
         float hWStep = wStep * 0.5;
-        float d = position.z / uObjSize.z;
-        float t = fract((uTime * 0.1 + animationOffset) + (d * uLengthRatio));
+
+        float d = pos.z / uObjSize.z;
+        float t = fract((uTime * 0.1) + (d * uLengthRatio));
         float numPrev = floor(t / wStep);
         float numNext = numPrev + 1.;
         float tPrev = numPrev * wStep + hWStep;
         float tNext = numNext * wStep + hWStep;
+
         splineData splinePrev = getSplineData(tPrev);
         splineData splineNext = getSplineData(tNext);
+
         float f = (t - tPrev) / wStep;
         vec3 P = mix(splinePrev.point, splineNext.point, f);
         vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
         vec3 N = mix(splinePrev.normal, splineNext.normal, f);
+
         transformed = P + (N * pos.x) + (B * pos.y);
       `
     );
