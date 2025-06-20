@@ -97,10 +97,10 @@ const mat = new THREE.ShaderMaterial({
 
 scene.add(new THREE.Mesh(instGeom, mat));
 
-// Whale and Koi path animations
+// Uniform storage
 const oUs = [];
 
-function loadAnimatedFish(url, scale, color, heightOffset = 0) {
+function loadAnimatedFish(url, scale, color, heightOffset = 0, timeOffset = 0) {
   const loader = new STLLoader();
   loader.load(url, objGeom => {
     const baseVector = new THREE.Vector3(50, 0, 0);
@@ -146,7 +146,8 @@ function loadAnimatedFish(url, scale, color, heightOffset = 0) {
       uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
       uTime: { value: 0 },
       uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
-      uObjSize: { value: objSize }
+      uObjSize: { value: objSize },
+      uTimeOffset: { value: timeOffset }
     };
     oUs.push(objUniforms);
 
@@ -157,6 +158,7 @@ function loadAnimatedFish(url, scale, color, heightOffset = 0) {
       shader.uniforms.uTime = objUniforms.uTime;
       shader.uniforms.uLengthRatio = objUniforms.uLengthRatio;
       shader.uniforms.uObjSize = objUniforms.uObjSize;
+      shader.uniforms.uTimeOffset = objUniforms.uTimeOffset;
 
       shader.vertexShader = `
         uniform sampler2D uSpatialTexture;
@@ -164,6 +166,7 @@ function loadAnimatedFish(url, scale, color, heightOffset = 0) {
         uniform float uTime;
         uniform float uLengthRatio;
         uniform vec3 uObjSize;
+        uniform float uTimeOffset;
 
         struct splineData {
           vec3 point;
@@ -189,7 +192,7 @@ function loadAnimatedFish(url, scale, color, heightOffset = 0) {
           float wStep = 1. / uTextureSize.x;
           float hWStep = wStep * 0.5;
           float d = pos.z / uObjSize.z;
-          float t = fract((uTime * 0.1) + (d * uLengthRatio));
+          float t = fract((uTime * 0.1 + uTimeOffset) + (d * uLengthRatio));
           float numPrev = floor(t / wStep);
           float numNext = numPrev + 1.0;
           float tPrev = numPrev * wStep + hWStep;
@@ -210,9 +213,9 @@ function loadAnimatedFish(url, scale, color, heightOffset = 0) {
   });
 }
 
-// Load Whale and Koi Fish
-loadAnimatedFish('/Assets/model/mobydock.stl', 4.5, 0x3399ff, 0);
-loadAnimatedFish('/Assets/model/fish.stl', 0.5, 0xff6600, 5);
+// 🐋 Whale (offset 0.0), 🐟 Koi (offset 0.5)
+loadAnimatedFish('/Assets/model/mobydock.stl', 4.5, 0x3399ff, 0, 0.0);
+loadAnimatedFish('/Assets/model/fish.stl', 0.5, 0xff6600, 5, 0.5);
 
 // Animate
 const clock = new THREE.Clock();
