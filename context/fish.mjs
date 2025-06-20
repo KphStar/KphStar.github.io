@@ -215,7 +215,7 @@ function loadAnimatedFish(url, scale, color, heightOffset = 0, timeOffset = 0) {
 
 // 🐋 Whale (offset 0.0), 🐟 Koi (offset 0.5)
 loadAnimatedFish('/Assets/model/mobydock.stl', 4.5, 0x3399ff, 0, 0.0);
-loadAnimatedFish('/Assets/model/fish.stl', 0.5, 0xff6600, 5, 1.0);
+loadAnimatedFish('/Assets/model/fish.stl', 0.5, 0xff6600, 5, 5.0);
 
 // Animate
 const clock = new THREE.Clock();
