@@ -147,7 +147,7 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
   // Model transform
   objGeom.center();
   objGeom.rotateX(-Math.PI * 0.5);
-  objGeom.scale(0.5, 0.5, 0.5);
+  objGeom.scale(4.5, 4.5, 4.5);
   let objBox = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"));
   let objSize = new THREE.Vector3();
   objBox.getSize(objSize);
