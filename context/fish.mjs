@@ -11,7 +11,7 @@ renderer.setClearColor(0x181005);
 renderer.setSize(innerWidth, innerHeight);
 document.body.appendChild(renderer.domElement);
 
-var controls = new THREE.OrbitControls(camera, renderer.domElement);
+var controls = new OrbitControls(camera, renderer.domElement);
 controls.maxDistance = 150;
 controls.enableDamping = true;
 
