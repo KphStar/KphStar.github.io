@@ -215,7 +215,7 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
 //koi fish 
 let loader = new THREE.STLLoader();
 //https://clara.io/view/b47726c8-02cf-4eb5-b275-d9b2be591bad
-loader.load("/Assets/model/mobydock.stl/fish.stl", objGeom => {
+loader.load("/Assets/model/fish.stl", objGeom => {
   console.log(objGeom);
   //objGeom.rotateX(-MathPI * 0.5);
 
