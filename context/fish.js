@@ -153,7 +153,7 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
     uTime: { value: 0 },
     uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
     uObjSize: { value: objSize },
-    uScale: { value: 0.001 }
+    uScale: { value: 3.5 }
   };
   oUs.push(objUniforms);
 
