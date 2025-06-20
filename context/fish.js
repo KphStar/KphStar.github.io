@@ -112,89 +112,67 @@ scene.add(lantern);
 let oUs = [];
 
 
+// Spline path for whale
+const baseVector = new THREE.Vector3(80, 0, 0);
+const axis = new THREE.Vector3(0, 1, 0);
+const cPts = [], cSegments = 6, cStep = Math.PI * 2 / cSegments;
+for (let i = 0; i < cSegments; i++) {
+  cPts.push(
+    new THREE.Vector3().copy(baseVector)
+      .applyAxisAngle(axis, cStep * i)
+      .setY(Math.sin(i * 0.8) * 20 + THREE.MathUtils.randFloat(-5, 5))
+      .setZ(Math.cos(i * 0.7) * 20 + THREE.MathUtils.randFloat(-5, 5))
+  );
+}
+const curve = new THREE.CatmullRomCurve3(cPts);
+curve.type = 'chordal';
+curve.closed = false;
+const numPoints = 511;
+const cPoints = curve.getSpacedPoints(numPoints);
+const cObjects = curve.computeFrenetFrames(numPoints, true);
+const data = [];
+cPoints.forEach(v => data.push(v.x, v.y, v.z));
+cObjects.binormals.forEach(v => data.push(v.x, v.y, v.z));
+cObjects.normals.forEach(v => data.push(v.x, v.y, v.z));
+cObjects.tangents.forEach(v => data.push(v.x, v.y, v.z));
+const dataArray = new Float32Array(data);
+const tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
+tex.magFilter = THREE.NearestFilter;
+
 let whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
-  console.log(objGeom);
-  //objGeom.rotateX(-MathPI * 0.5);
-
-  // path
-  let baseVector = new THREE.Vector3(40, 0, 0);
-  let axis = new THREE.Vector3(0, 1, 0);
-  let cPts = [];
-  let cSegments = 6;
-  let cStep = Math.PI * 2 / cSegments;
-  for (let i = 0; i < cSegments; i++){
-    cPts.push(
-      new THREE.Vector3().copy(baseVector)
-      //.setLength(35 + (Math.random() - 0.5) * 5)
-      .applyAxisAngle(axis, cStep * i).setY(THREE.MathUtils.randFloat(-10, 10))
-    );
-  }
-  let curve = new THREE.CatmullRomCurve3(cPts);
-  curve.closed = true;
-
-  console.log(curve);
-
-  let numPoints = 511;
-  let cPoints = curve.getSpacedPoints(numPoints);
-  let cObjects = curve.computeFrenetFrames(numPoints, true);
-  console.log(cObjects);
-  let pGeom = new THREE.BufferGeometry().setFromPoints(cPoints);
-  let pMat = new THREE.LineBasicMaterial({color: "yellow"});
-  let pathLine = new THREE.Line(pGeom, pMat);
-  //scene.add(pathLine);
-
-  // data texture
-  let data = [];
-  cPoints.forEach( v => { data.push(v.x, v.y, v.z);} );
-  cObjects.binormals.forEach( v => { data.push(v.x, v.y, v.z);} );
-  cObjects.normals.forEach( v => { data.push(v.x, v.y, v.z);} );
-  cObjects.tangents.forEach( v => { data.push(v.x, v.y, v.z);} );
-
-  let dataArray = new Float32Array(data);
-
-  let tex = new THREE.DataTexture(dataArray, numPoints + 1, 4, THREE.RGBFormat, THREE.FloatType);
-  tex.magFilter = THREE.NearestFilter;
-  console.log(tex);
-  
   objGeom.center();
   objGeom.rotateX(-Math.PI * 0.5);
-  objGeom.scale(0.05, 0.05, 0.05);
-  let objBox = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position"));
-  let objSize = new THREE.Vector3();
-  objBox.getSize(objSize);
-  //objGeom.translate(0, 0, objBox.z);
-
-  objUniforms = {
-    uSpatialTexture: {value: tex},
-    uTextureSize: {value: new THREE.Vector2(numPoints + 1, 4)},
-    uTime: {value: 0},
-    uLengthRatio: {value: objSize.z / curve.cacheArcLengths[200]}, // more or less real lenght along the path
-    uObjSize: {value: objSize} // lenght
-  }
+  let objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position")).getSize(new THREE.Vector3());
+  let objUniforms = {
+    uSpatialTexture: { value: tex },
+    uTextureSize: { value: new THREE.Vector2(numPoints + 1, 4) },
+    uTime: { value: 0 },
+    uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
+    uObjSize: { value: objSize },
+    uScale: { value: 0.001 }
+  };
   oUs.push(objUniforms);
-
-  let objMat = new THREE.MeshBasicMaterial({color: 0xff6600, wireframe: true});
+  let objMat = new THREE.MeshBasicMaterial({ color: 0x3399ff, wireframe: true });
   objMat.onBeforeCompile = shader => {
     shader.uniforms.uSpatialTexture = objUniforms.uSpatialTexture;
     shader.uniforms.uTextureSize = objUniforms.uTextureSize;
     shader.uniforms.uTime = objUniforms.uTime;
     shader.uniforms.uLengthRatio = objUniforms.uLengthRatio;
     shader.uniforms.uObjSize = objUniforms.uObjSize;
-
+    shader.uniforms.uScale = objUniforms.uScale;
     shader.vertexShader = `
       uniform sampler2D uSpatialTexture;
       uniform vec2 uTextureSize;
       uniform float uTime;
       uniform float uLengthRatio;
       uniform vec3 uObjSize;
-
+      uniform float uScale;
       struct splineData {
         vec3 point;
         vec3 binormal;
         vec3 normal;
       };
-
       splineData getSplineData(float t){
         float step = 1. / uTextureSize.y;
         float halfStep = step * 0.5;
@@ -204,39 +182,33 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
         sd.normal   = texture2D(uSpatialTexture, vec2(t, step * 2. + halfStep)).rgb;
         return sd;
       }
-  ` + shader.vertexShader;
-    shader.vertexShader = shader.vertexShader.replace(
-      `#include <begin_vertex>`,
-      `#include <begin_vertex>
-
+    ` + shader.vertexShader;
+    shader.vertexShader = shader.vertexShader.replace(`#include <begin_vertex>`, `#include <begin_vertex>
       vec3 pos = position;
-
+      float tailWave = sin(uTime * 12.0 + pos.z * 50.0) * 0.5;
+      pos.x += tailWave * smoothstep(0.6, 1.0, abs(pos.z / uObjSize.z));
+      pos.z += sin(uTime * 1.0 + pos.x * 2.0) * 0.1;
+      pos.y += sin(uTime * 2.5 + pos.z * 0.4) * 0.7 + cos(uTime * 1.0 + pos.x * 0.5) * 0.3;
+      pos *= uScale;
+      float animationOffset = 0.25;
       float wStep = 1. / uTextureSize.x;
       float hWStep = wStep * 0.5;
-
       float d = pos.z / uObjSize.z;
-      float t = fract((uTime * 0.1) + (d * uLengthRatio));
+      float t = fract((uTime * 0.1 + animationOffset) + (d * uLengthRatio));
       float numPrev = floor(t / wStep);
       float numNext = numPrev + 1.;
-      //numNext = numNext > (uTextureSize.x - 1.) ? 0. : numNext;
       float tPrev = numPrev * wStep + hWStep;
       float tNext = numNext * wStep + hWStep;
-      //float tDiff = tNext - tPrev;
       splineData splinePrev = getSplineData(tPrev);
       splineData splineNext = getSplineData(tNext);
-
       float f = (t - tPrev) / wStep;
       vec3 P = mix(splinePrev.point, splineNext.point, f);
       vec3 B = mix(splinePrev.binormal, splineNext.binormal, f);
       vec3 N = mix(splinePrev.normal, splineNext.normal, f);
-
       transformed = P + (N * pos.x) + (B * pos.y);
-  `
-    );
-    //console.log(shader.vertexShader);
-  }
-  let obj = new THREE.Mesh(objGeom, objMat);
-  scene.add(obj);
+    `);
+  };
+  scene.add(new THREE.Mesh(objGeom, objMat));
 });
 
 
