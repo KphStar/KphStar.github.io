@@ -118,7 +118,7 @@ const whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
   objGeom.center();
   objGeom.rotateX(-Math.PI * 0.5); // Same as koi
-  objGeom.scale(0.5, 0.5, 0.5); // Optional for uniform scaling
+  objGeom.scale(3.5, 3.5, 3.5); // Optional for uniform scaling
 
   const objSize = new THREE.Box3().setFromBufferAttribute(objGeom.getAttribute("position")).getSize(new THREE.Vector3());
 
