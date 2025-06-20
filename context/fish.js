@@ -113,7 +113,7 @@ let oUs = [];
 
 
 // Whale animation path setup
-const whaleloader = new THREE.STLLoader();
+let whaleloader = new THREE.STLLoader();
 whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
   // Path (same style as koi)
   let baseVector = new THREE.Vector3(50, 0, 0);
