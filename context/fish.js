@@ -150,7 +150,7 @@ whaleloader.load("/Assets/model/mobydock.stl", objGeom => {
     uTime: { value: 0 },
     uLengthRatio: { value: objSize.z / curve.cacheArcLengths[200] },
     uObjSize: { value: objSize },
-    uScale: { value: 0.001 }
+    uScale: { value: 2.5 }
   };
   oUs.push(objUniforms);
   let objMat = new THREE.MeshBasicMaterial({ color: 0x3399ff, wireframe: true });
