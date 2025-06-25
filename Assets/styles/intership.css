@@ -48,57 +48,47 @@ footer {
   margin-top: auto;
 }
 
-/* Centered Banner Container */
+/* Centered and styled work-in-progress banner */
 .work-banner {
   position: relative;
-  z-index: 101;
-  margin: 40px auto;
-  width: 90%;
-  max-width: 800px;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #000;
-  padding: 20px;
-  border: 4px solid #cc0000;
+  margin: 2em auto;
+  width: 100%;
+  max-width: 1000px;
+  padding: 1em 0;
+  overflow: hidden;
   background: repeating-linear-gradient(
     -45deg,
     #ffc107,
-    #ffc107 10px,
-    #ffecb3 10px,
-    #ffecb3 20px
+    #ffc107 20px,
+    #ffecb3 20px,
+    #ffecb3 40px
   );
-  animation: pulseStripe 3s linear infinite;
-  overflow: hidden;
-  border-radius: 12px;
+  border-top: 4px solid red;
+  border-bottom: 4px solid red;
+  z-index: 101;
 }
 
-/* Stripe movement animation */
-@keyframes pulseStripe {
-  0% { background-position: 0 0; }
-  100% { background-position: 40px 40px; }
-}
-
-/* Blinking caution icon */
-.work-banner .icon {
+/* Inner container with sliding effect */
+.banner-inner {
+  white-space: nowrap;
   display: inline-block;
+  animation: slideText 12s linear infinite;
+}
+
+/* Blinking icon style */
+.icon {
   color: red;
-  margin-right: 10px;
+  margin-right: 1em;
   animation: blink 1s step-start infinite;
 }
 
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-/* Scrolling/moving text inside banner */
-.banner-text {
-  display: inline-block;
-  white-space: nowrap;
-  animation: slideText 10s linear infinite;
-}
-
+/* Text sliding animation */
 @keyframes slideText {
   0% { transform: translateX(100%); }
   100% { transform: translateX(-100%); }
+}
+
+/* Blinking animation */
+@keyframes blink {
+  50% { opacity: 0; }
 }
