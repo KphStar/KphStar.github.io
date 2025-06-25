@@ -48,14 +48,9 @@ footer {
   margin-top: auto;
 }
 
-/* Centered and styled work-in-progress banner */
+/* Full-width banner with construction theme */
 .work-banner {
-  position: relative;
-  margin: 2em auto;
-  width: 100%;
-  max-width: 1000px;
-  padding: 1em 0;
-  overflow: hidden;
+  width: 100vw; /* full viewport width */
   background: repeating-linear-gradient(
     -45deg,
     #ffc107,
@@ -65,30 +60,36 @@ footer {
   );
   border-top: 4px solid red;
   border-bottom: 4px solid red;
-  z-index: 101;
+  overflow: hidden;
+  padding: 1em 0;
+  z-index: 1000;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Inner container with sliding effect */
+/* The moving text inside the banner */
 .banner-inner {
-  white-space: nowrap;
   display: inline-block;
-  animation: slideText 12s linear infinite;
+  white-space: nowrap;
+  animation: slideText 15s linear infinite;
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding-left: 100%;
 }
 
-/* Blinking icon style */
+/* Make the caution icon blink */
 .icon {
   color: red;
   margin-right: 1em;
   animation: blink 1s step-start infinite;
 }
 
-/* Text sliding animation */
+/* Animation keyframes */
 @keyframes slideText {
-  0% { transform: translateX(100%); }
+  0% { transform: translateX(0%); }
   100% { transform: translateX(-100%); }
 }
 
-/* Blinking animation */
 @keyframes blink {
   50% { opacity: 0; }
 }
