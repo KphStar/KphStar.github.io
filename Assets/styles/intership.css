@@ -1,45 +1,70 @@
-  html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
-      color: #333;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-    }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: url('https://images.unsplash.com/photo-1590658268037-6bf12165a8d5') no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+}
 
-    header {
-      background-color: #1a252f;
-      color: white;
-      text-align: center;
-      padding: 1em 0;
-    }
+header {
+  background-color: #1a252f;
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+}
 
-    nav {
-      background-color: #2c3e50;
-      padding: 1em;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+nav {
+  background-color: rgba(44, 62, 80, 0.9); /* semi-transparent */
+  padding: 1em;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5em;
+}
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 1.5em;
-      font-weight: bold;
-    }
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
 
-    nav a:hover {
-      text-decoration: underline;
-    }
+nav a:hover {
+  text-decoration: underline;
+}
 
-    footer {
-      text-align: center;
-      padding: 1em;
-      background-color: #1a252f;
-      color: white;
-      margin-top: auto;
-    }
+footer {
+  text-align: center;
+  padding: 1em;
+  background-color: #1a252f;
+  color: white;
+  margin-top: auto;
+}
+
+/* 🔧 Work in Progress Banner */
+.work-banner {
+  background-color: rgba(255, 165, 0, 0.95); /* construction orange */
+  color: #000;
+  text-align: center;
+  padding: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-bottom: 4px solid #cc0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  z-index: 101;
+}
+
+.work-banner i {
+  font-size: 1.5em;
+}
