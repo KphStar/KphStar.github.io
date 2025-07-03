@@ -87,22 +87,37 @@ footer {
 
 /* Google Certificate – landscape, needs rotation */
 .google-cert {
-
+  transform-origin: center;
+  height: 300px;
+  width: 300px;
+  margin: 0 auto;
 }
 
 /* Greenville Associate */
 .greenville-associate {
   /* Use default portrait styling */
+  transform-origin: center;
+  height: 300px;
+  width: 300px;
+  margin: 0 auto;
 }
 
 /* Greenville Certificate */
 .greenville-certificate {
   /* Use default portrait styling */
+  transform-origin: center;
+  height: 300px;
+  width: 300px;
+  margin: 0 auto;
 }
 
 /* San Diego City College Certificate */
 .sdcity-certificate {
   /* Use default portrait styling */
+  transform-origin: center;
+  height: 300px;
+  width: 300px;
+  margin: 0 auto;
 }
 
 .rotate-pdf {
