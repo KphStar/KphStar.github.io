@@ -76,20 +76,34 @@ footer {
   min-width: 300px;
 }
 
-.pdf-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  max-width: 360px;
-}
-
+/* Default styling for all certificates */
 .pdf-section iframe {
   width: 100%;
   height: 200px;
   border: 1px solid #ccc;
+  object-fit: contain;
+  display: block;
 }
 
+/* Google Certificate – landscape, needs rotation */
+.google-cert {
+
+}
+
+/* Greenville Associate */
+.greenville-associate {
+  /* Use default portrait styling */
+}
+
+/* Greenville Certificate */
+.greenville-certificate {
+  /* Use default portrait styling */
+}
+
+/* San Diego City College Certificate */
+.sdcity-certificate {
+  /* Use default portrait styling */
+}
 
 .rotate-pdf {
   transform: rotate(-90deg) scale(0.7);
