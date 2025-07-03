@@ -66,10 +66,9 @@ footer {
 .content-wrapper {
   display: flex;
   justify-content: space-between;
-  align-items: stretch; /* ensures both columns match height */
-  flex-wrap: wrap;
-  gap: 4em;
-  margin-bottom: 0; /* add this */
+  align-items: flex-start; /* better for column alignment */
+  gap: 2em;
+  flex-wrap: nowrap; /* prevent wrapping to new line */
 }
 
 .education-details {
