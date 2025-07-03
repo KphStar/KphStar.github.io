@@ -88,8 +88,8 @@ footer {
 /* Google Certificate – landscape, needs rotation */
 .google-cert {
   transform-origin: center;
-  height: 300px;
-  width: 300px;
+  height: 350px;
+  width: 400px;
   margin: 0 auto;
 }
 
@@ -97,8 +97,8 @@ footer {
 .greenville-associate {
   /* Use default portrait styling */
   transform-origin: center;
-  height: 300px;
-  width: 300px;
+  height: 350px;
+  width: 400px;
   margin: 0 auto;
 }
 
@@ -106,8 +106,8 @@ footer {
 .greenville-certificate {
   /* Use default portrait styling */
   transform-origin: center;
-  height: 300px;
-  width: 300px;
+  height: 350px;
+  width: 400px;
   margin: 0 auto;
 }
 
@@ -115,8 +115,8 @@ footer {
 .sdcity-certificate {
   /* Use default portrait styling */
   transform-origin: center;
-  height: 300px;
-  width: 300px;
+  height: 350px;
+  width: 400px;
   margin: 0 auto;
 }
 
