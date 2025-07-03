@@ -77,9 +77,9 @@ footer {
 }
 
 .image-section {
-  flex: 1;
+    flex: 1;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(3, 1fr); /* exactly 3 per row */
   gap: 1.5em;
   justify-items: center;
   align-items: start;
@@ -112,7 +112,7 @@ footer {
 }
 
 .google-cert:hover {
-  transform: scale(3.00);
+  transform: scale(2.00);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
@@ -130,7 +130,7 @@ footer {
 }
 
 .greenville-associate:hover{
-  transform: scale(3.00);
+  transform: scale(2.00);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
@@ -147,7 +147,7 @@ footer {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .greenville-certificate:hover{
-  transform: scale(3.00);
+  transform: scale(2.00);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 .testout-certificate{
@@ -163,7 +163,7 @@ footer {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .testout-certificate:hover{
-  transform: scale(3.00);
+  transform: scale(2.00);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 .sdcity-certificate{
@@ -179,7 +179,7 @@ footer {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .sdcity-certificate:hover{
-  transform: scale(3.00);
+  transform: scale(2.00);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
