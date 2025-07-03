@@ -113,7 +113,7 @@ footer {
 
 /* Hover = enlarge slightly */
 .google-cert:hover {
-  transform: scale(5.00);
+  transform: scale(2.00);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
