@@ -108,13 +108,12 @@ footer {
   background-clip: content-box, border-box;
   box-shadow: 0 4px 20px rgba(0, 114, 255, 0.25);
   padding: 8px;
-  cursor: zoom-in;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Hover = enlarge slightly */
 .google-cert:hover {
-  transform: scale(1.02);
+  transform: scale(50.00);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
