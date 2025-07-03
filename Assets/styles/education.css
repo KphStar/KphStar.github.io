@@ -78,6 +78,20 @@ footer {
    margin-bottom: 0; /* add this */
 }
 
+.pdf-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  max-width: 360px;
+}
+
+.pdf-section iframe {
+  width: 100%;
+  height: 200px;
+  border: 1px solid #ccc;
+}
+
 .farmer-canvas-fullwidth {
   width: 100vw; /* full width of viewport */
   display: flex;
@@ -95,16 +109,3 @@ canvas#farmerCanvas {
   max-width: none; /* remove size constraint */
 }
 
-.pdf-section {
-  display: flex;
-  flex-direction: column; /* ensures vertical stacking */
-  gap: 1em;
-  flex: 0 0 320px; /* fixed width on the right */
-  max-width: 100%;
-}
-
-.pdf-section iframe {
-  width: 100%;
-  height: 200px;
-  border: 1px solid #ccc;
-}
