@@ -66,15 +66,14 @@ footer {
 .content-wrapper {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* better for column alignment */
+  align-items: flex-start;
   gap: 2em;
-  flex-wrap: nowrap; /* prevent wrapping to new line */
+  flex-wrap: nowrap;
 }
 
 .education-details {
   flex: 1;
   min-width: 300px;
-   margin-bottom: 0; /* add this */
 }
 
 .pdf-section {
