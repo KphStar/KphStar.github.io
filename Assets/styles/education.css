@@ -77,12 +77,15 @@ footer {
 }
 
 .image-section {
-    flex: 1;
+    width: 100%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* exactly 3 per row */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5em;
-  justify-items: center;
+  justify-content: center; /* center grid items horizontally */
+  justify-items: center;   /* center individual items */
   align-items: start;
+  padding: 1em 0;
+  box-sizing: border-box;
 }
 
 /* Shared image styles */
