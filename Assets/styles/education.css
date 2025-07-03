@@ -112,10 +112,10 @@ footer {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover effect */
+/* Hover = enlarge slightly */
 .google-cert:hover {
-  transform: scale(1.02) rotate(-90deg);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 /* Other images are portrait, so no transform needed */
