@@ -90,13 +90,10 @@ footer {
 
 /* Shared image styles */
 .image-section img {
-  width: 100%;
+   width: 100%;
   max-width: 240px;
   height: auto;
-  border: 1px solid #ccc;
   object-fit: contain;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
 }
 
 /* Border Style Of Each Cert */
