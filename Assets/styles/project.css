@@ -1,68 +1,127 @@
-   html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
-      color: #333;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background-color: #1a252f;
-      color: white;
-      text-align: center;
-      padding: 1em 0;
-    }
-
-    nav {
-      background-color: #2c3e50;
-      padding: 1em;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 1.5em;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      text-align: center;
-      padding: 1em;
-      background-color: #1a252f;
-      color: white;
-     margin-top: auto;
-    }
-
-  .project-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Exactly 4 columns */
-  gap: 20px;
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Universal Flipping Card CSS */
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  position: relative;
+}
 
-/* Flip Card Container */
-.flip-card {
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 600px;
+  height: 100%;
+  background-image: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Header & Navigation */
+header {
+  background-color: rgba(26, 37, 47, 0.8);
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+nav {
+  background-color: rgba(44, 62, 80, 0.8);
+  padding: 1em;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+nav a:hover {
+  text-decoration: underline;
+  transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1em;
+  background-color: rgba(26, 37, 47, 0.8);
+  color: white;
+  margin-top: auto;
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* Project Grid */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 2rem 0;
+}
+
+/* Reusable Glass Box */
+.glass-box {
+  background: rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  backdrop-filter: blur(8px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 2em;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-weight: bold;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-box:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+/* Apply to all project-boxes */
+/* Flip Card Container */
+.flip-card, .flip-cardNN, .flip-cardCK, .flip-cardBlackjack, .flip-cardConnect4 {
+  width: 100%;
+  max-width: 400px;
   height: 400px;
   perspective: 1000px;
   margin: 1em auto;
 }
 
 /* Flip Inner Wrapper */
-.flip-card-inner {
+.flip-card-inner, .flip-card-innerNN, .flip-card-innerCK, .flip-card-innerBlackjack, .flip-card-innerConnect4 {
   position: relative;
   width: 100%;
   height: 100%;
@@ -70,14 +129,21 @@
   transform-style: preserve-3d;
 }
 
-/* Apply flip on hover */
-.flip-card:hover .flip-card-inner {
+/* Flip on Hover */
+.flip-card:hover .flip-card-inner,
+.flip-cardNN:hover .flip-card-innerNN,
+.flip-cardCK:hover .flip-card-innerCK,
+.flip-cardBlackjack:hover .flip-card-innerBlackjack,
+.flip-cardConnect4:hover .flip-card-innerConnect4 {
   transform: rotateY(180deg);
 }
 
-/* Front and Back Sides */
-.flip-card-front,
-.flip-card-back {
+/* Front & Back Styles */
+.flip-card-front, .flip-card-back,
+.flip-card-frontNN, .flip-card-backNN,
+.flip-card-frontCK, .flip-card-backCK,
+.flip-card-frontBlackjack, .flip-card-backBlackjack,
+.flip-card-frontConnect4, .flip-card-backConnect4 {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -85,527 +151,80 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-/* Front Side */
-.flip-card-front {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #fff;
-}
-
-.flip-card-front img {
-  width: 100%;
-  max-width: 600px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  margin: 1em;
-  display: block;
-  object-fit: contain;
-}
-
-/* Back Side */
-.flip-card-back {
-  background-color: #ffffff;
   color: #1a252f;
-  transform: rotateY(180deg);
   padding: 1em;
-  text-align: left;
   font-size: 0.95em;
   overflow-y: auto;
 }
 
-/* Container for the Hardware Test Project*/
-.project-boxHWT {
-  background-color: white;
-  border: 1px solid #ccc;
+/* Flip Front */
+.flip-card-front, .flip-card-frontNN, .flip-card-frontCK, .flip-card-frontBlackjack {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.75em;
+}
+
+/* Flip Back */
+.flip-card-back, .flip-card-backNN, .flip-card-backCK, .flip-card-backBlackjack,
+.flip-card-backConnect4 {
+  transform: rotateY(180deg);
+}
+
+/* Project Images */
+.project-imageNN, .project-imageCK, .project-imageBlackjack, .project-imageConnect4 {
+  width: 40%;
+  max-width: 180px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
   border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Container for the Activation Wonderland */
-.project-boxACT {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
+.project-imageConnect4 {
+  width: 90%;
+  max-width: 350px;
+  aspect-ratio: 1.5 / 1;
+  margin-top: 1em;
 }
 
-/* Project WUSHU CSS */
-.project-boxWU {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
-
-/* Project Nail News CSS */
-.project-boxNN {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
-
-/* Project Custom Kernel CSS */
-
-.project-boxCK {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
-
-/* Project Black Jack Game CSS */
-
-.project-boxBlackjack{
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
-
-/* Project Connect4 CSS */
-
-.project-boxConnect4{
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-} 
-
-/* Project Hoa Su CSS */
-
-.project-boxHS {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-} 
-
-.project-boxSG {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-} 
-
-
-/* Project GP CSS */
-.project-boxGP {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
-
-.project-boxGP h3 {
-  margin-top: 0;
-  margin-bottom: 0.5em;
-  color: #1a252f;
-}
-
-.project-boxGP ul {
-  padding-left: 1.2em;
-  margin: 0;
-}
-
-.project-boxGP li {
-  margin-bottom: 0.5em;
-  text-align: left;
-  font-size: 0.95em;
-}
-
-/* Project GP CSS */
-.project-boxVH {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
-
-.project-boxVH h3 {
-  margin-top: 0;
-  margin-bottom: 0.5em;
-  color: #1a252f;
-}
-
-.project-boxVH ul {
-  padding-left: 1.2em;
-  margin: 0;
-}
-
-.project-boxVH li {
-  margin-bottom: 0.5em;
-  text-align: left;
-  font-size: 0.95em;
-}
-
-
-/* Project F3D CSS */
-.project-boxF3D {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
-
-.project-boxF3D h3 {
-  margin-top: 0;
-  margin-bottom: 0.5em;
-  color: #1a252f;
-}
-
-.project-boxF3D ul {
-  padding-left: 1.2em;
-  margin: 0;
-}
-
-.project-boxF3D li {
-  margin-bottom: 0.5em;
-  text-align: left;
-  font-size: 0.95em;
-}
-
-
-/* Project GH CSS */
-.project-boxGH {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-}
-
+/* Custom Text Lists in Project Boxes */
+.project-boxGP h3,
+.project-boxVH h3,
+.project-boxF3D h3,
 .project-boxGH h3 {
   margin-top: 0;
   margin-bottom: 0.5em;
   color: #1a252f;
 }
 
+.project-boxGP ul,
+.project-boxVH ul,
+.project-boxF3D ul,
 .project-boxGH ul {
   padding-left: 1.2em;
   margin: 0;
+  text-align: left;
 }
 
+.project-boxGP li,
+.project-boxVH li,
+.project-boxF3D li,
 .project-boxGH li {
   margin-bottom: 0.5em;
-  text-align: left;
   font-size: 0.95em;
 }
 
+/* Responsive Grid */
+@media (max-width: 768px) {
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
 
-/* Flip Card Container */
-.flip-cardNN {
-  width: 100%;
-  max-width: 400px;
-  height: 400px;
-  perspective: 1000px;
-  margin: 1em auto;
+  nav {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 }
-
-/* Flip Inner Wrapper */
-.flip-card-innerNN {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-}
-
-/* Apply flip on hover */
-.flip-cardNN:hover .flip-card-innerNN {
-  transform: rotateY(180deg);
-}
-
-/* Front and Back Sides */
-.flip-card-frontNN,
-.flip-card-backNN {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-/* Flip Card Front - Flex Layout */
-.flip-card-frontNN {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  background-color: #fff;
-  padding: 1em;
-  gap: 0.75em; /* smaller gap between images */
-}
-
-/* Project Images - Smaller and Uniform */
-.project-imageNN {
-  width: 40%; /* fits 2 per row comfortably */
-  max-width: 180px; /* limit maximum size */
-  aspect-ratio: 1 / 1; /* makes them square */
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Back Side Styling */
-.flip-card-backNN {
-  background-color: #ffffff;
-  color: #1a252f;
-  transform: rotateY(180deg);
-  padding: 1em;
-  text-align: left;
-  font-size: 0.95em;
-  overflow-y: auto;
-}
-
-
-/* Flip Card Container */
-.flip-cardCK {
-  width: 100%;
-  max-width: 400px;
-  height: 400px;
-  perspective: 1000px;
-  margin: 1em auto;
-}
-
-/* Flip Inner Wrapper */
-.flip-card-innerCK {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-}
-
-/* Apply flip on hover */
-.flip-cardCK:hover .flip-card-innerCK {
-  transform: rotateY(180deg);
-}
-
-/* Front and Back Sides */
-.flip-card-frontCK,
-.flip-card-backCK {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-/* Flip Card Front - Flex Layout */
-.flip-card-frontCK {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  background-color: #fff;
-  padding: 1em;
-  gap: 0.75em; /* smaller gap between images */
-}
-
-/* Project Images - Smaller and Uniform */
-.project-imageCK {
-  width: 40%; /* fits 2 per row comfortably */
-  max-width: 180px; /* limit maximum size */
-  aspect-ratio: 1 / 1; /* makes them square */
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Back Side Styling */
-.flip-card-backCK {
-  background-color: #ffffff;
-  color: #1a252f;
-  transform: rotateY(180deg);
-  padding: 1em;
-  text-align: left;
-  font-size: 0.95em;
-  overflow-y: auto;
-}
-
-
-/* Project BlackJack CSS */
-
-/* Flip Card Container */
-.flip-cardBlackjack {
-  width: 100%;
-  max-width: 400px;
-  height: 400px;
-  perspective: 1000px;
-  margin: 1em auto;
-}
-
-/* Flip Inner Wrapper */
-.flip-card-innerBlackjack {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-}
-
-/* Apply flip on hover */
-.flip-cardBlackjack:hover .flip-card-innerBlackjack {
-  transform: rotateY(180deg);
-}
-
-/* Front and Back Sides */
-.flip-card-frontBlackjack,
-.flip-card-backBlackjack {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-/* Flip Card Front - Flex Layout */
-.flip-card-frontBlackjack {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  background-color: #fff;
-  padding: 1em;
-  gap: 0.75em; /* smaller gap between images */
-}
-
-/* Project Images - Smaller and Uniform */
-.project-imageBlackjack {
-  width: 40%; /* fits 2 per row comfortably */
-  max-width: 180px; /* limit maximum size */
-  aspect-ratio: 1 / 1; /* makes them square */
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Back Side Styling */
-.flip-card-backBlackjack {
-  background-color: #ffffff;
-  color: #1a252f;
-  transform: rotateY(180deg);
-  padding: 1em;
-  text-align: left;
-  font-size: 0.95em;
-  overflow-y: auto;
-}
-
-/* Project Connect4WH CSS */
-
-
-/* Flip Card Container for Connect 4 */
-.flip-cardConnect4 {
-  width: 100%;
-  max-width: 400px;
-  height: 400px;
-  perspective: 1000px;
-  margin: 1em auto;
-}
-
-.flip-card-innerConnect4 {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-}
-
-.flip-cardConnect4:hover .flip-card-innerConnect4 {
-  transform: rotateY(180deg);
-}
-
-.flip-card-frontConnect4,
-.flip-card-backConnect4 {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-
-.flip-card-frontConnect4 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  padding: 1em;
-}
-
-.flip-card-backConnect4 {
-  background-color: #ffffff;
-  color: #1a252f;
-  transform: rotateY(180deg);
-  padding: 1em;
-  text-align: left;
-  font-size: 0.95em;
-  overflow-y: auto;
-}
-
-.project-imageConnect4 {
-  width: 90%;
-  max-width: 350px;
-  aspect-ratio: 1.5 / 1; /* adjust if the GIF isn't square */
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 1em;
-}
-
-
-
-
-
-
-

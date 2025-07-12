@@ -1,25 +1,48 @@
-html, body {
-  height: 100%;
+/* Reset & Base */
+* {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
-  background: url('https://images.unsplash.com/photo-1590658268037-6bf12165a8d5') no-repeat center center fixed;
-  background-size: cover;
-  color: #333;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
+  box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  background: url('https://images.unsplash.com/photo-1590658268037-6bf12165a8d5') no-repeat center center fixed;
+  background-size: cover;
+  position: relative;
+  padding: 1.5rem;
+}
+
+/* Optional background blur overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  z-index: -1;
+}
+
+/* Header */
 header {
-  background-color: #1a252f;
+  background-color: rgba(26, 37, 47, 0.8);
   color: white;
   text-align: center;
   padding: 1em 0;
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
+/* Navigation */
 nav {
-  background-color: rgba(44, 62, 80, 0.9); /* semi-transparent */
+  background-color: rgba(44, 62, 80, 0.85);
   padding: 1em;
   position: sticky;
   top: 0;
@@ -28,29 +51,40 @@ nav {
   justify-content: center;
   flex-wrap: wrap;
   gap: 1.5em;
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
 nav a {
   color: white;
   text-decoration: none;
   font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 nav a:hover {
   text-decoration: underline;
+  transform: scale(1.05);
 }
 
+/* Footer */
 footer {
   text-align: center;
   padding: 1em;
-  background-color: #1a252f;
+  background-color: rgba(26, 37, 47, 0.8);
   color: white;
   margin-top: auto;
+  border-radius: 1rem;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 }
 
-/* Full-width banner with construction theme */
+/* -------------------------------
+   Construction Banner
+--------------------------------- */
 .work-banner {
-  width: 100vw; /* full viewport width */
+  width: 100vw;
   background: repeating-linear-gradient(
     -45deg,
     #ffc107,
@@ -60,14 +94,14 @@ footer {
   );
   border-top: 4px solid red;
   border-bottom: 4px solid red;
-  overflow: hidden;
   padding: 1em 0;
-  z-index: 1000;
   position: relative;
+  overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
 
-/* The moving text inside the banner */
+/* Moving caution text */
 .banner-inner {
   display: inline-block;
   white-space: nowrap;
@@ -75,21 +109,34 @@ footer {
   font-size: 1.3rem;
   font-weight: bold;
   padding-left: 100%;
+  color: #000;
 }
 
-/* Make the caution icon blink */
+/* Blinking caution icon */
 .icon {
   color: red;
   margin-right: 1em;
   animation: blink 1s step-start infinite;
 }
 
-/* Animation keyframes */
+/* Animations */
 @keyframes slideText {
-  0% { transform: translateX(0%); }
+  0%   { transform: translateX(0%); }
   100% { transform: translateX(-100%); }
 }
 
 @keyframes blink {
   50% { opacity: 0; }
+}
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    gap: 0.75em;
+  }
+
+  .banner-inner {
+    font-size: 1rem;
+  }
 }
