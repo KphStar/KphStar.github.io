@@ -170,6 +170,12 @@ h1 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   object-fit: contain;
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1em 0;
 }
 
 .cert-column {
