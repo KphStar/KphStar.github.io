@@ -162,14 +162,7 @@ h1 {
 /* -------------------------------
    Certificate Images
 --------------------------------- */
-.image-section img {
-  width: 100%;
-  max-width: 180px;   /* reduce from 240px */
-  height: auto;
-  border-radius: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  object-fit: contain;
+.image-section {
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
@@ -182,6 +175,16 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.image-section img {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  border-radius: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  object-fit: contain;
 }
 
 /* Zoom & Border */
