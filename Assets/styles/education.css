@@ -1,44 +1,13 @@
-/* -------------------------------
-   Base Reset & Background
---------------------------------- */
-* {
+html, body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  min-height: 100vh;
-  padding: 1.5rem;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: white;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  line-height: 1.6;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: relative;
-}
-
-/* Background bubbles */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
 }
 
 /* -------------------------------
@@ -74,103 +43,25 @@ nav a:hover {
   color: rgba(255, 255, 255, 0.85);
   transform: scale(1.05);
 }
-/* -------------------------------
-   Main Glass Container
---------------------------------- */
+
+
 main.main-content {
+ padding: 2em 2em 1em 2em; /* less bottom padding */
   flex: 1;
-  width: 100%;
-  max-width: 1200px;
-  margin-top: 2rem;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2rem;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 
-/* -------------------------------
-   Layout
---------------------------------- */
-.content-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
+h1 {
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.3em;
 }
 
-.education-details {
-  flex: 1;
-  min-width: 280px;
+a {
+  color: #2c3e50;
+  text-decoration: none;
 }
 
-.education-details h3 a {
-  color: #fff;
+a:hover {
   text-decoration: underline;
-}
-
-.education-details ul {
-  padding-left: 1.2em;
-  line-height: 1.6;
-}
-
-/* -------------------------------
-   Certificate Images
---------------------------------- */
-.image-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  justify-items: center;
-}
-
-.image-section img {
-  width: 100%;
-  max-width: 240px;
-  border-radius: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-}
-
-/* Hover Zoom Effect + Borders */
-.image-section img:hover {
-  transform: scale(1.75);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
-  z-index: 100;
-}
-
-/* Certificate Borders */
-.google-cert {
-  border: 4px solid #00c6ff;
-}
-.greenville-associate {
-  border: 4px solid #178eaf;
-}
-.greenville-certificate {
-  border: 4px solid #4c9db3;
-}
-.testout-certificate {
-  border: 4px solid #65a9bb;
-}
-.sdcity-certificate {
-  border: 4px solid #00ffd5;
-}
-
-/* -------------------------------
-   Canvas Footer
---------------------------------- */
-.farmer-canvas-fullwidth {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2rem;
-  overflow-x: hidden;
-}
-
-canvas#farmerCanvas {
-  width: 100%;
-  height: 50px;
 }
 
 /* -------------------------------
@@ -189,20 +80,141 @@ footer {
   box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 
-/* -------------------------------
-   Responsive
---------------------------------- */
-@media (max-width: 768px) {
-  .content-wrapper {
-    flex-direction: column;
-  }
-
-  nav {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  nav a {
-    margin: 0.3em;
-  }
+.content-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2em;
+  flex-wrap: nowrap;
 }
+
+.education-details {
+  flex: 1;
+  min-width: 300px;
+}
+
+.image-section {
+    width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* exactly 3 per row */
+  gap: 1.5em;
+  justify-content: center; /* center grid items horizontally */
+  justify-items: center;   /* center individual items */
+  align-items: start;
+  padding: 1em 0;
+  box-sizing: border-box;
+}
+
+/* Shared image styles */
+.image-section img {
+   width: 100%;
+  max-width: 240px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Border Style Of Each Cert */
+
+.google-cert {
+  transform-origin: center;
+  border: 4px solid transparent;
+  border-radius: 16px;
+  background-image: linear-gradient(#f0f2f5, #f0f2f5),
+                    linear-gradient(135deg, #00c6ff, #0072ff);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 20px rgba(0, 114, 255, 0.25);
+  padding: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.google-cert:hover {
+  transform: scale(2.00);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.greenville-associate{
+  transform-origin: center;
+  border: 4px solid transparent;
+  border-radius: 16px;
+  background-image: linear-gradient(#f0f2f5, #f0f2f5),
+                    linear-gradient(135deg, #178eaf, #1758a7);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 20px rgba(0, 114, 255, 0.25);
+  padding: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.greenville-associate:hover{
+  transform: scale(2.00);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.greenville-certificate{
+  transform-origin: center;
+  border: 4px solid transparent;
+  border-radius: 16px;
+  background-image: linear-gradient(#f0f2f5, #f0f2f5),
+                    linear-gradient(135deg, #4c9db3, #042853);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 20px rgba(0, 114, 255, 0.25);
+  padding: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.greenville-certificate:hover{
+  transform: scale(2.00);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.testout-certificate{
+  transform-origin: center;
+  border: 4px solid transparent;
+  border-radius: 16px;
+  background-image: linear-gradient(#f0f2f5, #f0f2f5),
+                    linear-gradient(135deg, #65a9bb, #0e2541);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 20px rgba(0, 114, 255, 0.25);
+  padding: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.testout-certificate:hover{
+  transform: scale(2.00);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.sdcity-certificate{
+  transform-origin: center;
+  border: 4px solid transparent;
+  border-radius: 16px;
+  background-image: linear-gradient(#f0f2f5, #f0f2f5),
+                    linear-gradient(135deg, #00ffd5, #072346);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 0 4px 20px rgba(0, 114, 255, 0.25);
+  padding: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.sdcity-certificate:hover{
+  transform: scale(2.00);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+
+.farmer-canvas-fullwidth {
+  width: 100vw; /* full width of viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+canvas#farmerCanvas {
+  width: 100%;
+  height: 50px; /* or any height you prefer */
+  border: none;
+  max-width: none; /* remove size constraint */
+}
+
