@@ -129,18 +129,18 @@ h1 {
    Certificate Images
 --------------------------------- */
 .image-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  display: flex;
+  flex-direction: row;
   gap: 1.5rem;
-  justify-items: center;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1em 0;
 }
 
-.image-section img {
-  width: 100%;
-  max-width: 240px;
-  border-radius: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
+.cert-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 /* Zoom & Border */
