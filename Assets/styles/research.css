@@ -45,45 +45,57 @@ header {
   backdrop-filter: blur(6px);
 }
 
-/* Navigation Bar */
+/* -------------------------------
+   Header & Navigation
+--------------------------------- */
+header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
 nav {
-  background-color: rgba(44, 62, 80, 0.9);
-  padding: 1em;
-  position: sticky;
-  top: 0;
-  z-index: 100;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 1.5rem;
+  padding: 1em;
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 1rem;
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 nav a {
   color: white;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 1.1rem;
   transition: all 0.3s ease;
 }
 
 nav a:hover {
-  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.85);
   transform: scale(1.05);
 }
 
-/* Footer */
+
+/* -------------------------------
+   Footer
+--------------------------------- */
 footer {
+  width: 100%;
   text-align: center;
   padding: 1em;
-  background-color: rgba(26, 37, 47, 0.85);
+  margin-top: 2rem;
   color: white;
-  margin-top: auto;
+  background: rgba(0, 0, 0, 0.25);
   border-radius: 1rem;
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
+
 
 /* Responsive */
 @media (max-width: 768px) {
