@@ -205,10 +205,10 @@ h1 {
 --------------------------------- */
 .farmer-canvas-fullwidth {
   width: 100%;
+  margin-top: auto; /* Push to bottom of flex container */
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
   overflow-x: hidden;
 }
 
