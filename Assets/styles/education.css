@@ -110,7 +110,7 @@ nav a:hover {
 
 /* -------------------------------
    Main Content Wrapper
---------------------------------- */
+--------------------------------- 
 main.main-content {
   width: 100%;
   max-width: 1200px;
@@ -123,6 +123,7 @@ main.main-content {
   backdrop-filter: blur(8px);
   box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
+*/
 
 /* -------------------------------
    Title
