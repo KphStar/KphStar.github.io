@@ -119,46 +119,6 @@ nav a:hover {
   padding: 20px;
 }
 
-/* -------------------------------
-   Sidebar Glass Style
---------------------------------- */
-.sidebar {
-  width: 230px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.12);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  margin-right: 20px;
-}
-
-.sidebar a {
-  color: white;
-  text-decoration: none;
-}
-
-.sidebar a:hover {
-  text-decoration: underline;
-}
-
-.profile {
-  text-align: center;
-}
-
-.profile-pic {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.4);
-}
-
-.profile p {
-  margin: 5px 0;
-  color: white;
-}
 
 /* -------------------------------
    Main Content
@@ -339,11 +299,6 @@ footer {
   .container {
     flex-direction: column;
     padding: 1em;
-  }
-
-  .sidebar {
-    width: 100%;
-    margin-bottom: 1em;
   }
 
   .main-content {
