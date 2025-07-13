@@ -8,7 +8,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link rel="stylesheet" href="Assets/styles/blog.css" />
 </head>
+
 <body>
+  <!-- Header + Nav -->
   <header class="glass">
     <nav class="glass">
       <a href="index.html">DUC LE/ PROFILE</a>
@@ -21,43 +23,63 @@
     </nav>
   </header>
 
+  <!-- Main Blog Container -->
   <div class="container">
-    <aside class="sidebar">
+    <!-- Sidebar -->
+    <aside class="sidebar glass">
       <div class="profile">
         <img src="rsz_1profile.jpg" alt="Duc Le" class="profile-pic">
         <h3>Duc Le</h3>
         <p><i class="fas fa-map-marker-alt"></i> San Diego, CA, US</p>
         <p><i class="fas fa-envelope"></i> <a href="mailto:lerockandroy@gmail.com">Email</a></p>
-        <p><i class="fab fa-github"></i> <a href="https://github.com/KphStar">GitHub</a></p>
-        <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/ducleit">LinkedIn</a></p>
+        <p><i class="fab fa-github"></i> <a href="https://github.com/KphStar" target="_blank" rel="noopener">GitHub</a></p>
+        <p><i class="fab fa-linkedin"></i> <a href="https://www.linkedin.com/in/ducleit" target="_blank" rel="noopener">LinkedIn</a></p>
       </div>
     </aside>
 
+    <!-- Blog Content -->
+    <main class="main-content glass">
+      <h1>Blog Posts</h1>
 
-<main class="main-content">
-  <h1>Blog Posts</h1>
+      <div id="scrollable-area" style="flex: 1; overflow-y: auto;">
+        <!-- Dynamic blog post previews -->
+        <div id="blog-list"></div>
 
-  <div style="flex: 1; overflow-y: auto;" id="scrollable-area">
-    <div id="blog-list"></div>
-    <div id="blog-detail" class="hidden">
-      <h1 id="detail-title"></h1>
-      <p id="detail-date"></p>
-      <div id="detail-content"></div>
-    </div>
+        <!-- Blog detail view -->
+        <div id="blog-detail" class="hidden">
+          <h1 id="detail-title"></h1>
+          <p id="detail-date"></p>
+          <div id="detail-content"></div>
+        </div>
+      </div>
+
+      <!-- Go back link -->
+      <a href="blog.html" id="go-back" class="glass" style="
+        display: none;
+        position: sticky;
+        bottom: 0;
+        background-color: #1a252f;
+        color: white;
+        text-align: center;
+        padding: 1em;
+        text-decoration: none;
+        border-top: 1px solid #ccc;
+        z-index: 10;
+      ">
+        ← Go Back
+      </a>
+
+      <!-- Pagination -->
+      <div id="pagination" class="pagination"></div>
+    </main>
   </div>
 
-  <a href="blog.html" id="go-back" style="display: none; position: sticky; bottom: 0; background-color: #1a252f; color: white; text-align: center; padding: 1em; text-decoration: none; border-top: 1px solid #ccc; z-index: 10;">
-    ← Go Back
-  </a>
-
-  <div id="pagination" class="pagination"></div>
-</main>
-
-  </div>
+  <!-- Footer -->
   <footer class="glass">
     <p>© 2025 Duc Le. All rights reserved.</p>
   </footer>
 
+  <!-- Blog data loader -->
   <script type="module" src="context/blog.js"></script>
 </body>
 </html>
