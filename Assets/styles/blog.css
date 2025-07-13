@@ -151,11 +151,13 @@ nav a:hover {
    Blog Posts
 --------------------------------- */
 .blog-post {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto 1.5rem auto; /* center and space out */
+  padding: 1.25rem;
   background: rgba(255, 255, 255, 0.12);
   border: 0.0625rem solid rgba(255, 255, 255, 0.4);
   border-radius: 1.5rem;
-  padding: 1.25rem;
-  margin-bottom: 1.5rem;
   box-shadow: 0 8px 24px rgba(31, 38, 135, 0.15), inset 0 4px 20px rgba(255, 255, 255, 0.15);
   transition: all 0.3s ease;
   position: relative;
