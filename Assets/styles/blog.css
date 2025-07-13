@@ -197,6 +197,12 @@ nav a:hover {
   color: #ffd700;
 }
 
+#blog-list {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 /* -------------------------------
    Blog Detail
 --------------------------------- */
