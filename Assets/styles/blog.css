@@ -142,12 +142,9 @@ nav a:hover {
 .main-content h1 {
   border-bottom: 2px solid rgba(255,255,255,0.3);
   padding-bottom: 0.3em;
-  margin: 0 auto 1rem auto; /* center horizontally */
+  margin: 0;
+  margin-bottom: 1rem;
   color: white;
-
-  max-width: 1200px;  /* NEW: limit width */
-  width: 100%;        /* allow it to shrink on smaller screens */
-  text-align: center; /* optional: center the text itself */
 }
 
 /* -------------------------------
