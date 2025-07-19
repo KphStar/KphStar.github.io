@@ -12,6 +12,9 @@ let prevMouse = { x: 0, y: 0 };
 let rotation = { x: 0, y: 0 };
 let zoom = 50;
 let zoomTarget = 50;
+let touchStartDistance = 0;
+let touchStartZoom = zoomTarget;
+let touchStartRotation = { x: 0, y: 0 };
 
 const messages = [
   "Cảm ơn vì em đã đến",
@@ -64,6 +67,10 @@ function init() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+
+  renderer.domElement.addEventListener('touchstart', onTouchStart, { passive: false });
+renderer.domElement.addEventListener('touchmove', onTouchMove, { passive: false });
+renderer.domElement.addEventListener('touchend', onTouchEnd);
 
   const renderScene = new RenderPass(scene, camera);
   const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.2, 0.4, 0.85);
@@ -216,4 +223,47 @@ function onResize() {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
   composer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function getTouchDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function onTouchStart(e) {
+  if (e.touches.length === 1) {
+    isDragging = true;
+    prevMouse.x = e.touches[0].clientX;
+    prevMouse.y = e.touches[0].clientY;
+    touchStartRotation.x = rotation.x;
+    touchStartRotation.y = rotation.y;
+  } else if (e.touches.length === 2) {
+    e.preventDefault();
+    touchStartDistance = getTouchDistance(e.touches);
+    touchStartZoom = zoomTarget;
+  }
+}
+
+function onTouchMove(e) {
+  if (e.touches.length === 1 && isDragging) {
+    const deltaX = e.touches[0].clientX - prevMouse.x;
+    const deltaY = e.touches[0].clientY - prevMouse.y;
+    rotation.x += deltaX * 0.005;
+    rotation.y += deltaY * 0.005;
+    prevMouse.x = e.touches[0].clientX;
+    prevMouse.y = e.touches[0].clientY;
+  } else if (e.touches.length === 2) {
+    e.preventDefault();
+    const newDistance = getTouchDistance(e.touches);
+    const zoomDelta = (touchStartDistance - newDistance) * 0.1;
+    zoomTarget = touchStartZoom + zoomDelta;
+    zoomTarget = Math.max(20, Math.min(100, zoomTarget));
+  }
+}
+
+function onTouchEnd(e) {
+  if (e.touches.length < 2) {
+    isDragging = false;
+  }
 }
