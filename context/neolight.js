@@ -267,3 +267,7 @@ function onTouchEnd(e) {
     isDragging = false;
   }
 }
+
+  document.getElementById('popup-button').addEventListener('click', () => {
+    document.getElementById('popup-overlay').style.display = 'none';
+  });
