@@ -206,17 +206,6 @@ footer {
   text-align: center;
   font-weight: bold;
 }
-/* Container for the iPXE */
-.project-boxiPxe {
-    background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 2.5em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-weight: bold;
-
-}
 
 /* Project WUSHU CSS */
 .project-boxWU {
@@ -298,6 +287,34 @@ footer {
   font-weight: bold;
 } 
 
+/* Container for the iPXE */
+.project-boxiPxe {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 2.5em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-weight: bold;
+
+}
+.project-boxiPxe h3 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  color: #1a252f;
+}
+
+.project-boxiPxe ul {
+  padding-left: 1.2em;
+  margin: 0;
+}
+
+.project-boxiPxe li {
+  margin-bottom: 0.5em;
+  text-align: left;
+  font-size: 0.95em;
+  color: #1a252f;
+}
 
 /* Project GP CSS */
 .project-boxGP {
